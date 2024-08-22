@@ -1,6 +1,6 @@
 General:
   IncludeFD: true
-  IncludeND: true
+  IncludeND: false
   FDPOT: 1.3628319e+23
   NDPOT: 3.85e+21
   #### Asimov A ####
@@ -16,4 +16,4 @@ General:
     OscCovName: "osc_cov"
     OscStepScale: 0.045
   Output:
-    FileName: "TestEventRates.root"
+    FileName: "Results/1D_Abis3Dbinningtestmorebins.root"

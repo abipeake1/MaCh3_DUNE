@@ -304,7 +304,7 @@ void samplePDFDUNEBaseND::init(double pot, std::string samplecfgfile, covariance
   dathist = new TH1D("dat_nue","",200,0, 50.0); 
   _hPDF2D = new TH2D(histname,histtitle,15,0,50.0*1000,15,0,150);
   dathist2d = new TH2D("dat2d_nue","",15,0,1500,15,0,150);
-
+  
   //ETA Don't forget the -1 on the size here, as it's number of bins not bin edges
   set1DBinning(sample_erec_bins.size()-1, erec_bin_edges);
   set2DBinning(sample_erec_bins.size()-1, erec_bin_edges, sample_theta_bins.size()-1, theta_bin_edges); 

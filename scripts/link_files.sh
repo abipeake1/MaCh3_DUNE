@@ -5,10 +5,10 @@
 # If not change FILESDIR to point to where the files live
 
 MACH3DIR=`pwd`
-FILESDIR=/vols/dune/ljw20/
+#FILESDIR=/vols/dune/ljw20/
 
 #PATH to /cvmfs where files should live soon!
-#FILESDIR=/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v1/
+FILESDIR=/cvmfs/dune.osgstorage.org/pnfs/fnal.gov/usr/dune/persistent/stash/MaCh3/inputs/TDR/v2/
 
 if [ ! -d "$MACH3DIR/inputs/DUNE_CAF_files" ]
 then

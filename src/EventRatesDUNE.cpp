@@ -12,9 +12,43 @@
 #include <TColor.h>
 #include <TMath.h>
 
+//template <typename T>
+#include <assert.h>
+#include <stdexcept>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <numeric>
+#include <stdlib.h>
+#include <string>
+#include <vector>
+
 #include "samplePDFDUNE/samplePDFDUNEBase.h"
 #include "samplePDFDUNE/samplePDFDUNEBaseND.h"
 #include "manager/manager.h"
+
+/* a function to generate numpy linspace */
+//template <typename T>
+  
+  template <typename T>
+    std::vector<T> linspace(T a, T b, size_t N) {
+        T h = (b - a) / static_cast<T>(N);
+        std::vector<T> xs(N);
+        typename std::vector<T>::iterator x;
+        T val;
+        for (x = xs.begin(), val = a; x != xs.end(); ++x, val += h)
+            *x = val;
+        return xs;
+    }
+
+  void ExtendLinspace(std::vector<double> &in, double low, double high,size_t nbins){
+    for(auto x : linspace(low, high,nbins)){
+        in.push_back(x);
+        
+      }
+      auto x =std::unique(in.begin(),in.end());  //put duplicate bins at end
+      in.erase(x, in.end()); //erase duplicates
+  }
 
 
 std::string getNameNoExt(std::string name, std::string ext)  
@@ -225,9 +259,105 @@ int main(int argc, char * argv[]) {
 
 	Outfile->cd();
 	sample_osc->Write(NameTString+"_osc");
+
+    
+
+
+  ///////////////////////////////////////////////////////////
+  std::vector<double> xbins;
+  ExtendLinspace(xbins,1e-8,27,27);
+  /*
+  std::vector<double> flat_bin_edges;
+  std::unique_ptr<TH3D> hist3d = std::make_unique<TH3D>(xbins.size() - 1,xbins.data(),
+  xbins.size() - 1,xbins.data(), xbins.size() - 1,xbins.data());
+
+  flat_bin_edges.push_back(0);
+  for(size_t i = 0; i < hist3d->GetNcells(); ++i){
+    flat_bin_edges.push_back(flat_bin_edges.back()+1);
+  } */
+  
+  //whatever the instances of samplePDFFDDUNE are called in EventRates.cpp
+  //samplePDFFDBase::set1DBinning(flat_bin_edges.size() - 1, flat_bin_edges);
+  //SamplePDFs[sample_i] -> set1DBinning(flat_bin_edges.size() - 1, flat_bin_edges);
+
+
+
+
+
+
+
+
+
+
   }
 
   canv->Print((OutPlotName+"]").c_str());
+
+
+  /*
+  /////////print 2D histograms
+
+   //Some place to store the histograms
+  std::vector<TH2D*> oscillated_hists2D;
+  std::vector<TH2D*> unoscillated_hists2D;
+  std::vector<std::string> sample_names2D;
+  
+  TCanvas *canv2D = new TCanvas("nomcanv","", 0, 0, 700,900);
+  canv2D->Divide(1,2);
+  std::string OutPlotName2D = OutfileName.substr(0, OutfileName.length() - 5) + "2D.pdf";
+  canv2D->Print((OutPlotName2D+"[").c_str());
+
+  for (unsigned sample_i = 0 ; sample_i < SamplePDFs.size() ; ++sample_i) {
+    
+	
+	std::string name = SamplePDFs[sample_i]->GetSampleName();
+	sample_names.push_back(name);
+	TString NameTString = TString(name.c_str());
+	// Unoscillated
+	osc -> setParameters(oscpars_un);
+	osc -> acceptStep();
+
+	SamplePDFs[sample_i] -> SetupOscCalc(osc->GetPathLength(), osc->GetDensity());
+	SamplePDFs[sample_i] -> reweight(osc->getPropPars());
+	TH2D *sample_unosc2D = (TH2D*)SamplePDFs[sample_i] -> get2DHist() -> Clone(NameTString+"_unosc");
+	unoscillated_hists2D.push_back(sample_unosc2D);
+
+  canv2D->cd(1);
+	sample_unosc2D -> SetTitle(NameTString+"_unosc");
+	sample_unosc2D -> Draw("HIST COLZ");
+	canv2D->Update();
+
+	Outfile->cd();
+	sample_unosc2D->Write(NameTString+"_unosc");
+
+	osc->setParameters(oscpars);
+	osc->acceptStep();
+
+	SamplePDFs[sample_i] -> reweight(osc->getPropPars());
+	TH2D *sample_osc2D = (TH2D*)SamplePDFs[sample_i] -> get2DHist()->Clone(NameTString+"_osc");
+	oscillated_hists2D.push_back(sample_osc2D);
+
+	canv2D->cd(2);
+	sample_osc2D -> SetTitle(NameTString+"_osc");
+	sample_osc2D -> Draw("HIST COLZ");
+	canv2D->Update();
+
+	canv2D->Print(OutPlotName.c_str());
+
+	Outfile->cd();
+	sample_osc2D->Write(NameTString+"_osc");
+  }
+
+  canv2D->Print((OutPlotName2D+"]").c_str());
+  */
+  /* a function to generate numpy linspace */
+
+
+
+// #define DEBUG
+
+
+  
 
   //Now print out some event rates, we'll make a nice latex table at some point 
   std::cout << "~~~~~~~~~~~~~~~~" << std::endl;

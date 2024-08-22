@@ -6,8 +6,42 @@
 #include "samplePDFDUNEBase.h"
 #include <assert.h>
 #include <stdexcept>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <numeric>
+#include <stdlib.h>
+#include <string>
+#include <vector>
+
 
 // #define DEBUG
+
+
+/* a function to generate numpy linspace */
+//template <typename T>
+  template <typename T>
+    std::vector<T> linspace(T a, T b, size_t N) {
+        T h = (b - a) / static_cast<T>(N);
+        std::vector<T> xs(N);
+        typename std::vector<T>::iterator x;
+        T val;
+        for (x = xs.begin(), val = a; x != xs.end(); ++x, val += h)
+            *x = val;
+        return xs;
+    }
+
+  void ExtendLinspace(std::vector<double> &in, double low, double high,size_t nbins){
+    for(auto x : linspace(low, high,nbins)){
+        in.push_back(x);
+        
+      }
+      auto x =std::unique(in.begin(),in.end());  //put duplicate bins at end
+      in.erase(x, in.end()); //erase duplicates
+  }
+
+  std::unique_ptr<TH3D> Abis3DHistogram;
+  TH1D *onedim_binnumberhisto;
 
 // Constructors for erec-binned errors
 
@@ -25,6 +59,34 @@ samplePDFDUNEBase::samplePDFDUNEBase(double pot, std::string mc_version,
     throw;
   }
   init(pot, mc_version, xsec_cov);
+
+
+  //Somewhere in samplePDFDUNEBase::samplePDFDUNEBase
+  //int number_of_pt_bins = h->GetXaxis()->GetNbins();
+
+  std::vector<double> ELep_bins;
+    ExtendLinspace(ELep_bins,1e-8,40,4);
+    std::vector<double> theta_bins;
+    ExtendLinspace(theta_bins,1e-8,4,4);
+    std::vector<double> ENuReco_bins;
+    ExtendLinspace(ENuReco_bins,1e-8,40,4);
+    
+     //TH3D* Abis3DHistogram = new TH3D("Abis3DHistogram", "", ELep_bins.size(), theta_bins.size(),  ENuReco_bins.size()); // fill this in with the binning like we used to in NUISANCE
+     std::cout<< "ELep_bins.size() = " << ELep_bins.size() <<std::endl;
+     std::cout<< "theta_bins.size() = " << theta_bins.size() <<std::endl;
+     std::cout<< "ENuReco_bins.size() = " << ENuReco_bins.size() <<std::endl;
+     
+     Abis3DHistogram =
+        std::make_unique<TH3D>("Abis3DHistogram", "", ELep_bins.size() - 1,
+                               ELep_bins.data(), theta_bins.size() - 1, theta_bins.data(),
+                               ENuReco_bins.size() - 1, ENuReco_bins.data());
+
+      double noofbins_1Dhisto = Abis3DHistogram->GetNcells();
+      std::cout<< "no of bins in 3D HISTO = " << Abis3DHistogram->GetNcells() <<std::endl;
+     
+      onedim_binnumberhisto = 
+      new TH1D("onedim_binnumberhisto","", noofbins_1Dhisto, -1, noofbins_1Dhisto -1 );
+
 }
 
 samplePDFDUNEBase::~samplePDFDUNEBase() {}
@@ -427,6 +489,8 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   _data->SetBranchAddress("RecoLepEnNumu", &_erec_lep);
   _data->SetBranchStatus("RecoLepEnNue", 1);
   _data->SetBranchAddress("RecoLepEnNue", &_erec_lep_nue);
+  _data->SetBranchStatus("RecoLepAngNumu",1);
+  _data->SetBranchAddress("RecoLepAngNumu", &_erec_lep_ang_numu);
 
   _data->SetBranchStatus("eRecoP", 1);
   _data->SetBranchAddress("eRecoP", &_eRecoP);
@@ -519,6 +583,8 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   duneobj->rw_ePi0 = new double[duneobj->nEvents];
   duneobj->rw_eN = new double[duneobj->nEvents];
 
+  duneobj->rw_lep_ang_numu = new double[duneobj->nEvents];
+
   duneobj->rw_theta = new double[duneobj->nEvents];
   duneobj->flux_w = new double[duneobj->nEvents];
   duneobj->xsec_w = new double[duneobj->nEvents];
@@ -529,6 +595,9 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   duneobj->rw_vtx_x = new double[duneobj->nEvents];
   duneobj->rw_vtx_y = new double[duneobj->nEvents];
   duneobj->rw_vtx_z = new double[duneobj->nEvents];
+
+  duneobj->rw_abis3dbinnumber = new double[duneobj->nEvents]; /////////////////////new bin number
+
 
   duneobj->energyscale_w = new double[duneobj->nEvents];
   duneobj->mode = new int[duneobj->nEvents];
@@ -570,7 +639,7 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
       duneobj->rw_erec_had[i] = (double)_erec_had;
       duneobj->rw_erec_lep[i] = (double)_erec_lep;
     }
-
+    duneobj->rw_lep_ang_numu[i] = (double)_erec_lep_ang_numu;
     duneobj->rw_eRecoP[i] = (double)_eRecoP;
     duneobj->rw_eRecoPip[i] = (double)_eRecoPip;
     duneobj->rw_eRecoPim[i] = (double)_eRecoPim;
@@ -642,6 +711,41 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
   case kCVNNue:
     KinematicValue = dunemcSamples[iSample].rw_cvnnue_shifted[iEvent];
     break;
+
+  case kInvariantHadronicMass_W:{
+       // Get W_true with assumption of initial state nucleon at rest
+      // m_n =  ; //GeV//(float)PhysConst::mass_proton;
+      // Q2 assuming nucleon at res
+      //double W_nuc_rest = sqrt(-Q2 + 2 * m_n * q0 + m_n * m_n);
+      double q0 = dunemcSamples[iSample].rw_erec_lep[iEvent]-dunemcSamples[iSample].rw_cvnnue[iEvent];
+	   KinematicValue = sqrt(-dunemcSamples[iSample].rw_Q2[iEvent]+ (2* 0.938 * q0) + (0.938*0.938) );
+     //std::cout<< "W = " << KinematicValue << std::endl;
+     //std::cout<< "rw_Q2[iEvent] = " << _Q2 << std::endl;
+	   break;
+    }
+  case kAbis3DBinning:{
+        double ELep = dunemcSamples[iSample].rw_LepE[iEvent];  // calculate ELep
+        double thetaLep = dunemcSamples[iSample].rw_lep_ang_numu[iEvent]; // calculate thetaLep 
+        double ENuReco = dunemcSamples[iSample].rw_erec[iEvent]; // calculate Reconstructed neutrino energy
+        KinematicValue = Abis3DHistogram->FindFixBin(ELep,thetaLep,ENuReco);
+
+        /*
+        std::cout << "Kinematic Value for Abis3DHistogram = " << KinematicValue <<std::endl;
+        std::cout << "Elep = " << ELep <<std::endl;
+        std::cout << "thetalep = " << thetaLep <<std::endl;
+        std::cout << "ENuReco= " << ENuReco <<std::endl;
+        */
+        double global_bin = Abis3DHistogram->FindFixBin(ELep,thetaLep,ENuReco);
+        //std::cout << "Kinematic Value for Abis3DHistogram = " << KinematicValue <<std::endl;
+        dunemcSamples[iSample].rw_abis3dbinnumber[iEvent] = global_bin;
+        onedim_binnumberhisto->Fill(global_bin);
+        
+        break;
+      }
+      //onedim_binnumberhisto->Write();
+  case kM3Mode:
+        KinematicValue = dunemcSamples[iSample].mode[iEvent];
+        break;
   default:
     std::cout << "[ERROR]: " << __FILE__ << ":" << __LINE__
               << " Did not recognise Kinematic Parameter type..." << std::endl;
@@ -650,6 +754,9 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
 
   return KinematicValue;
 }
+
+
+//Fill a 1D histogram with the kinematic values of Abis 3D histogram
 
 void samplePDFDUNEBase::setupFDMC(dunemc_base *duneobj, fdmc_base *fdobj,
                                   const char *splineFile) {
@@ -720,7 +827,7 @@ void samplePDFDUNEBase::setupFDMC(dunemc_base *duneobj, fdmc_base *fdobj,
       // Just point to xvar to the address of the variable you want to bin in
       // This way we don't have to update both fdmc and skmc when we apply
       // shifts to variables we're binning in
-      fdobj->x_var[iEvent] = &(duneobj->rw_erec_shifted[iEvent]);
+      fdobj->x_var[iEvent] = &(duneobj->rw_abis3dbinnumber[iEvent]);
       fdobj->y_var[iEvent] =
           &(duneobj
                 ->dummy_y); // ETA - don't think we even need this as if we have
@@ -732,7 +839,7 @@ void samplePDFDUNEBase::setupFDMC(dunemc_base *duneobj, fdmc_base *fdobj,
       // This way we don't have to update both fdmc and skmc when we apply
       // shifts to variables we're binning in
       fdobj->x_var[iEvent] = &(duneobj->rw_erec_shifted[iEvent]);
-      fdobj->y_var[iEvent] = &(duneobj->rw_theta[iEvent]);
+      fdobj->y_var[iEvent] = &(duneobj->rw_erec_had[iEvent]);
       break;
     default:
       std::cout << "[ERROR:] " << __FILE__ << ":" << __LINE__
@@ -926,8 +1033,19 @@ void samplePDFDUNEBase::applyShifts(int iSample, int iEvent) {
            &dunemcSamples[iSample].rw_cvnnue_shifted[iEvent]);
 }
 
+
 // This is currently here just for show. We'll implement functional parameters
 // soon!
+
+int getNMCSamples() {
+    //std::vector<struct dunemc_base> dunemcSamples;
+    // Initialize dunemcSamples as needed
+    //return dunemcSamples.size();
+    return 0;
+}
+
+
+
 double samplePDFDUNEBase::CalcXsecWeightFunc(int iSample, int iEvent) {
   return 1.0;
 }
@@ -953,12 +1071,79 @@ void samplePDFDUNEBase::printPosteriors() {
   std::cout << "printPosteriors" << std::endl;
 }
 
+/*
 int samplePDFDUNEBase::getNMCSamples() {
   std::cout << "getNMCSamples" << std::endl;
   return 0;
-}
+}*/
 
 int samplePDFDUNEBase::getNEventsInSample(int sample) {
   std::cout << "getNEventsInSample" << std::endl;
   return 0;
 }
+
+TH1D* get1DVarHist(std::string KinematicVar1, std::vector< std::vector<double> > SelectionVec, int kModeToFill, int kChannelToFill, int WeightStyle, TAxis* Axis) {
+  bool fChannel;
+  bool fMode;
+  
+
+  if (kChannelToFill!=-1) {
+    if (kChannelToFill>getNMCSamples()) {
+      std::cout << "Required channel is not available. kChannelToFill should be between 0 and " << getNMCSamples() << std::endl;
+      std::cout << "kChannelToFill given:" << kChannelToFill << std::endl;
+      std::cout << "Exitting.." << std::endl;
+      throw;
+    }
+    fChannel = true;
+  } else {
+    fChannel = false;
+  }
+
+  if (kModeToFill!=-1) {
+    if (kModeToFill>kMaCh3_nModes) {
+      std::cout << "Required mode is not available. kModeToFill should be between 0 and " << kMaCh3_nModes << std::endl;
+      std::cout << "kModeToFill given:" << kModeToFill << std::endl;
+      std::cout << "Exitting.." << std::endl;
+      throw;
+    }
+    fMode = true;
+  } else {
+    fMode = false;
+  }
+
+ // std::vector< std::vector<double> > SelectionVec;
+
+  if (fMode) {
+    std::vector<double> SelecMode(3);
+    SelecMode[0] = kM3Mode;
+    SelecMode[1] = kModeToFill;
+    SelecMode[2] = kModeToFill+1;
+    SelectionVec.push_back(SelecMode);
+  }
+
+  if (fChannel) {
+    std::vector<double> SelecChannel(3);
+    SelecChannel[0] = kOscChannel;
+    SelecChannel[1] = kChannelToFill;
+    SelecChannel[2] = kChannelToFill+1;
+    SelectionVec.push_back(SelecChannel);
+  }
+  TFile my1dhisto("my1dhisto.root","RECREATE");
+  onedim_binnumberhisto->Write();
+  my1dhisto.Close();
+  //return get1DVarHist(KinematicVar1,SelectionVec,WeightStyle,Axis);
+  return get1DVarHist(KinematicVar1, SelectionVec, kModeToFill, kChannelToFill, WeightStyle, Axis);
+}
+
+//TFile my1dhisto("my1dhisto.root","RECREATE");
+//std::ofstream out("1Dhisto.root".c_str()); // create a new output file or overwrite an existing one
+//onedim_binnumberhisto->Write();
+//my1dhisto.close();
+
+
+/*
+//1D hist for kinemtaticvariable 3D binning
+  double noofbins = Abis3DHistogram->GetNcells();
+    f1DHist_binnumber =
+        std::make_unique<TH1D>("f1DHist_binnumbe", "",noofbins ,
+        Erec.data()) ;*/

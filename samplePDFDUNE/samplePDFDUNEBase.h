@@ -82,6 +82,9 @@ struct dunemc_base {
   double *rw_cvnnumu_shifted;
   double *rw_cvnnue_shifted;
 
+  double *rw_lep_ang_numu;
+
+  double *rw_abis3dbinnumber;
   double *rw_berpaacvwgt;
   int    *rw_isCC;
   int    *rw_nuPDGunosc;
@@ -145,8 +148,8 @@ public:
   //Likelihood
   double getCovLikelihood();
   double getDiscVar(int sample , int event , int varindx);
-
-  int getNMCSamples();
+  int getNMCSamples(){return 0;}
+  //int getNMCSamples(){return 0;}
   int getNEventsInSample(int sample);
 
   //Apply shifts from functional parameters
@@ -155,7 +158,7 @@ public:
 
   // dunemc
   std::vector<struct dunemc_base> dunemcSamples;
-
+  
 
   TFile *_sampleFile;
   TTree *_data;
@@ -213,6 +216,7 @@ public:
   int _isFHC;
   double _LepTheta;
   double _Q2;
+  double _erec_lep_ang_numu;
 
 
 
@@ -290,6 +294,9 @@ public:
   std::vector<int> splineParsIndex;
   std::vector<std::string> splineParsNames;
 
+ TH1D* get1DVarHist(std::string KinematicVar1, int kModeToFill, int kChannelToFill, int WeightStyle, TAxis* Axis);
+  //{return get1DVarHist(KinematicVar1,SelectionVec,WeightStyle,Axis);};
+  TH1D* get1DVarHist(std::string KinematicVar1,std::vector< std::vector<double> > SelectionVec, int WeightStyle, TAxis* Axis){return 0;};
 
  private:
   void calcXsecNormsBins(dunemc_base* dunemc);

@@ -13,9 +13,15 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
-
+#include <regex>
+#include <filesystem>
+#include <iostream>
 
 // #define DEBUG
+
+//Read in all the input CAF files
+
+
 
 
 /* a function to generate numpy linspace */
@@ -41,6 +47,9 @@
   }
 
   std::unique_ptr<TH3D> Abis3DHistogram;
+  std::unique_ptr<TH3D> OA3DHistogram; 
+  std::unique_ptr<TH2D> OA2DHistogram; 
+
   TH1D *onedim_binnumberhisto;
 
 // Constructors for erec-binned errors
@@ -64,12 +73,18 @@ samplePDFDUNEBase::samplePDFDUNEBase(double pot, std::string mc_version,
   //Somewhere in samplePDFDUNEBase::samplePDFDUNEBase
   //int number_of_pt_bins = h->GetXaxis()->GetNbins();
 
-  std::vector<double> ELep_bins;
-    ExtendLinspace(ELep_bins,1e-8,40,4);
+    std::vector<double> ELep_bins;
+    ExtendLinspace(ELep_bins,0,40,5);
     std::vector<double> theta_bins;
-    ExtendLinspace(theta_bins,1e-8,4,4);
-    std::vector<double> ENuReco_bins;
-    ExtendLinspace(ENuReco_bins,1e-8,40,4);
+    ExtendLinspace(theta_bins,0,3,10);
+    ExtendLinspace(theta_bins,3,9,3);
+    ExtendLinspace(theta_bins,9,100,2);
+    //ExtendLinspace(theta_bins,0,100,10);
+    std::vector<double> ENuReco_bins={0.,   1.,  1.5, 2., 2.5, 3., 3.5, 4., 5., 6., 10.};
+    //ExtendLinspace(ENuReco_bins,0,4,8);
+
+    std::vector<double> offaxis_position;
+    ExtendLinspace(offaxis_position,-1,30,10);
     
      //TH3D* Abis3DHistogram = new TH3D("Abis3DHistogram", "", ELep_bins.size(), theta_bins.size(),  ENuReco_bins.size()); // fill this in with the binning like we used to in NUISANCE
      std::cout<< "ELep_bins.size() = " << ELep_bins.size() <<std::endl;
@@ -83,6 +98,24 @@ samplePDFDUNEBase::samplePDFDUNEBase(double pot, std::string mc_version,
 
       double noofbins_1Dhisto = Abis3DHistogram->GetNcells();
       std::cout<< "no of bins in 3D HISTO = " << Abis3DHistogram->GetNcells() <<std::endl;
+
+      OA3DHistogram =
+        std::make_unique<TH3D>("OA3DHistogram", "", ELep_bins.size() - 1,
+                               ELep_bins.data(), theta_bins.size() - 1, theta_bins.data(),
+                               offaxis_position.size() - 1, offaxis_position.data());
+
+
+
+
+      OA2DHistogram =
+        std::make_unique<TH2D>("OA2DHistogram", "",offaxis_position.size() - 1, offaxis_position.data(),
+        ENuReco_bins.size() - 1, ENuReco_bins.data());
+
+      //double noofbins_1Dhisto = Abis3DHistogram->GetNcells();
+      //std::cout<< "no of bins in 3D HISTO = " << Abis3DHistogram->GetNcells() <<std::endl;
+
+
+
      
       onedim_binnumberhisto = 
       new TH1D("onedim_binnumberhisto","", noofbins_1Dhisto, -1, noofbins_1Dhisto -1 );
@@ -141,6 +174,9 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
       SampleManager->raw()["Binning"]["XVarBins"].as<std::vector<double>>();
   std::vector<double> sample_theta_bins =
       SampleManager->raw()["Binning"]["YVarBins"].as<std::vector<double>>();
+
+  //std::vector<double> uniform_bins =
+    //  SampleManager->raw()["Binning"]["NBins"].as<std::vector<double>>();
 
   samplename = SampleManager->raw()["SampleName"].as<std::string>();
 
@@ -467,7 +503,7 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   std::cout << "input file: " << sampleFile << std::endl;
 
   _sampleFile = new TFile(sampleFile, "READ");
-  _data = (TTree *)_sampleFile->Get("caf");
+  _data = (TTree *)_sampleFile->Get("cafTree");  //cafTree
 
   if (_data) {
     std::cout << "Found mtuple tree is " << sampleFile << std::endl;
@@ -479,6 +515,8 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   _data->SetBranchAddress("Ev", &_ev);
   _data->SetBranchStatus("Ev_reco_numu", 1);
   _data->SetBranchAddress("Ev_reco_numu", &_erec);
+  _data->SetBranchStatus("Ev_reco", 1);
+  _data->SetBranchAddress("Ev_reco", &_Ev_reco);//////for oa sampls
   _data->SetBranchStatus("Ev_reco_nue", 1);
   _data->SetBranchAddress("Ev_reco_nue", &_erec_nue);
   _data->SetBranchStatus("RecoHadEnNumu", 1);
@@ -536,19 +574,30 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   _data->SetBranchAddress("vtx_y", &_vtx_y);
   _data->SetBranchStatus("vtx_z", 1);
   _data->SetBranchAddress("vtx_z", &_vtx_z);
+  _data->SetBranchStatus("det_x", 1);
+  _data->SetBranchAddress("det_x", &_det_x);
+  
+
 
   TH1D *norm = (TH1D *)_sampleFile->Get("norm");
   if (!norm) {
-    std::cout << "Add a norm KEY to the root file using MakeNormHists.cxx"
-              << std::endl;
-    std::cout << "Ignoring for now" << std::endl;
-    std::cerr << __FILE__ << ":" << __LINE__ << std::endl;
-    throw;
+    //std::cout << "Add a norm KEY to the root file using MakeNormHists.cxx"
+             // << std::endl;
+    //std::cout << "Ignoring for now" << std::endl;
+    //std::cerr << __FILE__ << ":" << __LINE__ << std::endl;
+    //throw;
+
+  norm = new TH1D("norm","",1,0,1);
+  norm->SetBinContent(1,1);
   }
 
+  //pot scaling  duneobj->norm_s = (1e21/1.905e21);
   // now fill the actual variables
-  duneobj->norm_s = norm->GetBinContent(1);
-  duneobj->pot_s = (pot) / norm->GetBinContent(2);
+  duneobj->norm_s = 1.0; //norm->GetBinContent(1);
+  //duneobj->pot_s = (pot) / norm->GetBinContent(1);
+  duneobj->pot_s = (pot) / 3.85e21;
+  //duneobj->pot_s = (pot) / norm->GetBinContent(2);
+  std::cout << "pot = " << (pot)<< std::endl;
   std::cout << "pot_s = " << duneobj->pot_s << std::endl;
   std::cout << "norm_s = " << duneobj->norm_s << std::endl;
   duneobj->nEvents = _data->GetEntries();
@@ -558,6 +607,7 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
 
   std::cout << "signal: " << duneobj->signal << std::endl;
   std::cout << "nevents: " << duneobj->nEvents << std::endl;
+  std::cout << "nutype " << duneobj->nutype << std::endl;
 
   // allocate memory for dunemc variables
   duneobj->rw_cvnnumu = new double[duneobj->nEvents];
@@ -568,7 +618,12 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   duneobj->rw_erec = new double[duneobj->nEvents];
   duneobj->rw_erec_shifted = new double[duneobj->nEvents];
   duneobj->rw_erec_had = new double[duneobj->nEvents];
+
+  duneobj->rw_erec_had_nd = new double[duneobj->nEvents];
   duneobj->rw_erec_lep = new double[duneobj->nEvents];
+  
+  duneobj->enureco = new double[duneobj->nEvents];
+  
 
   duneobj->rw_eRecoP = new double[duneobj->nEvents];
   duneobj->rw_eRecoPip = new double[duneobj->nEvents];
@@ -597,7 +652,10 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   duneobj->rw_vtx_z = new double[duneobj->nEvents];
 
   duneobj->rw_abis3dbinnumber = new double[duneobj->nEvents]; /////////////////////new bin number
-
+  duneobj->detector_oa_position = new double[duneobj->nEvents];
+  duneobj->offaxis_3dbinnumber = new double[duneobj->nEvents];
+  duneobj->offaxis_2dbinnumber = new double[duneobj->nEvents];
+  //duneobk->global_binnumber = new double[duneobj->nEvents];
 
   duneobj->energyscale_w = new double[duneobj->nEvents];
   duneobj->mode = new int[duneobj->nEvents];
@@ -628,6 +686,9 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
     duneobj->rw_cvnnue[i] = (double)_cvnnue;
     duneobj->rw_cvnnumu_shifted[i] = (double)_cvnnumu;
     duneobj->rw_cvnnue_shifted[i] = (double)_cvnnue;
+    
+    duneobj->enureco[i] = (double)_Ev_reco;
+  
     if (iselike) {
       duneobj->rw_erec[i] = (double)_erec_nue;
       duneobj->rw_erec_shifted[i] = (double)_erec_nue;
@@ -639,6 +700,8 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
       duneobj->rw_erec_had[i] = (double)_erec_had;
       duneobj->rw_erec_lep[i] = (double)_erec_lep;
     }
+    duneobj->rw_erec_had_nd[i] = (double)(_erec - _erec_lep);
+    duneobj->detector_oa_position[i] = ((-1.0*(double)_det_x)/100.0);  ///make OA position positive and in m   +vtx  
     duneobj->rw_lep_ang_numu[i] = (double)_erec_lep_ang_numu;
     duneobj->rw_eRecoP[i] = (double)_eRecoP;
     duneobj->rw_eRecoPip[i] = (double)_eRecoPip;
@@ -678,6 +741,9 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
     duneobj->energyscale_w[i] = 1.0;
 
     duneobj->flux_w[i] = 1.0;
+
+   //detector_oa_position[i] = "<< (-1.0*(double)_det_x)/100.0<<std::endl;
+   //std::cout<< "rw_etrue = " << _ev << std::endl;
   }
 
   _sampleFile->Close();
@@ -723,6 +789,18 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
      //std::cout<< "rw_Q2[iEvent] = " << _Q2 << std::endl;
 	   break;
     }
+    case kBinningin2D:{
+        double ELep = dunemcSamples[iSample].rw_etru[iEvent];  // calculate ELep
+        double offaxis_position = dunemcSamples[iSample].detector_oa_position[iEvent]; // OA position
+        KinematicValue = OA2DHistogram->FindFixBin(offaxis_position,ELep);
+        double global_bin_prism_2D = OA2DHistogram->FindFixBin(offaxis_position,ELep);
+        //std::cout << "Kinematic Value for 2D histogram = " << KinematicValue <<std::endl;
+        dunemcSamples[iSample].offaxis_2dbinnumber[iEvent] = global_bin_prism_2D;
+        //std::cout<<"offaxis_2dbinnumber  = " << global_bin_prism_2D << std::endl;
+        //std::cout<<"OA positon  = " << offaxis_position << std::endl;
+        //std::cout<<" rw_etru  = " << ELep << std::endl;
+        break; 
+      }
   case kAbis3DBinning:{
         double ELep = dunemcSamples[iSample].rw_LepE[iEvent];  // calculate ELep
         double thetaLep = dunemcSamples[iSample].rw_lep_ang_numu[iEvent]; // calculate thetaLep 
@@ -742,6 +820,20 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
         
         break;
       }
+    
+
+    case kDUNEPRISMBinning:{
+        double ELep = dunemcSamples[iSample].rw_LepE[iEvent];  // calculate ELep
+        double Ehad = dunemcSamples[iSample].rw_erec_had[iEvent]; // calculate thetaLep 
+        double offaxis_position = dunemcSamples[iSample].detector_oa_position[iEvent]; // OA position
+        KinematicValue = OA3DHistogram->FindFixBin(ELep,Ehad,offaxis_position);
+        double global_bin_prism = OA3DHistogram->FindFixBin(ELep,Ehad,offaxis_position);
+        std::cout << "Kinematic Value for kDUNEPRISMBinning = " << KinematicValue <<std::endl;
+        dunemcSamples[iSample].offaxis_3dbinnumber[iEvent] = global_bin_prism;
+        break;
+      }
+
+      
       //onedim_binnumberhisto->Write();
   case kM3Mode:
         KinematicValue = dunemcSamples[iSample].mode[iEvent];
@@ -827,7 +919,7 @@ void samplePDFDUNEBase::setupFDMC(dunemc_base *duneobj, fdmc_base *fdobj,
       // Just point to xvar to the address of the variable you want to bin in
       // This way we don't have to update both fdmc and skmc when we apply
       // shifts to variables we're binning in
-      fdobj->x_var[iEvent] = &(duneobj->rw_abis3dbinnumber[iEvent]);
+      fdobj->x_var[iEvent] = &(duneobj->offaxis_2dbinnumber[iEvent]); //offaxis_3dbinnumber
       fdobj->y_var[iEvent] =
           &(duneobj
                 ->dummy_y); // ETA - don't think we even need this as if we have
@@ -838,9 +930,23 @@ void samplePDFDUNEBase::setupFDMC(dunemc_base *duneobj, fdmc_base *fdobj,
       // Just point to xvar to the address of the variable you want to bin in
       // This way we don't have to update both fdmc and skmc when we apply
       // shifts to variables we're binning in
-      fdobj->x_var[iEvent] = &(duneobj->rw_erec_shifted[iEvent]);
-      fdobj->y_var[iEvent] = &(duneobj->rw_erec_had[iEvent]);
+      fdobj->y_var[iEvent] = &(duneobj->detector_oa_position[iEvent]);
+      fdobj->x_var[iEvent] = &(duneobj->rw_etru[iEvent]);
+
+      
       break;
+    case 3: // binning opt 3 sets itself up different but just uses the 1d binning projection
+      //fdobj->x_var[iEvent] = doc["Binning"]["BinningOpt"].as<int>();
+      //vector<double> uniform_binning(100);
+      //double x = 0.0;
+      //std::generate(uniform_binning.begin(), uniform_binning.end(), [&]{ return x++; }); 
+      fdobj->x_var[iEvent] = &(duneobj->offaxis_2dbinnumber[iEvent]);
+      fdobj->y_var[iEvent] = &(duneobj->dummy_y);
+            //    doc["Binning"]["NTotalBins"].as<int>();
+
+              //  SampleManager->raw()["Binning"]["BinningOpt"].as<int>();
+      break;
+
     default:
       std::cout << "[ERROR:] " << __FILE__ << ":" << __LINE__
                 << " unrecognised binning option" << BinningOpt << std::endl;
@@ -929,108 +1035,109 @@ void samplePDFDUNEBase::applyShifts(int iSample, int iEvent) {
                    abs(dunemcSamples[iSample].rw_nuPDG[iEvent] == 14)) &&
                  dunemcSamples[iSample].nutype == 2};
 
+   /*
   TotalEScaleFD(FDDetectorSystPointers[0],
                 &dunemcSamples[iSample].rw_erec_shifted[iEvent],
                 dunemcSamples[iSample].rw_erec_had[iEvent],
-                dunemcSamples[iSample].rw_erec_lep[iEvent], NotCCnumu);
+                dunemcSamples[iSample].rw_erec_lep[iEvent], NotCCnumu);*/
 
-  TotalEScaleSqrtFD(FDDetectorSystPointers[1],
-                    &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-                    dunemcSamples[iSample].rw_erec_had[iEvent],
-                    dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecHad,
-                    sqrtErecLep, NotCCnumu);
+//   TotalEScaleSqrtFD(FDDetectorSystPointers[1],
+//                     &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//                     dunemcSamples[iSample].rw_erec_had[iEvent],
+//                     dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecHad,
+//                     sqrtErecLep, NotCCnumu);
 
-  TotalEScaleInvSqrtFD(FDDetectorSystPointers[2],
-                       &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-                       dunemcSamples[iSample].rw_erec_had[iEvent],
-                       dunemcSamples[iSample].rw_erec_lep[iEvent],
-                       invSqrtErecHad, invSqrtErecLep, NotCCnumu);
+//   TotalEScaleInvSqrtFD(FDDetectorSystPointers[2],
+//                        &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//                        dunemcSamples[iSample].rw_erec_had[iEvent],
+//                        dunemcSamples[iSample].rw_erec_lep[iEvent],
+//                        invSqrtErecHad, invSqrtErecLep, NotCCnumu);
 
-  HadEScaleFD(FDDetectorSystPointers[3],
-              &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad);
+//   HadEScaleFD(FDDetectorSystPointers[3],
+//               &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad);
 
-  HadEScaleSqrtFD(FDDetectorSystPointers[4],
-                  &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad,
-                  sqrtSumEhad);
+//   HadEScaleSqrtFD(FDDetectorSystPointers[4],
+//                   &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad,
+//                   sqrtSumEhad);
 
-  HadEScaleInvSqrtFD(FDDetectorSystPointers[5],
-                     &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad,
-                     invSqrtSumEhad);
+//   HadEScaleInvSqrtFD(FDDetectorSystPointers[5],
+//                      &dunemcSamples[iSample].rw_erec_shifted[iEvent], sumEhad,
+//                      invSqrtSumEhad);
 
-  MuEScaleFD(FDDetectorSystPointers[6],
-             &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-             dunemcSamples[iSample].rw_erec_lep[iEvent], CCnumu);
+//   MuEScaleFD(FDDetectorSystPointers[6],
+//              &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//              dunemcSamples[iSample].rw_erec_lep[iEvent], CCnumu);
 
-  MuEScaleSqrtFD(FDDetectorSystPointers[7],
-                 &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-                 dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep,
-                 CCnumu);
+//   MuEScaleSqrtFD(FDDetectorSystPointers[7],
+//                  &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//                  dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep,
+//                  CCnumu);
 
-  MuEScaleInvSqrtFD(FDDetectorSystPointers[8],
-                    &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-                    dunemcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep,
-                    CCnumu);
+//   MuEScaleInvSqrtFD(FDDetectorSystPointers[8],
+//                     &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//                     dunemcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep,
+//                     CCnumu);
 
-  NEScaleFD(FDDetectorSystPointers[9],
-            &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-            dunemcSamples[iSample].rw_eRecoN[iEvent]);
+//   NEScaleFD(FDDetectorSystPointers[9],
+//             &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//             dunemcSamples[iSample].rw_eRecoN[iEvent]);
 
-  NEScaleSqrtFD(FDDetectorSystPointers[10],
-                &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-                dunemcSamples[iSample].rw_eRecoN[iEvent], sqrteRecoN);
+//   NEScaleSqrtFD(FDDetectorSystPointers[10],
+//                 &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//                 dunemcSamples[iSample].rw_eRecoN[iEvent], sqrteRecoN);
 
-  NEScaleInvSqrtFD(FDDetectorSystPointers[11],
-                   &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-                   dunemcSamples[iSample].rw_eRecoN[iEvent], invSqrteRecoN);
+//   NEScaleInvSqrtFD(FDDetectorSystPointers[11],
+//                    &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//                    dunemcSamples[iSample].rw_eRecoN[iEvent], invSqrteRecoN);
 
-  EMEScaleFD(FDDetectorSystPointers[12],
-             &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-             dunemcSamples[iSample].rw_eRecoPi0[iEvent],
-             dunemcSamples[iSample].rw_erec_lep[iEvent], CCnue);
+//   EMEScaleFD(FDDetectorSystPointers[12],
+//              &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//              dunemcSamples[iSample].rw_eRecoPi0[iEvent],
+//              dunemcSamples[iSample].rw_erec_lep[iEvent], CCnue);
 
-  EMEScaleSqrtFD(FDDetectorSystPointers[13],
-                 &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-                 dunemcSamples[iSample].rw_eRecoPi0[iEvent],
-                 dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep,
-                 sqrteRecoPi0, CCnue);
+//   EMEScaleSqrtFD(FDDetectorSystPointers[13],
+//                  &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//                  dunemcSamples[iSample].rw_eRecoPi0[iEvent],
+//                  dunemcSamples[iSample].rw_erec_lep[iEvent], sqrtErecLep,
+//                  sqrteRecoPi0, CCnue);
 
-  EMEScaleInvSqrtFD(FDDetectorSystPointers[14],
-                    &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-                    dunemcSamples[iSample].rw_eRecoPi0[iEvent],
-                    dunemcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep,
-                    invSqrteRecoPi0, CCnue);
+//   EMEScaleInvSqrtFD(FDDetectorSystPointers[14],
+//                     &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//                     dunemcSamples[iSample].rw_eRecoPi0[iEvent],
+//                     dunemcSamples[iSample].rw_erec_lep[iEvent], invSqrtErecLep,
+//                     invSqrteRecoPi0, CCnue);
 
-  HadResFD(FDDetectorSystPointers[15],
-           &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-           dunemcSamples[iSample].rw_eRecoP[iEvent],
-           dunemcSamples[iSample].rw_eRecoPip[iEvent],
-           dunemcSamples[iSample].rw_eRecoPim[iEvent],
-           dunemcSamples[iSample].rw_eP[iEvent],
-           dunemcSamples[iSample].rw_ePip[iEvent],
-           dunemcSamples[iSample].rw_ePim[iEvent]);
+//   HadResFD(FDDetectorSystPointers[15],
+//            &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//            dunemcSamples[iSample].rw_eRecoP[iEvent],
+//            dunemcSamples[iSample].rw_eRecoPip[iEvent],
+//            dunemcSamples[iSample].rw_eRecoPim[iEvent],
+//            dunemcSamples[iSample].rw_eP[iEvent],
+//            dunemcSamples[iSample].rw_ePip[iEvent],
+//            dunemcSamples[iSample].rw_ePim[iEvent]);
 
-  MuResFD(FDDetectorSystPointers[16],
-          &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-          dunemcSamples[iSample].rw_erec_lep[iEvent],
-          dunemcSamples[iSample].rw_LepE[iEvent], CCnumu);
+//   MuResFD(FDDetectorSystPointers[16],
+//           &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//           dunemcSamples[iSample].rw_erec_lep[iEvent],
+//           dunemcSamples[iSample].rw_LepE[iEvent], CCnumu);
 
-  NResFD(FDDetectorSystPointers[17],
-         &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-         dunemcSamples[iSample].rw_eRecoN[iEvent],
-         dunemcSamples[iSample].rw_eN[iEvent]);
+//   NResFD(FDDetectorSystPointers[17],
+//          &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//          dunemcSamples[iSample].rw_eRecoN[iEvent],
+//          dunemcSamples[iSample].rw_eN[iEvent]);
 
-  EMResFD(FDDetectorSystPointers[18],
-          &dunemcSamples[iSample].rw_erec_shifted[iEvent],
-          dunemcSamples[iSample].rw_eRecoPi0[iEvent],
-          dunemcSamples[iSample].rw_ePi0[iEvent],
-          dunemcSamples[iSample].rw_erec_lep[iEvent],
-          dunemcSamples[iSample].rw_LepE[iEvent], CCnue);
+//   EMResFD(FDDetectorSystPointers[18],
+//           &dunemcSamples[iSample].rw_erec_shifted[iEvent],
+//           dunemcSamples[iSample].rw_eRecoPi0[iEvent],
+//           dunemcSamples[iSample].rw_ePi0[iEvent],
+//           dunemcSamples[iSample].rw_erec_lep[iEvent],
+//           dunemcSamples[iSample].rw_LepE[iEvent], CCnue);
 
-  CVNNumuFD(FDDetectorSystPointers[19],
-            &dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent]);
+//   CVNNumuFD(FDDetectorSystPointers[19],
+//             &dunemcSamples[iSample].rw_cvnnumu_shifted[iEvent]);
 
-  CVNNueFD(FDDetectorSystPointers[20],
-           &dunemcSamples[iSample].rw_cvnnue_shifted[iEvent]);
+//   CVNNueFD(FDDetectorSystPointers[20],
+//            &dunemcSamples[iSample].rw_cvnnue_shifted[iEvent]);
 }
 
 

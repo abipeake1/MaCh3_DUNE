@@ -53,10 +53,8 @@ enum KinematicTypes {
   kM3Mode = 14,
   kOscChannel = 15,
   kAbis3DBinning = 16,
-  
-
-
-
+  kDUNEPRISMBinning=17,
+  kBinningin2D=18,
   kNKinematicParams
 };
 
@@ -76,6 +74,8 @@ inline int ReturnKinematicParameterFromString(std::string KinematicParameterStr)
   if (KinematicParameterStr.find("M3Mode") != std::string::npos) {return kM3Mode;}
   if (KinematicParameterStr.find("InvariantHadronicMass_W") != std::string::npos) {return kInvariantHadronicMass_W;}
   if (KinematicParameterStr.find("Abis3DBinning") != std::string::npos) {return kAbis3DBinning;}
+  if (KinematicParameterStr.find("DUNEPRISMBinning") != std::string::npos) {return kDUNEPRISMBinning;}
+  if (KinematicParameterStr.find("Binningin2D") != std::string::npos) {return kBinningin2D;}
   if (KinematicParameterStr.find("OscChannel") != std::string::npos) {return kOscChannel;}
   return kNKinematicParams; 
 }

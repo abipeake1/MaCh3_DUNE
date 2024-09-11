@@ -274,7 +274,10 @@ void samplePDFDUNEBaseND::init(double pot, std::string samplecfgfile, covariance
 
   std::cout << "Now setting up Splines" << std::endl;
   for(unsigned iSample=0 ; iSample < MCSamples.size() ; iSample++){
-	setupSplines(&MCSamples[sample_vecno[iSample]] , (splineprefix+spline_files[iSample]+splinesuffix).c_str(), MCSamples[iSample].nutype, MCSamples[iSample].signal);
+        if(!splineprefix.size() || !splinesuffix.size()){
+      continue;
+    }
+	  setupSplines(&MCSamples[sample_vecno[iSample]] , (splineprefix+spline_files[iSample]+splinesuffix).c_str(), MCSamples[iSample].nutype, MCSamples[iSample].signal);
   }
 
   std::cout << "################" << std::endl;
@@ -676,6 +679,9 @@ void samplePDFDUNEBaseND::applyShifts(int iSample, int iEvent)
   
   dunendmcSamples[iSample].rw_erec_shifted[iEvent] = dunendmcSamples[iSample].rw_erec[iEvent];
 
+
+
+  //std::cout<< "dunendmcSamples[iSample].rw_erec_shifted[iEvent] " << dunendmcSamples[iSample].rw_erec_shifted[iEvent]  <<std::endl;
   //Calculate values needed
   double sqrtErecHad =  sqrt(dunendmcSamples[iSample].rw_erec_had[iEvent]);
   double sqrtErecLep =  sqrt(dunendmcSamples[iSample].rw_erec_lep[iEvent]);

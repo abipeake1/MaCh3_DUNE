@@ -51,6 +51,7 @@ struct dunemc_base {
   double *rw_erec;
   double *rw_erec_shifted;
   double *rw_erec_had;
+  double *rw_erec_had_nd;
   double *rw_erec_lep;
   
   double *rw_eRecoP;
@@ -65,6 +66,8 @@ struct dunemc_base {
   double *rw_ePim;
   double *rw_ePi0;
   double *rw_eN;
+
+  double *enureco;
 
   double *rw_etru;
   double *rw_mom;
@@ -85,6 +88,8 @@ struct dunemc_base {
   double *rw_lep_ang_numu;
 
   double *rw_abis3dbinnumber;
+  double *offaxis_3dbinnumber;
+  double *offaxis_2dbinnumber;
   double *rw_berpaacvwgt;
   int    *rw_isCC;
   int    *rw_nuPDGunosc;
@@ -100,6 +105,8 @@ struct dunemc_base {
   int *mode;
   int *isbound;
   int **rw_ipnu;
+
+  double *detector_oa_position;//////////////////////detector off axis position as a bin for Mach3 - for PRISM analysis
 
 
   double pot_s; // s is for scale                                             
@@ -191,6 +198,8 @@ public:
   double _vtx_y;
   double _vtx_z;
 
+  double _Ev_reco;
+
   //Truth Variables
   double _ev;
   double _LepE;
@@ -217,6 +226,9 @@ public:
   double _LepTheta;
   double _Q2;
   double _erec_lep_ang_numu;
+
+  //Detector position
+  double _det_x; ///////////////////////////NB this is in cm so need to convert to m
 
 
 

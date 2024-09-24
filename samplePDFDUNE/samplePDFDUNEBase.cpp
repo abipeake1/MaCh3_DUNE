@@ -84,7 +84,7 @@ samplePDFDUNEBase::samplePDFDUNEBase(double pot, std::string mc_version,
     //ExtendLinspace(ENuReco_bins,0,4,8);
 
     std::vector<double> offaxis_position;
-    ExtendLinspace(offaxis_position,-1,30,10);
+    ExtendLinspace(offaxis_position,-35,0,10);
     
      //TH3D* Abis3DHistogram = new TH3D("Abis3DHistogram", "", ELep_bins.size(), theta_bins.size(),  ENuReco_bins.size()); // fill this in with the binning like we used to in NUISANCE
      std::cout<< "ELep_bins.size() = " << ELep_bins.size() <<std::endl;
@@ -155,7 +155,7 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
 
   // Bools
   IsRHC = SampleManager->raw()["SampleBools"]["isrhc"].as<bool>();
-  SampleDetID = SampleManager->raw()["DetID"].as<int>();
+  SampleDetID =SampleManager->raw()["DetID"].as<int>();
   iselike = SampleManager->raw()["SampleBools"]["iselike"].as<bool>();
 
   // Inputs
@@ -175,8 +175,14 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
   std::vector<double> sample_theta_bins =
       SampleManager->raw()["Binning"]["YVarBins"].as<std::vector<double>>();
 
-  //std::vector<double> uniform_bins =
-    //  SampleManager->raw()["Binning"]["NBins"].as<std::vector<double>>();
+  
+  
+  double Number_of_uniform_bins = SampleManager->raw()["Binning"]["NTotalBins"].as<double>();
+  std::vector<double> uniform_bins;
+      for (int i = 0; i < Number_of_uniform_bins; ++i) {
+         uniform_bins.push_back(i);
+      }
+      
 
   samplename = SampleManager->raw()["SampleName"].as<std::string>();
 
@@ -187,7 +193,77 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
   std::vector<int> sample_nutype;
   std::vector<bool> sample_signal;
 
-  // Loop over all the sub-samples
+
+  //Loop over all the subsamples using a wildcard so you can loop over the whole directory
+
+   std::string caf_file_directory = "/home/abipeake/Mach3/MaCh3_DUNE/inputs/DUNE_OA_CAF_new/*";
+   std::cout<< "looking in caf_file_directory :  " << caf_file_directory << std::endl;
+   int number_of_subsamples=0;
+        // pretends shell glob caf_file_directorys are regex any char
+        size_t next_ast = caf_file_directory.find_first_of('*');
+        std::cout<< "files in CAF folder =  :  " << next_ast << std::endl;
+
+        while(next_ast != std::string::npos){
+          std::cout<< "in while loop finding subsamples in CAF dir" << std::endl;
+                if(!next_ast || (caf_file_directory[next_ast-1] != '.')){
+                        caf_file_directory.replace(next_ast,1,".*");
+                        next_ast++;
+                        //number_of_subsamples = number_of_subsamples +1;
+                       
+                        //std::cout << "number_of_subsamples " << number_of_subsamples << std::endl;
+                }
+                next_ast = caf_file_directory.find_first_of('*',next_ast+1);
+        }
+
+        size_t last_fs = caf_file_directory.find_last_of('/');
+        std::cout<< " found all subsamples in CAF dir" << std::endl;
+        std::filesystem::path dir;
+        std::regex file_re;
+        if(last_fs == std::string::npos){
+                dir = "./";
+                file_re = std::regex(caf_file_directory);
+        } else {
+                dir = caf_file_directory.substr(0,last_fs);
+                file_re = std::regex(caf_file_directory.substr(last_fs+1));
+        }
+        if(!std::filesystem::exists(dir)){
+                std::cerr << "[ERROR]: caf_file_directory directory: " << dir.native() << " does not exist." << std::endl;
+                throw;
+        }
+        for (auto const &dir_entry :
+          std::filesystem::directory_iterator{dir}) {
+                if (std::regex_match(dir_entry.path().filename().native(), file_re)) {
+                        std::cout << "found matching file:" << dir_entry.path().native() << std::endl;
+                        
+                        number_of_subsamples = number_of_subsamples + 1 ;
+                        mtuple_files.push_back(dir_entry.path().filename().native());
+                        spline_files.push_back(dir_entry.path().filename().native());
+                       
+                        sample_nutype.push_back(14);
+                        sample_oscnutype.push_back(14);
+                        sample_signal.push_back(false);
+                        sample_vecno.push_back(number_of_subsamples);
+                        std::cout<< "number_of_subsamples = " << number_of_subsamples <<std::endl;
+                }
+        }
+
+    /*---------------------original
+    for (auto const &osc_channel : SampleManager->raw()["SubSamples"]) {
+    std::cout << "Found sub sample" << std::endl;
+    
+    mtuple_files.push_back(osc_channel["mtuplefile"].as<std::string>());
+    spline_files.push_back(osc_channel["splinefile"].as<std::string>());
+    sample_vecno.push_back(osc_channel["samplevecno"].as<int>());
+    sample_nutype.push_back(
+        PDGToProbs(static_cast<NuPDG>(osc_channel["nutype"].as<int>())));
+    sample_oscnutype.push_back(
+        PDGToProbs(static_cast<NuPDG>(osc_channel["oscnutype"].as<int>())));
+    sample_signal.push_back(osc_channel["signal"].as<bool>());
+  }*/
+
+
+  /*
+  // Loop over all the sub-samples --original version
   for (auto const &osc_channel : SampleManager->raw()["SubSamples"]) {
     std::cout << "Found sub sample" << std::endl;
     mtuple_files.push_back(osc_channel["mtuplefile"].as<std::string>());
@@ -198,8 +274,9 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
     sample_oscnutype.push_back(
         PDGToProbs(static_cast<NuPDG>(osc_channel["oscnutype"].as<int>())));
     sample_signal.push_back(osc_channel["signal"].as<bool>());
-  }
+  }*/
 
+  
   // Now loop over the kinematic cuts
   for (auto const &SelectionCuts : SampleManager->raw()["SelectionCuts"]) {
     std::cout << "Looping over selection cuts " << std::endl;
@@ -226,15 +303,23 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
     theta_bin_edges[theta_i] = sample_theta_bins[theta_i];
   }
 
-  // create dunemc storage
-  int nSamples = SampleManager->raw()["NSubSamples"].as<int>();
+  // create dunemc storage -original 
+  /*int nSamples = SampleManager->raw()["NSubSamples"].as<int>();
   for (int i = 0; i < nSamples; i++) {
     struct dunemc_base obj = dunemc_base();
     dunemcSamples.push_back(obj);
-  }
+  }*/
+  
+  
+  for (int i = 0; i < number_of_subsamples; i++) {
+    //std::cout << "line 315 number of subsamples = " << number_of_subsamples << std::endl;
+    struct dunemc_base obj = dunemc_base();
+    dunemcSamples.push_back(obj);
+    }
 
-  // Now down with yaml file for sample
+  // Now down with yaml file for sample - original
   delete SampleManager;
+  std::cout << "Number of subsamples line 322 = : " << number_of_subsamples << endl;
   std::cout << "Oscnutype size: " << sample_oscnutype.size()
             << ", dunemcSamples size: " << dunemcSamples.size() << endl;
   if (sample_oscnutype.size() != dunemcSamples.size()) {
@@ -243,6 +328,7 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
               << std::endl;
     throw;
   }
+  
 
   for (unsigned iSample = 0; iSample < dunemcSamples.size(); iSample++) {
     setupDUNEMC((mtupleprefix + mtuple_files[iSample] + mtuplesuffix).c_str(),
@@ -251,7 +337,8 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
                 sample_signal[iSample]);
   }
 
-  for (int i = 0; i < nSamples; i++) {
+  for (int i = 0; i < number_of_subsamples; i++) {
+    // std::cout << "line 341 number of subsamples = " << number_of_subsamples << std::endl;
     struct fdmc_base obj = fdmc_base();
     MCSamples.push_back(obj);
   }
@@ -435,7 +522,9 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
   std::cout << "Setup FD splines   " << std::endl;
   std::cout << "################" << std::endl;
 
+  std::cout<< "about to call weight pointers" <<std::endl;
   setupWeightPointers();
+  std::cout<< "finished weight pointers" <<std::endl;
 
   fillSplineBins();
 
@@ -471,25 +560,34 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
 }
 
 void samplePDFDUNEBase::setupWeightPointers() {
-
+  
   for (int i = 0; i < (int)dunemcSamples.size(); ++i) {
-    for (int j = 0; j < dunemcSamples[i].nEvents; ++j) {
-      // DB Setting total weight pointers
-      MCSamples[i].ntotal_weight_pointers[j] = 6;
-      MCSamples[i].total_weight_pointers[j] =
-          new double *[MCSamples[i].ntotal_weight_pointers[j]];
-      MCSamples[i].total_weight_pointers[j][0] = &(dunemcSamples[i].pot_s);
-      MCSamples[i].total_weight_pointers[j][1] = &(dunemcSamples[i].norm_s);
-      MCSamples[i].total_weight_pointers[j][2] = &(MCSamples[i].osc_w[j]);
-      MCSamples[i].total_weight_pointers[j][3] =
-          &(dunemcSamples[i].rw_berpaacvwgt[j]);
-      MCSamples[i].total_weight_pointers[j][4] = &(MCSamples[i].flux_w[j]);
-      MCSamples[i].total_weight_pointers[j][5] = &(MCSamples[i].xsec_w[j]);
-    }
+    //std::cout<< "help in first for loop"<<std::endl;
+	for (int j = 0; j < dunemcSamples[i].nEvents; ++j) {
+    //std::cout<< "help0"<<std::endl;
+	  //DB Setting total weight pointers
+	  MCSamples[i].ntotal_weight_pointers[j] = 6;
+   // std::cout<< "help1"<<std::endl;
+	  MCSamples[i].total_weight_pointers[j] = new double*[MCSamples[i].ntotal_weight_pointers[j]];
+    //std::cout<< "help2"<<std::endl;
+	  MCSamples[i].total_weight_pointers[j][0] = &(dunemcSamples[i].pot_s);
+    //std::cout<< "help3"<<std::endl;
+	  MCSamples[i].total_weight_pointers[j][1] = &(dunemcSamples[i].norm_s);
+    //std::cout<< "help4"<<std::endl;
+	  MCSamples[i].total_weight_pointers[j][2] = &(MCSamples[i].osc_w[j]);
+    //std::cout<< "help5"<<std::endl;
+	  MCSamples[i].total_weight_pointers[j][3] = &(dunemcSamples[i].rw_berpaacvwgt[j]);
+    //std::cout<< "help6"<<std::endl;
+	  MCSamples[i].total_weight_pointers[j][4] = &(MCSamples[i].flux_w[j]);
+    //std::cout<< "help7"<<std::endl;
+	  MCSamples[i].total_weight_pointers[j][5] = &(MCSamples[i].xsec_w[j]);
+	}
   }
 
   return;
 }
+
+
 
 void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
                                     dunemc_base *duneobj, double pot,
@@ -655,6 +753,8 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   duneobj->detector_oa_position = new double[duneobj->nEvents];
   duneobj->offaxis_3dbinnumber = new double[duneobj->nEvents];
   duneobj->offaxis_2dbinnumber = new double[duneobj->nEvents];
+  duneobj->uniform_bins = new double[duneobj->nEvents];
+  
   //duneobk->global_binnumber = new double[duneobj->nEvents];
 
   duneobj->energyscale_w = new double[duneobj->nEvents];
@@ -701,7 +801,7 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
       duneobj->rw_erec_lep[i] = (double)_erec_lep;
     }
     duneobj->rw_erec_had_nd[i] = (double)(_erec - _erec_lep);
-    duneobj->detector_oa_position[i] = ((-1.0*(double)_det_x)/100.0);  ///make OA position positive and in m   +vtx  
+    duneobj->detector_oa_position[i] = (((double)_det_x + (double)_vtx_x)/100.0);  ///make OA position positive and in m   +vtx  
     duneobj->rw_lep_ang_numu[i] = (double)_erec_lep_ang_numu;
     duneobj->rw_eRecoP[i] = (double)_eRecoP;
     duneobj->rw_eRecoPip[i] = (double)_eRecoPip;
@@ -741,6 +841,8 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
     duneobj->energyscale_w[i] = 1.0;
 
     duneobj->flux_w[i] = 1.0;
+
+    duneobj->uniform_bins[i] = 1.0;
 
    //detector_oa_position[i] = "<< (-1.0*(double)_det_x)/100.0<<std::endl;
    //std::cout<< "rw_etrue = " << _ev << std::endl;
@@ -870,7 +972,9 @@ void samplePDFDUNEBase::setupFDMC(dunemc_base *duneobj, fdmc_base *fdobj,
   fdobj->NomYBin = new int[fdobj->nEvents];
   fdobj->XBin = new int[fdobj->nEvents];
   fdobj->YBin = new int[fdobj->nEvents];
-  ;
+
+  
+  
   fdobj->rw_lower_xbinedge = new double[fdobj->nEvents];
   fdobj->rw_lower_lower_xbinedge = new double[fdobj->nEvents];
   fdobj->rw_upper_xbinedge = new double[fdobj->nEvents];
@@ -940,6 +1044,17 @@ void samplePDFDUNEBase::setupFDMC(dunemc_base *duneobj, fdmc_base *fdobj,
       //vector<double> uniform_binning(100);
       //double x = 0.0;
       //std::generate(uniform_binning.begin(), uniform_binning.end(), [&]{ return x++; }); 
+      fdobj->x_var[iEvent] = &(duneobj->offaxis_2dbinnumber[iEvent]);
+      fdobj->y_var[iEvent] = &(duneobj->dummy_y);
+            //    doc["Binning"]["NTotalBins"].as<int>();
+
+              //  SampleManager->raw()["Binning"]["BinningOpt"].as<int>();
+      break;
+      case 4: //case 4 useful for 3D binning, set the 'global bin number' in the yaml file from the NTotalBins options
+      
+
+      
+      
       fdobj->x_var[iEvent] = &(duneobj->offaxis_2dbinnumber[iEvent]);
       fdobj->y_var[iEvent] = &(duneobj->dummy_y);
             //    doc["Binning"]["NTotalBins"].as<int>();

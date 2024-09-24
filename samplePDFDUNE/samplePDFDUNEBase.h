@@ -106,6 +106,7 @@ struct dunemc_base {
   int *isbound;
   int **rw_ipnu;
 
+  double *uniform_bins;
   double *detector_oa_position;//////////////////////detector off axis position as a bin for Mach3 - for PRISM analysis
 
 

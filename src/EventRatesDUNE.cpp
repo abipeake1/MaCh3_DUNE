@@ -162,8 +162,11 @@ int main(int argc, char * argv[]) {
   std::vector<samplePDFFDBase*> SamplePDFs;
   
   if(addFD) { 
-    samplePDFDUNEBase *numu_oa = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines.yaml", xsec);
-    SamplePDFs.push_back(numu_oa);
+    //samplePDFDUNEBase *numu_oa = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines.yaml", xsec);
+    //SamplePDFs.push_back(numu_oa);
+
+    samplePDFDUNEBase *numu_oa_wildcard = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines_wildcard.yaml", xsec);
+    SamplePDFs.push_back(numu_oa_wildcard);
 
     //samplePDFDUNEBase *numu_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_FHC_numuselec-nosplines.yaml", xsec);
     //SamplePDFs.push_back(numu_pdf);
@@ -241,14 +244,15 @@ int main(int argc, char * argv[]) {
     //ExtendLinspace(ENuReco_bins,0,4,8);
 
     std::vector<double> offaxis_position;
-    ExtendLinspace(offaxis_position,-1,30,10);
+     ExtendLinspace(offaxis_position,-35,0,10);
 
     
     
 //TH3D* Abis3DHistogram_forplotting = new TH3D("Abis3DHistogramforplotting", "", ELep_bins.size(), theta_bins.size(),  ENuReco_bins.size()); // fill this in with the binning like we used to in NUISANCE
-  //std::cout<< "ELep_bins.size() = " << ELep_bins.size() <<std::endl;
-  //std::cout<< "theta_bins.size() = " << theta_bins.size() <<std::endl;
-  //std::cout<< "ENuReco_bins.size() = " << ENuReco_bins.size() <<std::endl;
+  std::cout<< "ELep_bins.size() = " << ELep_bins.size() <<std::endl;
+  std::cout<< "theta_bins.size() = " << theta_bins.size() <<std::endl;
+  std::cout<< "ENuReco_bins.size() = " << ENuReco_bins.size() <<std::endl;
+   std::cout<< "offaxis_position.size() = " << offaxis_position.size() <<std::endl;
 
 
 
@@ -360,55 +364,37 @@ int main(int argc, char * argv[]) {
     // Abis2DHistogram_forplotting_unosc->SetOptStat(0);
      Abis2DHistogram_forplotting_unosc->GetXaxis()->SetTitle("Off axis position");
      Abis2DHistogram_forplotting_unosc->GetYaxis()->SetTitle("Neutrino energy (GeV)");
-     Abis2DHistogram_forplotting_unosc->Draw("colz");
+     Abis2DHistogram_forplotting_unosc->Draw("colz text");
      
 
      canv->cd(6);
      
-     for(Int_t bin1d_i = 0; bin1d_i < sample_unosc->GetNcells(); ++bin1d_i){
-      Abis2DHistogram_forplotting_unosc_scaled->SetBinContent(bin1d_i,sample_unosc->GetBinContent(bin1d_i));
-      }
-    // Abis2DHistogram_forplotting_unosc->SetOptStat(0);
-     Abis2DHistogram_forplotting_unosc_scaled->GetXaxis()->SetTitle("Off axis position");
-     Abis2DHistogram_forplotting_unosc_scaled->GetYaxis()->SetTitle("Neutrino energy (GeV)");
-
-     
     //Divide histogram rows by number of events in each OA position------------------------------------------------------------------
-    std::vector<double> bincontent_oa_position;
-    for(Int_t det_i = 0; det_i < Abis2DHistogram_forplotting_unosc_scaled->GetNbinsX(); ++det_i){
-      double n_events_yaxis=1.0;
-      for(int x=0 ; x < Abis2DHistogram_forplotting_unosc_scaled->GetNbinsY(); ++x){
+    //std::vector<double> bincontent_oa_position;
+    TH2* Abis2DHistogram_forplotting_unosc_scaled = (TH2*)Abis2DHistogram_forplotting_unosc->Clone();
+    double events_in_each_bin[Abis2DHistogram_forplotting_unosc_scaled->GetNbinsX()+2][Abis2DHistogram_forplotting_unosc_scaled->GetNbinsY()+2];
+   for(Int_t det_i = 0; det_i <= Abis2DHistogram_forplotting_unosc_scaled->GetNbinsX()+1; ++det_i){
+      double n_events_yaxis=0.0;
+      for(int x=0 ; x <= Abis2DHistogram_forplotting_unosc_scaled->GetNbinsY()+1; ++x){
 
         double bin_content = Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x);
-        std::cout<<"bin content" << bin_content <<std::endl;
-        n_events_yaxis += bin_content;
+        events_in_each_bin[det_i][x] = bin_content;
       }
-      std::cout<<"events in bin " << det_i << "=" << n_events_yaxis <<std::endl;
-      bincontent_oa_position.push_back(n_events_yaxis);
-      }
-
-      for(Int_t det_i = 0; det_i < Abis2DHistogram_forplotting_unosc_scaled->GetNbinsX(); ++det_i){
-      
-        for(int x=0 ; x < Abis2DHistogram_forplotting_unosc_scaled->GetNbinsY(); ++x){
-            //std::cout << "Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x)" << Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x) <<std::endl;
-            Abis2DHistogram_forplotting_unosc_scaled->SetBinContent(det_i,x, Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x)/bincontent_oa_position[det_i]);
-            //std::cout << "Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x)/bincontent_oa_position[det_i]" << Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x)/bincontent_oa_position[det_i] <<std::endl;
-        
-        }
-      //Abis2DHistogram_forplotting_unosc->SetBinContent(bin1d_i,sample_unosc->GetBinContent(bin1d_i));
-      }
-      Abis2DHistogram_forplotting_unosc_scaled->Draw("colz");
-
-     /*
-    for(Int_t bin1d_i = 0; bin1d_i < sample_osc->GetNcells(); ++bin1d_i){
-      Abis2DHistogram_forplotting_osc->SetBinContent(bin1d_i,sample_osc->GetBinContent(bin1d_i));
     }
 
-     //Abis2DHistogram_forplotting_osc->SetOptStat(0);
-     Abis2DHistogram_forplotting_osc->GetXaxis()->SetTitle("Off axis position");
-     Abis2DHistogram_forplotting_osc->GetYaxis()->SetTitle("Neutrino energy (GeV)");
-     Abis2DHistogram_forplotting_osc->Draw("colz");
-     */
+    for(Int_t det_i = 0; det_i <= (Abis2DHistogram_forplotting_unosc_scaled->GetNbinsX()+1); ++det_i){
+          Double_t det_integral = Abis2DHistogram_forplotting_unosc_scaled->Integral(det_i, det_i, 1 , Abis2DHistogram_forplotting_unosc_scaled->GetNbinsY()); 
+      for(int x=0; x <= (Abis2DHistogram_forplotting_unosc_scaled->GetNbinsY()+1); ++x){
+          //std::cout << "Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x)" << Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x) <<std::endl;
+          Abis2DHistogram_forplotting_unosc_scaled->SetBinContent(det_i,x,  Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x)/(det_integral+1.0));
+          std::cout << "events_in_each_bin[det_i] " << events_in_each_bin[det_i][x] << std::endl;
+          std::cout << "det_integral" << det_integral << std::endl; 
+      }
+    }
+      Abis2DHistogram_forplotting_unosc_scaled->GetXaxis()->SetTitle("Off axis position");
+     Abis2DHistogram_forplotting_unosc_scaled->GetYaxis()->SetTitle("Neutrino energy (GeV)");
+
+      Abis2DHistogram_forplotting_unosc_scaled->Draw("colz text");
 	   canv->Print(OutPlotName.c_str());
 
 	Outfile->cd();
@@ -437,4 +423,17 @@ int main(int argc, char * argv[]) {
   std::cout << "~~~~~~~~~~~~~~~~" << std::endl;
 
   return 0;
+
+
+  /*
+    for(Int_t bin1d_i = 0; bin1d_i < sample_osc->GetNcells(); ++bin1d_i){
+      Abis2DHistogram_forplotting_osc->SetBinContent(bin1d_i,sample_osc->GetBinContent(bin1d_i));
+    }
+
+     //Abis2DHistogram_forplotting_osc->SetOptStat(0);
+     Abis2DHistogram_forplotting_osc->GetXaxis()->SetTitle("Off axis position");
+     Abis2DHistogram_forplotting_osc->GetYaxis()->SetTitle("Neutrino energy (GeV)");
+     Abis2DHistogram_forplotting_osc->Draw("colz");
+     */
+
  }

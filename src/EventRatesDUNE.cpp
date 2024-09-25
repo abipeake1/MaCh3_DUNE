@@ -26,30 +26,9 @@
 #include "samplePDFDUNE/samplePDFDUNEBase.h"
 #include "samplePDFDUNE/samplePDFDUNEBaseND.h"
 #include "manager/manager.h"
+#include "samplePDFDUNE/histograms.h"
 
 using namespace std;
-/* a function to generate numpy linspace */
-//template <typename T>
-  
-template <typename T>
-  std::vector<T> linspace(T a, T b, size_t N) {
-      T h = (b - a) / static_cast<T>(N);
-      std::vector<T> xs(N);
-      typename std::vector<T>::iterator x;
-      T val;
-      for (x = xs.begin(), val = a; x != xs.end(); ++x, val += h)
-          *x = val;
-      return xs;
-  }
-
-void ExtendLinspace(std::vector<double> &in, double low, double high,size_t nbins){
-  for(auto x : linspace(low, high,nbins)){
-      in.push_back(x);
-      
-    }
-    auto x =std::unique(in.begin(),in.end());  //put duplicate bins at end
-    in.erase(x, in.end()); //erase duplicates
-}
 
 
 // Constructors for erec-binned errors
@@ -81,14 +60,27 @@ void saveCanvas(TCanvas* canvas, std::string name, std::string legend)
   canvas -> SaveAs(name.c_str()) ;                           
                                                              
 } 
-
+  /*
   std::unique_ptr<TH3D> Abis3DHistogram_forplotting_unosc;
   std::unique_ptr<TH3D> Abis3DHistogram_forplotting_osc;
   std::unique_ptr<TH2D> Abis2DHistogram_forplotting_unosc;
   std::unique_ptr<TH2D> Abis2DHistogram_forplotting_unosc_scaled;
-  std::unique_ptr<TH2D> Abis2DHistogram_forplotting_osc;
+  std::unique_ptr<TH2D> Abis2DHistogram_forplotting_osc;*/
+
+  
 
 int main(int argc, char * argv[]) {
+
+  // Access histograms
+    Multidim_HistogramManager histograms;
+    auto& Abis3DHistogram_forplotting_unosc = histograms.Abis3DHistogram;
+    auto& Abis3DHistogram_forplotting_osc = histograms.Abis3DHistogram;
+    //auto& oa3D_forplotting_unosc = histograms.OA3DHistogram;
+    //auto& oa3D_forplotting_osc = histograms.OA3DHistogram
+    auto& Abis2DHistogram_forplotting_unosc  = histograms.OA2DHistogram;
+    auto& Abis2DHistogram_osc = histograms.OA2DHistogram;
+    auto& Abis2DHistogram_forplotting_unosc_scaled= histograms.OA2DHistogram;
+
 
   // ----------------------- OPTIONS ---------------------------------------- //
 
@@ -162,11 +154,11 @@ int main(int argc, char * argv[]) {
   std::vector<samplePDFFDBase*> SamplePDFs;
   
   if(addFD) { 
-    //samplePDFDUNEBase *numu_oa = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines.yaml", xsec);
-    //SamplePDFs.push_back(numu_oa);
+    samplePDFDUNEBase *numu_oa = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines.yaml", xsec);
+    SamplePDFs.push_back(numu_oa);
 
-    samplePDFDUNEBase *numu_oa_wildcard = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines_wildcard.yaml", xsec);
-    SamplePDFs.push_back(numu_oa_wildcard);
+    //samplePDFDUNEBase *numu_oa_wildcard = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines_wildcard.yaml", xsec);
+    //SamplePDFs.push_back(numu_oa_wildcard);
 
     //samplePDFDUNEBase *numu_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_FHC_numuselec-nosplines.yaml", xsec);
     //SamplePDFs.push_back(numu_pdf);
@@ -230,7 +222,7 @@ int main(int argc, char * argv[]) {
 
 
 
-
+  /*
   //////////////////////////////////////Stuff for the 3D Histogram unfolding :)
   std::vector<double> ELep_bins;
     ExtendLinspace(ELep_bins,0,40,5);
@@ -240,22 +232,20 @@ int main(int argc, char * argv[]) {
     ExtendLinspace(theta_bins,9,100,2);
     
     //std::vector<double> ENuReco_bins;
-     std::vector<double> ENuReco_bins={0.,   1.,  1.5, 2., 2.5, 3., 3.5, 4., 5., 6., 10.};
+    //std::vector<double> ENuReco_bins = {0., 0.5,   1.,  1.5, 2., 2.5, 3., 3.5, 4., 5., 6.,7., 8. 10.};
     //ExtendLinspace(ENuReco_bins,0,4,8);
 
+    std::vector<double> ENuReco_bins;
+    ExtendLinspace(ENuReco_bins,0,4,8);
+    ExtendLinspace(ENuReco_bins,4,10,6);
+    
     std::vector<double> offaxis_position;
-     ExtendLinspace(offaxis_position,-35,0,10);
+     ExtendLinspace(offaxis_position,-35,0,10);*/
 
     
     
 //TH3D* Abis3DHistogram_forplotting = new TH3D("Abis3DHistogramforplotting", "", ELep_bins.size(), theta_bins.size(),  ENuReco_bins.size()); // fill this in with the binning like we used to in NUISANCE
-  std::cout<< "ELep_bins.size() = " << ELep_bins.size() <<std::endl;
-  std::cout<< "theta_bins.size() = " << theta_bins.size() <<std::endl;
-  std::cout<< "ENuReco_bins.size() = " << ENuReco_bins.size() <<std::endl;
-   std::cout<< "offaxis_position.size() = " << offaxis_position.size() <<std::endl;
-
-
-
+  
   //Some place to store the histograms
   std::vector<TH1D*> oscillated_hists;
   std::vector<TH1D*> unoscillated_hists;
@@ -270,6 +260,8 @@ int main(int argc, char * argv[]) {
 
   for (unsigned sample_i = 0 ; sample_i < SamplePDFs.size() ; ++sample_i) {
 
+
+    /*
     Abis3DHistogram_forplotting_unosc  = std::make_unique<TH3D>("Abis3DHistogram_forplotting_unosc ", "", ELep_bins.size() - 1,
                                          ELep_bins.data(), theta_bins.size() - 1, theta_bins.data(),
                                          ENuReco_bins.size() - 1, ENuReco_bins.data());
@@ -288,7 +280,7 @@ int main(int argc, char * argv[]) {
     Abis2DHistogram_forplotting_unosc_scaled  = std::make_unique<TH2D>("Abis2DHistogram_forplotting_unos_scaled ", "", offaxis_position.size() - 1,
                                          offaxis_position.data(), ENuReco_bins.size() - 1, ENuReco_bins.data());
 
-
+    */
 
 
     std::string name = SamplePDFs[sample_i]->GetSampleName();
@@ -340,11 +332,13 @@ int main(int argc, char * argv[]) {
       Abis3DHistogram_forplotting_osc->SetBinContent(bin1d_i,sample_unosc->GetBinContent(bin1d_i));
     }
      Abis3DHistogram_forplotting_osc->Draw("lego colz");
+     Abis3DHistogram_forplotting_osc->Write();
      canv->Update();
 
      canv->cd(4);
     
      Abis3DHistogram_forplotting_unosc->Draw("lego colz");
+     Abis3DHistogram_forplotting_unosc->Write();
      canv->Update();
 
 

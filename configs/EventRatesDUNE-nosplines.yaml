@@ -16,4 +16,4 @@ General:
     OscCovName: "osc_cov"
     OscStepScale: 0.045
   Output:
-    FileName: "Results/offaxissamples_2D_oaposition_2dbinning_scaling_testingwildcard.root"
+    FileName: "Results/offaxissamples_3D_oaposition_250924.root"

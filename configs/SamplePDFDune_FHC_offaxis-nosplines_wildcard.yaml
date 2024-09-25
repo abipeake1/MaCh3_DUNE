@@ -30,12 +30,6 @@ SampleBools:
   isrhc: no
   #isnd: yes
   iselike: no
-SampleName: "ND_FHC_CCnumu"
-InputFiles:
-  mtupleprefix: "/home/abipeake/Mach3/MaCh3_DUNE/inputs/DUNE_OA_CAF_new/"
-  mtuplesuffix: ""
-  splineprefix: ""
-  splinesuffix: ""
 SampleCuts:
   up_bnd: 30.
 DetID: 1

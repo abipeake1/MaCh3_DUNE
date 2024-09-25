@@ -25,26 +25,26 @@
 
 void split_write3d(){
 
-    auto f1= new TFile("/home/abipeake/Mach3/MaCh3_DUNE/Results/offaxissamples_2D_oaposition_etrue.root"); //FHC_numuosc_3D
-    TH3D *h = (TH3D*)f1->Get("ND_FHC_CCnumuunosc_3D");
+    auto f1= new TFile("/home/abipeake/Mach3/MaCh3_DUNE/Results/offaxissamples_3D_oaposition_250924.root"); //FHC_numuosc_3D
+    TH3D *h = (TH3D*)f1->Get("Abis3DHistogram");
     //TH3D *osc_3Dhis = (TH3D*)f3->Get("FHC_numu_osc_3D");
 
     //std::vector<TH3D*> list_of_histograms = 
     // Open a ROOT file and save the formula, function and histogram
-    TFile myfile("ND_FHC_numuunosc_3D_unfolded_morebins.root","RECREATE");
+    TFile myfile("/home/abipeake/Mach3/MaCh3_DUNE/Unfoldedhists/offaxissamples_3D_oaposition_250924.root","RECREATE");
 
     h->Write();
     h->SetDirectory(nullptr);
     TH1::SetDefaultSumw2(true);
     
     int number_of_ELep_bins = h->GetXaxis()->GetNbins();
-    int number_of_thetalep = h->GetYaxis()->GetNbins();
-    int number_of_ENu_Reco = h->GetZaxis()->GetNbins();
+    int number_of_ENuReco_bins = h->GetYaxis()->GetNbins();
+    int number_of_oabins = h->GetZaxis()->GetNbins();
 
     auto ptpzproj = std::unique_ptr<TH2>(static_cast<TH2*>(h->Project3D("yx")));
     std::string hist_2Dname = ptpzproj->GetName();
 
-    std::cout << "The 3D histogram " << h->GetName() << "has" << number_of_ELep_bins << "bins in pt (x axis) and " << number_of_thetalep  << "number_of_thetalep  bins" <<"and" << h->GetZaxis()->GetNbins()<< "number_of_ENu_Reco"<<std::endl;
+    std::cout << "The 3D histogram " << h->GetName() << "has" << number_of_ELep_bins << "bins in pt (x axis) and " <<  number_of_ENuReco_bins << "number_of_ detectorposition  bins" <<"and" << h->GetZaxis()->GetNbins()<< "number_of_ENu_Reco"<<std::endl;
     for (int x = 0; x < h->GetXaxis()->GetNbins(); ++x) {
         for (int y = 0; y < h->GetYaxis()->GetNbins(); ++y) {
             TH1 *proj =

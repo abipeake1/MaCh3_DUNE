@@ -154,11 +154,11 @@ int main(int argc, char * argv[]) {
   std::vector<samplePDFFDBase*> SamplePDFs;
   
   if(addFD) { 
-    samplePDFDUNEBase *numu_oa = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines.yaml", xsec);
-    SamplePDFs.push_back(numu_oa);
+    //samplePDFDUNEBase *numu_oa = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines.yaml", xsec);
+    //SamplePDFs.push_back(numu_oa);
 
-    //samplePDFDUNEBase *numu_oa_wildcard = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines_wildcard.yaml", xsec);
-    //SamplePDFs.push_back(numu_oa_wildcard);
+    samplePDFDUNEBase *numu_oa_wildcard = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines_wildcard.yaml", xsec);
+    SamplePDFs.push_back(numu_oa_wildcard);
 
     //samplePDFDUNEBase *numu_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_FHC_numuselec-nosplines.yaml", xsec);
     //SamplePDFs.push_back(numu_pdf);
@@ -217,10 +217,9 @@ int main(int argc, char * argv[]) {
 	std::cout << "Keeping xsec parameters at their prior values" << std::endl;
   }
 
-
   xsec->setParameters(XsecParVals);
   xsec->setStepScale(fitMan->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
-  
+
 
 
   /*
@@ -255,16 +254,9 @@ int main(int argc, char * argv[]) {
   std::vector<std::string> sample_names;
   
   TCanvas *canv = new TCanvas("nomcanv","", 0, 0, 700,900);
-   
   canv->Divide(2,3);
-   std::cout << "Divided" << std::endl;
-   std::cout << "OutfileName  =  "  << OutfileName <<std::endl;
-  std::string OutPlotName =  OutfileName.substr(0, OutfileName.length() - 5) + ".pdf";
-  std::cout << "OutPlotName  =  "  << OutPlotName<<std::endl;
-  std::cout << "s" << std::endl;
+  std::string OutPlotName = OutfileName.substr(0, OutfileName.length() - 5) + ".pdf";
   canv->Print((OutPlotName+"[").c_str());
-
-  std::cout << "Created canvas" << std::endl;
 
   for (unsigned sample_i = 0 ; sample_i < SamplePDFs.size() ; ++sample_i) {
 
@@ -290,20 +282,15 @@ int main(int argc, char * argv[]) {
 
     */
 
-    std::cout<<"about to GetSampleName " <<std::endl;
+
     std::string name = SamplePDFs[sample_i]->GetSampleName();
     sample_names.push_back(name);
     TString NameTString = TString(name.c_str());
     // Unoscillated
-    std::cout<<"about to setParameters line 291" <<std::endl;
     osc -> setParameters(oscpars_un);
-    std::cout<<"done setParameters line 293" <<std::endl;
     osc -> acceptStep();
-    std::cout<<"acceptStep1" <<std::endl;
     SamplePDFs[sample_i] -> SetupOscCalc(osc->GetPathLength(), osc->GetDensity());
-    std::cout<<"acceptStep2" <<std::endl;
     SamplePDFs[sample_i] -> reweight(osc->getPropPars());
-    std::cout<<"done SetUpOscCalc" <<std::endl;
     TH1D *sample_unosc = (TH1D*)SamplePDFs[sample_i] -> get1DHist() -> Clone(NameTString+"_unosc");
 
   //Then in your plotting script, you make the same 3D histogram and loop over the bins of the 1D histogram and just do:

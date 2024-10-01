@@ -16,7 +16,6 @@
 #include "covariance/covarianceXsec.h"
 #include "covariance/covarianceOsc.h"
 #include "samplePDF/samplePDFFDBase.h"
-#include "samplePDF/samplePDFFDBase.h" 
 #include "StructsDUNE.h"
 
 
@@ -90,6 +89,7 @@ struct dunemc_base {
   double *rw_abis3dbinnumber;
   double *offaxis_3dbinnumber;
   double *offaxis_2dbinnumber;
+  double *offaxis_ndbinnumber;
   double *rw_berpaacvwgt;
   int    *rw_isCC;
   int    *rw_nuPDGunosc;
@@ -120,6 +120,8 @@ struct dunemc_base {
   //float *relRPA_w;
 
 };
+
+
 
 class samplePDFDUNEBase : virtual public samplePDFFDBase
 {

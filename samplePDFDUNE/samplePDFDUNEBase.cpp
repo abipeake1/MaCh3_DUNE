@@ -17,6 +17,7 @@
 #include <regex>
 #include <filesystem>
 #include <iostream>
+#include "THn.h"
 
 // Constructors for erec-binned errors
 
@@ -26,6 +27,7 @@ Multidim_HistogramManager histograms;
 auto& abis3D = histograms.Abis3DHistogram;
 auto& oa3D = histograms.OA3DHistogram;
 auto& oa2D = histograms.OA2DHistogram;
+auto& oaND = histograms.OANDHistogram;
 
 
 //!!rewrite execs to give arguments in new order
@@ -292,6 +294,7 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
                 &dunemcSamples[sample_vecno[iSample]], pot,
                 sample_nutype[iSample], sample_oscnutype[iSample],
                 sample_signal[iSample]);
+    std::cout << "(mtupleprefix + mtuple_files[iSample] + mtuplesuffix).c_str()" << (mtupleprefix + mtuple_files[iSample] + mtuplesuffix).c_str() << std::endl;
   }
 
   for (int i = 0; i < nSamples; i++) {
@@ -301,6 +304,8 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
   }
 
   for (unsigned iSample = 0; iSample < MCSamples.size(); iSample++) {
+        std::cout << " (splineprefix + spline_files[iSample] + splinesuffix).c_str()) = " <<  (splineprefix + spline_files[iSample] + splinesuffix).c_str()<<std::endl;
+
     setupFDMC(&dunemcSamples[sample_vecno[iSample]],
               &MCSamples[sample_vecno[iSample]],
               (splineprefix + spline_files[iSample] + splinesuffix).c_str());
@@ -710,6 +715,7 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   duneobj->detector_oa_position = new double[duneobj->nEvents];
   duneobj->offaxis_3dbinnumber = new double[duneobj->nEvents];
   duneobj->offaxis_2dbinnumber = new double[duneobj->nEvents];
+  duneobj->offaxis_ndbinnumber = new double[duneobj->nEvents];
   duneobj->uniform_bins = new double[duneobj->nEvents];
   
   //duneobk->global_binnumber = new double[duneobj->nEvents];
@@ -877,8 +883,6 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
         double global_bin = abis3D->FindFixBin(ELep,thetaLep,ENuReco);
         //std::cout << "Kinematic Value for Abis3DHistogram = " << KinematicValue <<std::endl;
         dunemcSamples[iSample].rw_abis3dbinnumber[iEvent] = global_bin;
-        
-        
         break;
       }
     case kDUNEPRISMBinning:{
@@ -896,10 +900,16 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
         dunemcSamples[iSample].offaxis_3dbinnumber[iEvent] = global_bin_prism;
         break;
       }
-
-      
-  
-  case kM3Mode:
+    case kNDimensionalBinning:{
+        double ELep = dunemcSamples[iSample].rw_LepE[iEvent];  // calculate ELep
+        double ENuReco = dunemcSamples[iSample].rw_etru[iEvent];
+        double offaxis_position = dunemcSamples[iSample].detector_oa_position[iEvent]; // OA position
+        //KinematicValue = oaND->FindFixBin(ELep,ENuReco,offaxis_position);
+       // double global_bin_prism = oaND->FindFixBin(ELep,ENuReco,offaxis_position);
+       // dunemcSamples[iSample].offaxis_ndbinnumber[iEvent] = global_bin_prism;
+        break;
+      }
+    case kM3Mode:
         KinematicValue = dunemcSamples[iSample].mode[iEvent];
         break;
   default:
@@ -935,8 +945,6 @@ void samplePDFDUNEBase::setupFDMC(dunemc_base *duneobj, fdmc_base *fdobj,
   fdobj->XBin = new int[fdobj->nEvents];
   fdobj->YBin = new int[fdobj->nEvents];
 
-  
-  
   fdobj->rw_lower_xbinedge = new double[fdobj->nEvents];
   fdobj->rw_lower_lower_xbinedge = new double[fdobj->nEvents];
   fdobj->rw_upper_xbinedge = new double[fdobj->nEvents];

@@ -55,6 +55,7 @@ enum KinematicTypes {
   kAbis3DBinning = 16,
   kDUNEPRISMBinning=17,
   kBinningin2D=18,
+  kNDimensionalBinning=19,
   kNKinematicParams
 };
 
@@ -76,11 +77,12 @@ inline int ReturnKinematicParameterFromString(std::string KinematicParameterStr)
   if (KinematicParameterStr.find("Abis3DBinning") != std::string::npos) {return kAbis3DBinning;}
   if (KinematicParameterStr.find("DUNEPRISMBinning") != std::string::npos) {return kDUNEPRISMBinning;}
   if (KinematicParameterStr.find("Binningin2D") != std::string::npos) {return kBinningin2D;}
+  if (KinematicParameterStr.find("NDimensionalBinning") != std::string::npos) {return kNDimensionalBinning;}
   if (KinematicParameterStr.find("OscChannel") != std::string::npos) {return kOscChannel;}
   return kNKinematicParams; 
 }
 
-// ********************************
+// ******************************** 
 // ND Detector Systematic Functions
 // ********************************
 

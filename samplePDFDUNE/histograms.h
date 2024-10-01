@@ -8,7 +8,7 @@
 #include "TH1D.h"
 #include "TH2D.h"
 #include "TH3D.h"     // ROOT histograms
-
+#include "THn.h"
 // Function to generate linearly spaced values similar to numpy's linspace
 template <typename T>
 std::vector<T> linspace(T a, T b, size_t N) {
@@ -38,12 +38,13 @@ public:
     std::unique_ptr<TH3D> Abis3DHistogram;
     std::unique_ptr<TH3D> OA3DHistogram;
     std::unique_ptr<TH2D> OA2DHistogram;
+    std::unique_ptr<THnD> OANDHistogram;
 
     // Constructor that initializes the histograms
     Multidim_HistogramManager() {
         // Define bin ranges using linspace and ExtendLinspace
         std::vector<double> ELep_bins;
-        ExtendLinspace(ELep_bins, 0, 20, 20);
+        ExtendLinspace(ELep_bins, 0, 10, 10);
         
         std::vector<double> theta_bins;
         ExtendLinspace(theta_bins, 0, 3, 10);
@@ -52,10 +53,13 @@ public:
         
         std::vector<double> ENuReco_bins;
         ExtendLinspace(ENuReco_bins, 0, 4, 8);
-        ExtendLinspace(ENuReco_bins, 4, 10, 6);
+        ExtendLinspace(ENuReco_bins, 4, 10, 2);
         
         std::vector<double> offaxis_position;
-        ExtendLinspace(offaxis_position, -35, 0, 10);
+        ExtendLinspace(offaxis_position, -35, 0, 7);
+
+        std::vector<double> EAvail_bins = {1e-8, 0.01,   0.02, 0.04,0.06,  0.08,0.1, 0.12,0.14, 
+                                        0.16, 0.2, 0.24, 0.28, 0.32, 0.4, 0.5, 0.6,0.8, 1, 5, 10};
         
         // Print bin sizes
         std::cout << "ELep_bins.size() = " << ELep_bins.size() << std::endl;
@@ -84,6 +88,20 @@ public:
                                                ENuReco_bins.size() - 1, ENuReco_bins.data());
 
         std::cout << "Number of bins in  OA2DHistogram histogram = " <<  OA2DHistogram->GetNcells() << std::endl;
+
+
+
+        ////////////////ND Histogram
+     /* OANDHistogram = std::make_unique<THnD>("OANDHistogram", "", 
+                                               offaxis_position.size() - 1, offaxis_position.data(),
+                                               ENuReco_bins.size() - 1, ENuReco_bins.data(),
+                                               EAvail_bins.size() -1 , EAvail_bins.data()
+                                               );*/
+
+
+
+
+
     }
 };
 

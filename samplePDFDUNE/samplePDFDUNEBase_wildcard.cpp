@@ -16,17 +16,23 @@
 #include <regex>
 #include <filesystem>
 #include <iostream>
+#include "histograms.h"
 
 // #define DEBUG
 
 //Read in all the input CAF files
 
 
+Multidim_HistogramManager histograms;
 
+// Access histograms
+auto& abis3D_wildcard = histograms.Abis3DHistogram;
+auto& oa3D_wildcard = histograms.OA3DHistogram;
+auto& oa2D_wildcard = histograms.OA2DHistogram;
 
 /* a function to generate numpy linspace */
 //template <typename T>
-  template <typename T>
+ /*template <typename T>
     std::vector<T> linspace(T a, T b, size_t N) {
         T h = (b - a) / static_cast<T>(N);
         std::vector<T> xs(N);
@@ -48,13 +54,14 @@
 
   std::unique_ptr<TH3D> Abis3DHistogram;
   std::unique_ptr<TH3D> OA3DHistogram; 
-  std::unique_ptr<TH2D> OA2DHistogram; 
+  std::unique_ptr<TH2D> OA2DHistogram; */
 
-  TH1D *onedim_binnumberhisto;
+  //TH1D *onedim_binnumberhisto;
 
 // Constructors for erec-binned errors
 
 //!!rewrite execs to give arguments in new order
+
 samplePDFDUNEBase::samplePDFDUNEBase(double pot, std::string mc_version,
                                      covarianceXsec *xsec_cov)
     : samplePDFBase(pot) {
@@ -73,6 +80,7 @@ samplePDFDUNEBase::samplePDFDUNEBase(double pot, std::string mc_version,
   //Somewhere in samplePDFDUNEBase::samplePDFDUNEBase
   //int number_of_pt_bins = h->GetXaxis()->GetNbins();
 
+    /*
     std::vector<double> ELep_bins;
     ExtendLinspace(ELep_bins,0,40,5);
     std::vector<double> theta_bins;
@@ -118,10 +126,11 @@ samplePDFDUNEBase::samplePDFDUNEBase(double pot, std::string mc_version,
 
      
       onedim_binnumberhisto = 
-      new TH1D("onedim_binnumberhisto","", noofbins_1Dhisto, -1, noofbins_1Dhisto -1 );
+      new TH1D("onedim_binnumberhisto","", noofbins_1Dhisto, -1, noofbins_1Dhisto -1 );*/
 
 }
 
+//samplePDFDUNEBase::~samplePDFDUNEBase() {}
 samplePDFDUNEBase::~samplePDFDUNEBase() {}
 
 void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
@@ -159,7 +168,7 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
   iselike = SampleManager->raw()["SampleBools"]["iselike"].as<bool>();
 
   // Inputs
-  /*
+  
   mtupleprefix =
       SampleManager->raw()["InputFiles"]["mtupleprefix"].as<std::string>();
   mtuplesuffix =
@@ -168,7 +177,7 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
       SampleManager->raw()["InputFiles"]["splineprefix"].as<std::string>();
   splinesuffix =
       SampleManager->raw()["InputFiles"]["splinesuffix"].as<std::string>();
-      */
+  
 
   // Binning
   BinningOpt = SampleManager->raw()["Binning"]["BinningOpt"].as<int>();
@@ -236,13 +245,35 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
           std::filesystem::directory_iterator{dir}) {
                 if (std::regex_match(dir_entry.path().filename().native(), file_re)) {
                         std::cout << "found matching file:" << dir_entry.path().native() << std::endl;
-                        
+                       // std::cout << "found matching file:" << dir_entry.path().native() << std::endl;
                         number_of_subsamples = number_of_subsamples + 1 ;
                         mtuple_files.push_back(dir_entry.path().filename().native());
-                        spline_files.push_back(dir_entry.path().filename().native());
+
+
+                        //std::vector<const char*> filenames;
+  
+
+                        std::string splinefilename = (dir_entry.path().filename().native()).c_str();
+
+                        // Find the position of the last dot (.)
+                        size_t last_dot = splinefilename.find_last_of('.');
+
+                        // Check if a dot was found and it's the .root extension
+                        if (last_dot != std::string::npos && splinefilename.substr(last_dot) == ".root") {
+                            // Remove the .root extension
+                            splinefilename.erase(last_dot);
+                        }
+
+                        std::cout << "splinefilename Filename without extension: " << splinefilename << std::endl;
+                        std::cout << "mtuple_file : " << dir_entry.path().native() << std::endl;
+                        //filenames.push_back(filename.c_str());
+                      
+
+                        //spline_files.push_back(dir_entry.path().filename().native());
+                        spline_files.push_back(splinefilename);
                        
-                        sample_nutype.push_back(14);
-                        sample_oscnutype.push_back(14);
+                        sample_nutype.push_back( PDGToProbs(static_cast<NuPDG>(14)));
+                        sample_oscnutype.push_back(PDGToProbs(static_cast<NuPDG>(14)));
                         sample_signal.push_back(false);
                         sample_vecno.push_back(number_of_subsamples);
                         std::cout<< "number_of_subsamples = " << number_of_subsamples <<std::endl;
@@ -325,7 +356,7 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
   std::cout << "Oscnutype size: " << sample_oscnutype.size()
             << ", dunemcSamples size: " << dunemcSamples.size() << endl;
   if (sample_oscnutype.size() != dunemcSamples.size()) {
-    std::cerr << "[ERROR:] samplePDFDUNEBase::samplePDFDUNEBase() - something "
+    std::cerr << "[ERROR:] samplePDFDUNEBase:samplePDFDUNEBase - something "
                  "went wrong either getting information from sample config"
               << std::endl;
     throw;
@@ -337,6 +368,8 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
                 &dunemcSamples[sample_vecno[iSample]], pot,
                 sample_nutype[iSample], sample_oscnutype[iSample],
                 sample_signal[iSample]);
+
+    std::cout << "(mtupleprefix + mtuple_files[iSample] + mtuplesuffix).c_str()" << (mtupleprefix + mtuple_files[iSample] + mtuplesuffix).c_str() << std::endl;
   }
 
   for (int i = 0; i < number_of_subsamples; i++) {
@@ -346,9 +379,28 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
   }
 
   for (unsigned iSample = 0; iSample < MCSamples.size(); iSample++) {
+    std::cout << " (splineprefix + spline_files[iSample] + splinesuffix).c_str()) = " <<  (splineprefix + spline_files[iSample] + splinesuffix).c_str()<<std::endl;
+    
+    //std::string filename = (splineprefix + spline_files[iSample] + splinesuffix).c_str();
+
+    // Find the position of the last dot (.)
+  //  size_t last_dot = filename.find_last_of('.');
+
+    // Check if a dot was found and it's the .root extension
+    //if (last_dot != std::string::npos && filename.substr(last_dot) == ".root") {
+        // Remove the .root extension
+      //  filename.erase(last_dot);
+   // }
+
+    //std::cout << "Filename without extension: " << filename << std::endl;
+
+
+
     setupFDMC(&dunemcSamples[sample_vecno[iSample]],
               &MCSamples[sample_vecno[iSample]],
-              (splineprefix + spline_files[iSample] + splinesuffix).c_str());
+              (splineprefix + spline_files[iSample] + splinesuffix).c_str()
+              //filenames[iSample]
+              );
   }
 
   std::cout << "################" << std::endl;
@@ -360,6 +412,7 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
   // in the core code this needs to come after setupFDMC as otherwise
   // MCSamples.splinefile will be NULL
   setXsecCov(xsec_cov);
+  std::cout << " setXsecCov(xsec_cov);" <<std::endl;
 
   tot_escale_fd_pos = -999;
   tot_escale_sqrt_fd_pos = -999;
@@ -517,6 +570,7 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
     }
     setupSplines(&MCSamples[sample_vecno[iSample]],
                  (splineprefix + spline_files[iSample] + splinesuffix).c_str(),
+                 //filenames[iSample],
                  MCSamples[iSample].nutype, MCSamples[iSample].signal);
   }
 
@@ -535,6 +589,7 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
 #else
   std::cout << "- Setup CUDAProb3" << std::endl;
 #endif
+
 
   _sampleFile->Close();
   char *histname = (char *)"blah";
@@ -557,6 +612,7 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
   set1DBinning(sample_erec_bins.size() - 1, erec_bin_edges);
   set2DBinning(sample_erec_bins.size() - 1, erec_bin_edges,
                sample_theta_bins.size() - 1, theta_bin_edges);
+  std::cout<< "done setting binning-"<< std::endl;
 
   return;
 }
@@ -564,9 +620,9 @@ void samplePDFDUNEBase::init(double pot, std::string samplecfgfile,
 void samplePDFDUNEBase::setupWeightPointers() {
   
   for (int i = 0; i < (int)dunemcSamples.size(); ++i) {
-    //std::cout<< "help in first for loop"<<std::endl;
+    std::cout<< "help in first for loop"<<std::endl;
 	for (int j = 0; j < dunemcSamples[i].nEvents; ++j) {
-    //std::cout<< "help0"<<std::endl;
+    std::cout<< "help0"<<std::endl;
 	  //DB Setting total weight pointers
 	  MCSamples[i].ntotal_weight_pointers[j] = 6;
    // std::cout<< "help1"<<std::endl;
@@ -585,9 +641,11 @@ void samplePDFDUNEBase::setupWeightPointers() {
 	  MCSamples[i].total_weight_pointers[j][5] = &(MCSamples[i].xsec_w[j]);
 	}
   }
-
+  std::cout<< "about to return" << std::endl;
   return;
 }
+
+
 
 
 
@@ -595,6 +653,8 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
                                     dunemc_base *duneobj, double pot,
                                     int nutype, int oscnutype, bool signal,
                                     bool hasfloats) {
+
+  std::cout<< "done weight pointers" << std::endl;
 
   // set up splines
   std::cout
@@ -896,8 +956,8 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
     case kBinningin2D:{
         double ELep = dunemcSamples[iSample].rw_etru[iEvent];  // calculate ELep
         double offaxis_position = dunemcSamples[iSample].detector_oa_position[iEvent]; // OA position
-        KinematicValue = OA2DHistogram->FindFixBin(offaxis_position,ELep);
-        double global_bin_prism_2D = OA2DHistogram->FindFixBin(offaxis_position,ELep);
+        KinematicValue = oa2D_wildcard->FindFixBin(offaxis_position,ELep);
+        double global_bin_prism_2D = oa2D_wildcard->FindFixBin(offaxis_position,ELep);
         //std::cout << "Kinematic Value for 2D histogram = " << KinematicValue <<std::endl;
         dunemcSamples[iSample].offaxis_2dbinnumber[iEvent] = global_bin_prism_2D;
         //std::cout<<"offaxis_2dbinnumber  = " << global_bin_prism_2D << std::endl;
@@ -909,18 +969,18 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
         double ELep = dunemcSamples[iSample].rw_LepE[iEvent];  // calculate ELep
         double thetaLep = dunemcSamples[iSample].rw_lep_ang_numu[iEvent]; // calculate thetaLep 
         double ENuReco = dunemcSamples[iSample].rw_erec[iEvent]; // calculate Reconstructed neutrino energy
-        KinematicValue = Abis3DHistogram->FindFixBin(ELep,thetaLep,ENuReco);
-
+        KinematicValue = abis3D_wildcard->FindFixBin(ELep,thetaLep,ENuReco);
+        
         /*
         std::cout << "Kinematic Value for Abis3DHistogram = " << KinematicValue <<std::endl;
         std::cout << "Elep = " << ELep <<std::endl;
         std::cout << "thetalep = " << thetaLep <<std::endl;
         std::cout << "ENuReco= " << ENuReco <<std::endl;
         */
-        double global_bin = Abis3DHistogram->FindFixBin(ELep,thetaLep,ENuReco);
+        double global_bin = abis3D_wildcard->FindFixBin(ELep,thetaLep,ENuReco);
         //std::cout << "Kinematic Value for Abis3DHistogram = " << KinematicValue <<std::endl;
         dunemcSamples[iSample].rw_abis3dbinnumber[iEvent] = global_bin;
-        onedim_binnumberhisto->Fill(global_bin);
+        //onedim_binnumberhisto->Fill(global_bin);
         
         break;
       }
@@ -930,8 +990,8 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
         double ELep = dunemcSamples[iSample].rw_LepE[iEvent];  // calculate ELep
         double Ehad = dunemcSamples[iSample].rw_erec_had[iEvent]; // calculate thetaLep 
         double offaxis_position = dunemcSamples[iSample].detector_oa_position[iEvent]; // OA position
-        KinematicValue = OA3DHistogram->FindFixBin(ELep,Ehad,offaxis_position);
-        double global_bin_prism = OA3DHistogram->FindFixBin(ELep,Ehad,offaxis_position);
+        KinematicValue = oa3D_wildcard->FindFixBin(ELep,Ehad,offaxis_position);
+        double global_bin_prism = oa3D_wildcard->FindFixBin(ELep,Ehad,offaxis_position);
         std::cout << "Kinematic Value for kDUNEPRISMBinning = " << KinematicValue <<std::endl;
         dunemcSamples[iSample].offaxis_3dbinnumber[iEvent] = global_bin_prism;
         break;
@@ -1353,8 +1413,8 @@ TH1D* get1DVarHist(std::string KinematicVar1, std::vector< std::vector<double> >
     SelectionVec.push_back(SelecChannel);
   }
   TFile my1dhisto("my1dhisto.root","RECREATE");
-  onedim_binnumberhisto->Write();
-  my1dhisto.Close();
+  //onedim_binnumberhisto->Write();
+  //my1dhisto.Close();
   //return get1DVarHist(KinematicVar1,SelectionVec,WeightStyle,Axis);
   return get1DVarHist(KinematicVar1, SelectionVec, kModeToFill, kChannelToFill, WeightStyle, Axis);
 }

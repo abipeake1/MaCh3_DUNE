@@ -26,10 +26,11 @@ SelectionCuts:
     Bounds: [ 50.0, 1244.0 ]
   - KinematicStr: "CVNNumu"
     Bounds: [ 0.5, 999 ]
-  - KinematicStr: "Abis3DBinning" 
-    Bounds: [ 0.0, 125.0]
+  - KinematicStr: "Abis3DBinning" #"kBinningin2D" #"kDUNEPRISMBinning" #"kBinningin2D" 
+    Bounds: [ 0.0, 10000.0]
 Binning:
-  BinningOpt: 1
+  BinningOpt: 4
+  NTotalBins: 1576
   #XVarBins: [0.,  0.5,  1.,  1.25, 1.5, 1.75, 2., 2.25, 2.5, 2.75, 3., 3.25, 3.5, 3.75, 4., 5., 6., 10.]
   #XVarBins: [0., 1.0, 2.0, 3.0,4.0,5.0,6.0, 7.0, 8.0, 9.0,10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0,26.0, 27.0, 28.0]
   #YVarBins: [0.,  0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,  1., 2.]

@@ -58,8 +58,15 @@ public:
         std::vector<double> offaxis_position;
         ExtendLinspace(offaxis_position, -35, 0, 7);
 
-        std::vector<double> EAvail_bins = {1e-8, 0.01,   0.02, 0.04,0.06,  0.08,0.1, 0.12,0.14, 
+        std::vector<double> EAvail_bins = {0, 0.01,   0.02, 0.04,0.06,  0.08,0.1, 0.12,0.14, 
                                         0.16, 0.2, 0.24, 0.28, 0.32, 0.4, 0.5, 0.6,0.8, 1, 5, 10};
+
+
+        std::vector<double> q0_bins;
+        ExtendLinspace(q0_bins, 0, 15,15);
+
+        std::vector<double> q3_bins;
+        ExtendLinspace(q3_bins, 0, 15,15);
         
         // Print bin sizes
         std::cout << "ELep_bins.size() = " << ELep_bins.size() << std::endl;

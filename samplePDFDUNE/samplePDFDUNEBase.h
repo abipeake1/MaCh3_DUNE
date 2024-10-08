@@ -51,7 +51,9 @@ struct dunemc_base {
   double *rw_erec_shifted;
   double *rw_erec_had;
   double *rw_erec_had_nd;
+  double *rw_erec_nd;
   double *rw_erec_lep;
+   double *rw_erec_lep_nd;
   
   double *rw_eRecoP;
   double *rw_eRecoPip;
@@ -100,6 +102,10 @@ struct dunemc_base {
   double *rw_vtx_y;
   double *rw_vtx_z;
   double dummy_y;
+  //double *rw_cvnnue;
+
+  double *q0;
+  double *q3;
 
   float **rw_dirlep;
   int *mode;
@@ -188,6 +194,10 @@ public:
   double _erec_had_nue;
   double _erec_lep;
   double _erec_lep_nue;
+
+  double _erec_nd;
+  double _erec_lep_nd;
+
 
   double _eRecoP;
   double _eRecoPip;

@@ -636,6 +636,13 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   _data->SetBranchAddress("vtx_z", &_vtx_z);
   _data->SetBranchStatus("det_x", 1);
   _data->SetBranchAddress("det_x", &_det_x);
+
+
+
+  _data->SetBranchStatus("Ev_reco", 1);
+  _data->SetBranchAddress("Ev_reco", &_erec_nd);
+  _data->SetBranchStatus("Elep_reco", 1);
+  _data->SetBranchAddress("Elep_reco", &_erec_lep_nd);
   
 
 
@@ -717,6 +724,10 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
   duneobj->offaxis_2dbinnumber = new double[duneobj->nEvents];
   duneobj->offaxis_ndbinnumber = new double[duneobj->nEvents];
   duneobj->uniform_bins = new double[duneobj->nEvents];
+  duneobj->q0 = new double[duneobj->nEvents];
+  duneobj->q3 = new double[duneobj->nEvents];
+  duneobj->rw_Q2 = new double[duneobj->nEvents];
+  
   
   //duneobk->global_binnumber = new double[duneobj->nEvents];
 
@@ -762,8 +773,12 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
       duneobj->rw_erec_shifted[i] = (double)_erec;
       duneobj->rw_erec_had[i] = (double)_erec_had;
       duneobj->rw_erec_lep[i] = (double)_erec_lep;
+      
     }
-    duneobj->rw_erec_had_nd[i] = (double)(_erec - _erec_lep);
+    
+    //duneobj->q3[i] = sqrt( ((double)_Q2)  +  ( (double)((_erec_lep - _cvnnue))**2)) ;
+    
+    duneobj->rw_erec_had_nd[i] = (double)(_erec_nd - _erec_lep_nd);
     duneobj->detector_oa_position[i] = (((double)_det_x + (double)_vtx_x)/100.0);  ///make OA position positive and in m   +vtx  
     duneobj->rw_lep_ang_numu[i] = (double)_erec_lep_ang_numu;
     duneobj->rw_eRecoP[i] = (double)_eRecoP;
@@ -771,7 +786,7 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
     duneobj->rw_eRecoPim[i] = (double)_eRecoPim;
     duneobj->rw_eRecoPi0[i] = (double)_eRecoPi0;
     duneobj->rw_eRecoN[i] = (double)_eRecoN;
-
+    duneobj->rw_Q2[i] = (double)_Q2;
     duneobj->rw_LepE[i] = (double)_LepE;
     duneobj->rw_eP[i] = (double)_eP;
     duneobj->rw_ePip[i] = (double)_ePip;
@@ -788,7 +803,21 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
     duneobj->rw_vtx_x[i] = (double)_vtx_x;
     duneobj->rw_vtx_y[i] = (double)_vtx_y;
     duneobj->rw_vtx_z[i] = (double)_vtx_z;
+    
+    duneobj->q3[i] = sqrt( ((double)_Q2)  +  (((double)(_ev - _LepE))) * (_ev - _LepE)) ;
+    duneobj->q0[i] =(double)(_ev - _LepE);
+    
+    double q3_test = sqrt( ((double)_Q2)  +  (((double)(_ev - _LepE))) * (_ev - _LepE));
+    double q0_test = (double)(_ev - _LepE);
+    std::cout<< "Q2 = " << ((double)_Q2) << std::endl;
+    if(q3_test >0.1 && q3_test < 0.2){
+          std::cout<< "Q3 = " << q3_test << std::endl;
+        }
+    if(q0_test >0.1 && q0_test < 0.2){
+          std::cout<< "Q0 = " << q0_test << std::endl;
+        }
 
+    
     // Assume everything is on Argon for now....
     duneobj->Target[i] = 40;
 
@@ -807,8 +836,8 @@ void samplePDFDUNEBase::setupDUNEMC(const char *sampleFile,
 
     duneobj->uniform_bins[i] = 1.0;
 
-   //detector_oa_position[i] = "<< (-1.0*(double)_det_x)/100.0<<std::endl;
-   //std::cout<< "rw_etrue = " << _ev << std::endl;
+   // std::cout << "q0[i] =(double)(_erec_lep - _cvnnue);  =  " << (double)(_erec_lep - _cvnnue) << "_erec_lep = "<< _erec_lep << "_cvnnue) = " << _cvnnue <<std::endl; 
+
   }
 
   _sampleFile->Close();
@@ -842,7 +871,6 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
   case kCVNNue:
     KinematicValue = dunemcSamples[iSample].rw_cvnnue_shifted[iEvent];
     break;
-
   case kInvariantHadronicMass_W:{
        // Get W_true with assumption of initial state nucleon at rest
       // m_n =  ; //GeV//(float)PhysConst::mass_proton;
@@ -852,19 +880,15 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
 	   KinematicValue = sqrt(-dunemcSamples[iSample].rw_Q2[iEvent]+ (2* 0.938 * q0) + (0.938*0.938) ); 
 	   break;
     }
-    case kBinningin2D:{
+  case kBinningin2D:{
         double ELep = dunemcSamples[iSample].rw_etru[iEvent];  // calculate ELep
         double offaxis_position = dunemcSamples[iSample].detector_oa_position[iEvent]; // OA position
         //KinematicValue = OA2DHistogram->FindFixBin(offaxis_position,ELep);
         //double global_bin_prism_2D = OA2DHistogram->FindFixBin(offaxis_position,ELep);
-
         KinematicValue = oa2D->FindFixBin(offaxis_position,ELep);
         double global_bin_prism_2D = oa2D->FindFixBin(offaxis_position, ELep);
         //std::cout << "Kinematic Value for 2D histogram = " << KinematicValue <<std::endl;
         dunemcSamples[iSample].offaxis_2dbinnumber[iEvent] = global_bin_prism_2D;
-        //std::cout<<"offaxis_2dbinnumber  = " << global_bin_prism_2D << std::endl;
-        //std::cout<<"OA positon  = " << offaxis_position << std::endl;
-        //std::cout<<" rw_etru  = " << ELep << std::endl;
         break; 
       }
   case kAbis3DBinning:{
@@ -873,19 +897,12 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
         double ENuReco = dunemcSamples[iSample].rw_erec[iEvent]; // calculate Reconstructed neutrino energy
         //KinematicValue = Abis3DHistogram->FindFixBin(ELep,thetaLep,ENuReco);
          KinematicValue = abis3D->FindFixBin(ELep,thetaLep,ENuReco);
-        /*
-        std::cout << "Kinematic Value for Abis3DHistogram = " << KinematicValue <<std::endl;
-        std::cout << "Elep = " << ELep <<std::endl;
-        std::cout << "thetalep = " << thetaLep <<std::endl;
-        std::cout << "ENuReco= " << ENuReco <<std::endl;
-        */
-        //double global_bin = Abis3DHistogram->FindFixBin(ELep,thetaLep,ENuReco);
         double global_bin = abis3D->FindFixBin(ELep,thetaLep,ENuReco);
         //std::cout << "Kinematic Value for Abis3DHistogram = " << KinematicValue <<std::endl;
         dunemcSamples[iSample].rw_abis3dbinnumber[iEvent] = global_bin;
         break;
       }
-    case kDUNEPRISMBinning:{
+  case kDUNEPRISMBinning:{
         double ELep = dunemcSamples[iSample].rw_LepE[iEvent];  // calculate ELep
         double ENuReco = dunemcSamples[iSample].rw_etru[iEvent];
         double offaxis_position = dunemcSamples[iSample].detector_oa_position[iEvent]; // OA position
@@ -893,23 +910,29 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
         //double global_bin_prism = OA3DHistogram->FindFixBin(ELep,Ehad,offaxis_position);
         KinematicValue = oa3D->FindFixBin(ELep,ENuReco,offaxis_position);
         double global_bin_prism = oa3D->FindFixBin(ELep,ENuReco,offaxis_position);
-        //std::cout << "Kinematic Value for kDUNEPRISMBinning = " << KinematicValue <<std::endl;
-        //std::cout << "Elep = " << ELep <<std::endl;
-        //std::cout << "ENuReco = " << ENuReco <<std::endl;
-
         dunemcSamples[iSample].offaxis_3dbinnumber[iEvent] = global_bin_prism;
         break;
       }
-    case kNDimensionalBinning:{
+  case kNDimensionalBinning:{
         double ELep = dunemcSamples[iSample].rw_LepE[iEvent];  // calculate ELep
         double ENuReco = dunemcSamples[iSample].rw_etru[iEvent];
         double offaxis_position = dunemcSamples[iSample].detector_oa_position[iEvent]; // OA position
-        //KinematicValue = oaND->FindFixBin(ELep,ENuReco,offaxis_position);
-       // double global_bin_prism = oaND->FindFixBin(ELep,ENuReco,offaxis_position);
-       // dunemcSamples[iSample].offaxis_ndbinnumber[iEvent] = global_bin_prism;
         break;
       }
-    case kM3Mode:
+  case k_theQ0:{ //q0 is calorimetric hadronic energy
+        KinematicValue = dunemcSamples[iSample].q0[iEvent];
+        
+       // std::cout << " Q0 = " <<  KinematicValue << std::endl;
+        break;
+      }
+  case k_Q3:{ //q0 is calorimetric hadronic energy
+      KinematicValue = dunemcSamples[iSample].q3[iEvent];
+      //if(KinematicValue >0.1 && KinematicValue < 0.2){
+        //  std::cout<< "Q3 = " << KinematicValue << std::endl;}
+     // std::cout << " Q0 = " <<  KinematicValue << std::endl;
+      break;
+    }
+  case kM3Mode:
         KinematicValue = dunemcSamples[iSample].mode[iEvent];
         break;
   default:
@@ -917,7 +940,6 @@ samplePDFDUNEBase::ReturnKinematicParameter(std::string KinematicParameter,
               << " Did not recognise Kinematic Parameter type..." << std::endl;
     throw;
   }
-
   return KinematicValue;
 }
 
@@ -1012,7 +1034,7 @@ void samplePDFDUNEBase::setupFDMC(dunemc_base *duneobj, fdmc_base *fdobj,
       fdobj->y_var[iEvent] = &(duneobj->dummy_y);
       break;
       case 4: //case 4 useful for 3D binning, set the 'global bin number' in the yaml file from the NTotalBins options
-      fdobj->x_var[iEvent] = &(duneobj->offaxis_3dbinnumber[iEvent]);
+      fdobj->x_var[iEvent] = &(duneobj->offaxis_2dbinnumber[iEvent]);
       fdobj->y_var[iEvent] = &(duneobj->dummy_y);
       break;
 

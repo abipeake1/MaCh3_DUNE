@@ -56,6 +56,8 @@ enum KinematicTypes {
   kDUNEPRISMBinning=17,
   kBinningin2D=18,
   kNDimensionalBinning=19,
+  k_theQ0 = 20,
+  k_Q3 = 21,
   kNKinematicParams
 };
 
@@ -79,6 +81,8 @@ inline int ReturnKinematicParameterFromString(std::string KinematicParameterStr)
   if (KinematicParameterStr.find("Binningin2D") != std::string::npos) {return kBinningin2D;}
   if (KinematicParameterStr.find("NDimensionalBinning") != std::string::npos) {return kNDimensionalBinning;}
   if (KinematicParameterStr.find("OscChannel") != std::string::npos) {return kOscChannel;}
+  if (KinematicParameterStr.find("the_Q0") != std::string::npos) {return k_theQ0;}
+  if (KinematicParameterStr.find("Q3") != std::string::npos) {return k_Q3;}
   return kNKinematicParams; 
 }
 

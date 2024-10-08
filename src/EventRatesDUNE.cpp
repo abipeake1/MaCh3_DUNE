@@ -152,9 +152,31 @@ int main(int argc, char * argv[]) {
 
 
   std::vector<samplePDFFDBase*> SamplePDFs;
+
+  //Setup the cross-section parameters
+  //This should get the prior values.
+  std::cout<< "xsec->getNominalArray()" <<std::endl;
+  std::vector<double> XsecParVals = xsec->getNominalArray();
+  
+  if(XsecParsAtGen){
+	TFile* XsecFile = new TFile(XsecMatrixFile.c_str(), "READ");
+	TVectorD* XsecGeneratedParamArray = (TVectorD*)XsecFile->Get("xsec_param_nom");
+	std::cout << "Setting xsec systs to their generated values " << std::endl;
+	for (unsigned param_i = 0 ; param_i < XsecParVals.size() ; ++param_i) {
+	  std::cout << "Generated value for param " << param_i << " is " << (*XsecGeneratedParamArray)(param_i) << std::endl;
+	  XsecParVals[param_i] = (*XsecGeneratedParamArray)(param_i);
+	  std::cout << "Set parameter " << param_i << " to value " << XsecParVals[param_i] << std::endl;
+	}
+  }
+  else{
+	std::cout << "Keeping xsec parameters at their prior values" << std::endl;
+  xsec->setParameters();
+  }
+  
+
   
   if(addFD) { 
-    samplePDFDUNEBase *numu_oa = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines.yaml", xsec);
+    samplePDFDUNEBase *numu_oa = new samplePDFDUNEBase(NDPOT, "/home/abipeake/Mach3/MaCh3_DUNE/configs/SamplePDFDune_FHC_offaxis-nosplines.yaml", xsec); //"configs/SamplePDFDune_FHC_offaxis-nosplines.yaml"
     SamplePDFs.push_back(numu_oa);
 
     //samplePDFDUNEBase *numu_oa_wildcard = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines_wildcard.yaml", xsec);
@@ -199,30 +221,7 @@ int main(int argc, char * argv[]) {
   oscpars_un[3] = 0;
   oscpars_un[4] = 0;
 
-  //Setup the cross-section parameters
-  //This should get the prior values.
-  std::vector<double> XsecParVals = xsec->getNominalArray();
-
-  if(XsecParsAtGen){
-	TFile* XsecFile = new TFile(XsecMatrixFile.c_str(), "READ");
-	TVectorD* XsecGeneratedParamArray = (TVectorD*)XsecFile->Get("xsec_param_nom");
-	std::cout << "Setting xsec systs to their generated values " << std::endl;
-	for (unsigned param_i = 0 ; param_i < XsecParVals.size() ; ++param_i) {
-	  std::cout << "Generated value for param " << param_i << " is " << (*XsecGeneratedParamArray)(param_i) << std::endl;
-	  XsecParVals[param_i] = (*XsecGeneratedParamArray)(param_i);
-	  std::cout << "Set parameter " << param_i << " to value " << XsecParVals[param_i] << std::endl;
-	}
-  }
-  else{
-	std::cout << "Keeping xsec parameters at their prior values" << std::endl;
-  }
-
-
-  xsec->setParameters(XsecParVals);
-  xsec->setStepScale(fitMan->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
   
-
-
   /*
   //////////////////////////////////////Stuff for the 3D Histogram unfolding :)
   std::vector<double> ELep_bins;
@@ -299,11 +298,27 @@ int main(int argc, char * argv[]) {
     osc -> setParameters(oscpars_un);
     std::cout<<"done setParameters line 293" <<std::endl;
     osc -> acceptStep();
-    std::cout<<"acceptStep1" <<std::endl;
+    //std::cout<<"acceptStep1" <<std::endl;
     SamplePDFs[sample_i] -> SetupOscCalc(osc->GetPathLength(), osc->GetDensity());
-    std::cout<<"acceptStep2" <<std::endl;
+    //std::cout<<"acceptStep2" <<std::endl;
     SamplePDFs[sample_i] -> reweight(osc->getPropPars());
-    std::cout<<"done SetUpOscCalc" <<std::endl;
+
+    ////////////////////
+    xsec->setParameters(XsecParVals);
+    double nominal =xsec->getNominal(0); //get central value of parameter
+    double error = xsec->getDiagonalError(0);
+    //xsec->setParCurrProp(0, nominal+(2*error));////////// set 
+    std::cout<< "nominal value = " << nominal<<std::endl;;
+    std::cout<< "error = " << error<<std::endl;
+    xsec->setSingleParameter(0, nominal); //nominal+(2*error)
+    //std::cout << "xsec->setParCurrProp(0, nominal+(2*error))" << xsec->setParCurrProp(0, nominal+(2*error)) << std::endl;
+    double current_value = xsec->getParProp(0);
+    std::cout<<"current value  = " << current_value << std::endl; 
+    //xsec->setParCurrProp(0, nominal);
+    xsec->setStepScale(fitMan->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
+    //SamplePDFs[sample_i] -> xsec->setParameters();
+    
+    //std::cout<<"done SetUpOscCalc" <<std::endl;
     TH1D *sample_unosc = (TH1D*)SamplePDFs[sample_i] -> get1DHist() -> Clone(NameTString+"_unosc");
 
   //Then in your plotting script, you make the same 3D histogram and loop over the bins of the 1D histogram and just do:
@@ -326,7 +341,11 @@ int main(int argc, char * argv[]) {
 	osc->setParameters(oscpars);
 	osc->acceptStep();
 
+
+
 	SamplePDFs[sample_i] -> reweight(osc->getPropPars());
+
+  
 	TH1D *sample_osc = (TH1D*)SamplePDFs[sample_i] -> get1DHist()->Clone(NameTString+"_osc");
 	oscillated_hists.push_back(sample_osc);
 
@@ -394,8 +413,8 @@ int main(int argc, char * argv[]) {
       for(int x=0; x <= (Abis2DHistogram_forplotting_unosc_scaled->GetNbinsY()+1); ++x){
           //std::cout << "Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x)" << Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x) <<std::endl;
           Abis2DHistogram_forplotting_unosc_scaled->SetBinContent(det_i,x,  Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x)/(det_integral+1.0));
-          std::cout << "events_in_each_bin[det_i] " << events_in_each_bin[det_i][x] << std::endl;
-          std::cout << "det_integral" << det_integral << std::endl; 
+          //std::cout << "events_in_each_bin[det_i] " << events_in_each_bin[det_i][x] << std::endl;
+          //std::cout << "det_integral" << det_integral << std::endl; 
       }
     }
       Abis2DHistogram_forplotting_unosc_scaled->GetXaxis()->SetTitle("Off axis position");

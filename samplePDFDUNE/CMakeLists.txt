@@ -1,5 +1,5 @@
 set(SamplePDFDUNE_implementation_files 
-	samplePDFDUNEBase.cpp #or samplePDFDUNEBase_wildcard.cpp
+    samplePDFDUNEBase.cpp #samplePDFDUNEBase_wildcard.cpp #or samplePDFDUNEBase_wildcard.cpp
 	samplePDFDUNEBaseND.cpp) 
 
 set(SamplePDFDUNE_header_files 

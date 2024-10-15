@@ -11,7 +11,6 @@
 #include <TLegend.h>
 #include <TColor.h>
 #include <TMath.h>
-#include <TRatioPlot.h>
 
 //template <typename T>
 #include <assert.h>
@@ -30,6 +29,9 @@
 #include "samplePDFDUNE/histograms.h"
 
 using namespace std;
+
+
+// Constructors for erec-binned errors
 
 std::string getNameNoExt(std::string name, std::string ext)  
 {                                                            
@@ -58,6 +60,14 @@ void saveCanvas(TCanvas* canvas, std::string name, std::string legend)
   canvas -> SaveAs(name.c_str()) ;                           
                                                              
 } 
+  /*
+  std::unique_ptr<TH3D> Abis3DHistogram_forplotting_unosc;
+  std::unique_ptr<TH3D> Abis3DHistogram_forplotting_osc;
+  std::unique_ptr<TH2D> Abis2DHistogram_forplotting_unosc;
+  std::unique_ptr<TH2D> Abis2DHistogram_forplotting_unosc_scaled;
+  std::unique_ptr<TH2D> Abis2DHistogram_forplotting_osc;*/
+
+  
 
 int main(int argc, char * argv[]) {
 
@@ -68,8 +78,8 @@ int main(int argc, char * argv[]) {
     //auto& oa3D_forplotting_unosc = histograms.OA3DHistogram;
     //auto& oa3D_forplotting_osc = histograms.OA3DHistogram
     auto& Abis2DHistogram_forplotting_unosc  = histograms.OA2DHistogram;
+    auto& Abis2DHistogram_osc = histograms.OA2DHistogram;
     auto& Abis2DHistogram_forplotting_unosc_scaled= histograms.OA2DHistogram;
-    auto& Abis2DHistogram_forplotting_osc =histograms.OA2DHistogram2;
 
 
   // ----------------------- OPTIONS ---------------------------------------- //
@@ -163,12 +173,34 @@ int main(int argc, char * argv[]) {
   xsec->setParameters();
   }
   
-  if(addFD) { 
-    samplePDFDUNEBase *numu_oa = new samplePDFDUNEBase(NDPOT, "/home/abipeake/Mach3/MaCh3_DUNE/configs/SamplePDFDune_FHC_numuselec-nosplines.yaml", xsec); //"configs/SamplePDFDune_FHC_offaxis-nosplines.yaml"  //    SamplePDFDune_FHC_offaxis-nosplines.yaml
-    SamplePDFs.push_back(numu_oa);
-  }
-  if(addND) {
+
   
+  if(addFD) { 
+    samplePDFDUNEBase *numu_oa = new samplePDFDUNEBase(NDPOT, "/home/abipeake/Mach3/MaCh3_DUNE/configs/SamplePDFDune_FHC_offaxis-nosplines.yaml", xsec); //"configs/SamplePDFDune_FHC_offaxis-nosplines.yaml"
+    SamplePDFs.push_back(numu_oa);
+
+    //samplePDFDUNEBase *numu_oa_wildcard = new samplePDFDUNEBase(NDPOT, "configs/SamplePDFDune_FHC_offaxis-nosplines_wildcard.yaml", xsec);
+    //SamplePDFs.push_back(numu_oa_wildcard);
+
+    //samplePDFDUNEBase *numu_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_FHC_numuselec-nosplines.yaml", xsec);
+    //SamplePDFs.push_back(numu_pdf);
+
+    
+    //samplePDFDUNEBase *nue_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_FHC_nueselec.yaml", xsec);
+    //SamplePDFs.push_back(nue_pdf);
+    // samplePDFDUNEBase *numubar_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_RHC_numuselec.yaml", xsec);
+    // SamplePDFs.push_back(numubar_pdf);
+    // samplePDFDUNEBase *nuebar_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_RHC_nueselec.yaml", xsec);
+    // SamplePDFs.push_back(nuebar_pdf);
+  }
+ 
+  if(addND) {
+    //samplePDFDUNEBaseND *numu_pdf_oa = new samplePDFDUNEBaseND(NDPOT, "configs/SamplePDFDuneND_FHC_CCnumuselec-nosplines.yaml", xsec);
+    //SamplePDFs.push_back(numu_pdf_oa);
+    // * FHC_numuCCND_pdf = new samplePDFDUNEBaseND(NDPOT, "configs/SamplePDFDuneND_FHC_CCnumuselec.yaml", xsec);
+    //SamplePDFs.push_back(FHC_numuCCND_pdf);
+    //samplePDFDUNEBaseND * RHC_numuCCND_pdf = new samplePDFDUNEBaseND(NDPOT, "configs/SamplePDFDuneND_RHC_CCnumuselec.yaml", xsec);
+    //SamplePDFs.push_back(RHC_numuCCND_pdf);
   }
 
   // Oscillated
@@ -188,6 +220,31 @@ int main(int argc, char * argv[]) {
   oscpars_un[2] = 0;
   oscpars_un[3] = 0;
   oscpars_un[4] = 0;
+
+  
+  /*
+  //////////////////////////////////////Stuff for the 3D Histogram unfolding :)
+  std::vector<double> ELep_bins;
+    ExtendLinspace(ELep_bins,0,40,5);
+    std::vector<double> theta_bins;
+    ExtendLinspace(theta_bins,0,3,10);
+    ExtendLinspace(theta_bins,3,9,3);
+    ExtendLinspace(theta_bins,9,100,2);
+    
+    //std::vector<double> ENuReco_bins;
+    //std::vector<double> ENuReco_bins = {0., 0.5,   1.,  1.5, 2., 2.5, 3., 3.5, 4., 5., 6.,7., 8. 10.};
+    //ExtendLinspace(ENuReco_bins,0,4,8);
+
+    std::vector<double> ENuReco_bins;
+    ExtendLinspace(ENuReco_bins,0,4,8);
+    ExtendLinspace(ENuReco_bins,4,10,6);
+    
+    std::vector<double> offaxis_position;
+     ExtendLinspace(offaxis_position,-35,0,10);*/
+
+    
+    
+//TH3D* Abis3DHistogram_forplotting = new TH3D("Abis3DHistogramforplotting", "", ELep_bins.size(), theta_bins.size(),  ENuReco_bins.size()); // fill this in with the binning like we used to in NUISANCE
   
   //Some place to store the histograms
   std::vector<TH1D*> oscillated_hists;
@@ -199,118 +256,179 @@ int main(int argc, char * argv[]) {
   TCanvas *canv = new TCanvas("nomcanv","", 0, 0, 700,900);
    
   canv->Divide(2,3);
+   std::cout << "Divided" << std::endl;
    std::cout << "OutfileName  =  "  << OutfileName <<std::endl;
   std::string OutPlotName =  OutfileName.substr(0, OutfileName.length() - 5) + ".pdf";
   std::cout << "OutPlotName  =  "  << OutPlotName<<std::endl;
+  std::cout << "s" << std::endl;
   canv->Print((OutPlotName+"[").c_str());
 
+  std::cout << "Created canvas" << std::endl;
+
   for (unsigned sample_i = 0 ; sample_i < SamplePDFs.size() ; ++sample_i) {
+
+
+    /*
+    Abis3DHistogram_forplotting_unosc  = std::make_unique<TH3D>("Abis3DHistogram_forplotting_unosc ", "", ELep_bins.size() - 1,
+                                         ELep_bins.data(), theta_bins.size() - 1, theta_bins.data(),
+                                         ENuReco_bins.size() - 1, ENuReco_bins.data());
+
+    Abis3DHistogram_forplotting_osc  = std::make_unique<TH3D>("Abis3DHistogram_forplotting_osc ", "", ELep_bins.size() - 1,
+                                        ELep_bins.data(), theta_bins.size() - 1, theta_bins.data(),
+                                        ENuReco_bins.size() - 1, ENuReco_bins.data());
+
+
+    Abis2DHistogram_forplotting_unosc  = std::make_unique<TH2D>("Abis2DHistogram_forplotting_unosc ", "", offaxis_position.size() - 1,
+                                         offaxis_position.data(), ENuReco_bins.size() - 1, ENuReco_bins.data());
+
+    Abis2DHistogram_forplotting_osc  = std::make_unique<TH2D>("Abis2DHistogram_forplotting_osc ", "", offaxis_position.size() - 1,
+                                        offaxis_position.data(), ENuReco_bins.size() - 1, ENuReco_bins.data());
+
+    Abis2DHistogram_forplotting_unosc_scaled  = std::make_unique<TH2D>("Abis2DHistogram_forplotting_unos_scaled ", "", offaxis_position.size() - 1,
+                                         offaxis_position.data(), ENuReco_bins.size() - 1, ENuReco_bins.data());
+
+    */
+
+    std::cout<<"about to GetSampleName " <<std::endl;
     std::string name = SamplePDFs[sample_i]->GetSampleName();
     sample_names.push_back(name);
     TString NameTString = TString(name.c_str());
     // Unoscillated
+    std::cout<<"about to setParameters line 291" <<std::endl;
     osc -> setParameters(oscpars_un);
+    std::cout<<"done setParameters line 293" <<std::endl;
     osc -> acceptStep();
+    //std::cout<<"acceptStep1" <<std::endl;
     SamplePDFs[sample_i] -> SetupOscCalc(osc->GetPathLength(), osc->GetDensity());
+    //std::cout<<"acceptStep2" <<std::endl;
     SamplePDFs[sample_i] -> reweight(osc->getPropPars());
 
     ////////////////////
     xsec->setParameters(XsecParVals);
     double nominal =xsec->getNominal(0); //get central value of parameter
     double error = xsec->getDiagonalError(0);
-    xsec->setParCurrProp(0, nominal);////////// set //+(2*error)
-    std::cout<< "nominal value = " << nominal <<std::endl;;
+    //xsec->setParCurrProp(0, nominal+(2*error));////////// set 
+    std::cout<< "nominal value = " << nominal<<std::endl;;
+    std::cout<< "error = " << error<<std::endl;
+    xsec->setSingleParameter(0, nominal); //nominal+(2*error)
+    //std::cout << "xsec->setParCurrProp(0, nominal+(2*error))" << xsec->setParCurrProp(0, nominal+(2*error)) << std::endl;
     double current_value = xsec->getParProp(0);
     std::cout<<"current value  = " << current_value << std::endl; 
+    //xsec->setParCurrProp(0, nominal);
     xsec->setStepScale(fitMan->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
-    SamplePDFs[sample_i] -> reweight(osc->getPropPars());
+    //SamplePDFs[sample_i] -> xsec->setParameters();
     
-    
+    //std::cout<<"done SetUpOscCalc" <<std::endl;
     TH1D *sample_unosc = (TH1D*)SamplePDFs[sample_i] -> get1DHist() -> Clone(NameTString+"_unosc");
-	  unoscillated_hists.push_back(sample_unosc);
 
-    canv->cd(1);
-    sample_unosc -> SetTitle(NameTString+"_unosc_nominal");
-    sample_unosc -> GetXaxis()->SetTitle("Q3");
-    sample_unosc -> Draw("HIST");
-    canv->Update();
+  //Then in your plotting script, you make the same 3D histogram and loop over the bins of the 1D histogram and just do:
+    for(Int_t bin1d_i = 0; bin1d_i < sample_unosc->GetNcells(); ++bin1d_i){
+      Abis3DHistogram_forplotting_unosc->SetBinContent(bin1d_i,sample_unosc->GetBinContent(bin1d_i));
+    }
 
-    Outfile->cd();
-    sample_unosc->Write(NameTString+"_unosc");
+	unoscillated_hists.push_back(sample_unosc);
+  //unoscillated_hists.push_back(sample_unosc);
 
-    canv->cd(3);
-     for(Int_t bin1d_i = 0; bin1d_i < sample_unosc->GetNcells(); ++bin1d_i){
-      Abis2DHistogram_forplotting_unosc->SetBinContent(bin1d_i,sample_unosc->GetBinContent(bin1d_i));
-      }
-     Abis2DHistogram_forplotting_unosc->SetTitle("Nominal");
-     Abis2DHistogram_forplotting_unosc->Draw("colz");
-     Outfile->cd();
-     Abis2DHistogram_forplotting_unosc->Write(NameTString+"_unosc_nominal_2D");
+  canv->cd(1);
+	sample_unosc -> SetTitle(NameTString+"_unosc");
+  sample_unosc -> GetXaxis()->SetTitle("Bin Number");
+	sample_unosc -> Draw("HIST");
+	canv->Update();
+
+	Outfile->cd();
+	sample_unosc->Write(NameTString+"_unosc");
+
+	osc->setParameters(oscpars);
+	osc->acceptStep();
+
+
+
+	SamplePDFs[sample_i] -> reweight(osc->getPropPars());
+
+  
+	TH1D *sample_osc = (TH1D*)SamplePDFs[sample_i] -> get1DHist()->Clone(NameTString+"_osc");
+	oscillated_hists.push_back(sample_osc);
+
+  
+	canv->cd(2);
+	sample_osc -> SetTitle(NameTString+"_osc");
+  sample_osc -> GetXaxis()->SetTitle("Bin Number");
+	sample_osc -> Draw("HIST");
+	canv->Update();
+
+
+   canv->cd(3);
+
+  //Then in your plotting script, you make the same 3D histogram and loop over the bins of the 1D histogram and just do:
+    for(Int_t bin1d_i = 0; bin1d_i < sample_osc->GetNcells(); ++bin1d_i){
+      Abis3DHistogram_forplotting_osc->SetBinContent(bin1d_i,sample_unosc->GetBinContent(bin1d_i));
+    }
+     Abis3DHistogram_forplotting_osc->Draw("lego colz");
+     Abis3DHistogram_forplotting_osc->Write();
+     canv->Update();
+
+     canv->cd(4);
+    
+     Abis3DHistogram_forplotting_unosc->Draw("lego colz");
+     Abis3DHistogram_forplotting_unosc->Write();
      canv->Update();
 
 
-    
-    //Now shift the xsec parameter by +2 sigma
-    xsec->setParameters(XsecParVals);
-    double nominal2 =xsec->getNominal(0); //get central value of parameter
-    double error2 = xsec->getDiagonalError(0);
-    //xsec->setParCurrProp(0, nominal+(2*error));////////// set 
-    xsec->setParCurrProp(0, nominal2+(2*error2));////////// set //+(2*error)
-    std::cout<< "nominal value = " << nominal2 <<std::endl;;
-    std::cout<< "error = " << error2 <<std::endl;
-    double current_value2 = xsec->getParProp(0);
-    std::cout<<"current value  = " << current_value2 << std::endl; 
-    xsec->setStepScale(fitMan->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
-    SamplePDFs[sample_i] -> reweight(osc->getPropPars());
 
-    canv->cd(2);
-    TH1D *sample_osc = (TH1D*)SamplePDFs[sample_i] -> get1DHist()->Clone(NameTString+"_osc");
-    oscillated_hists.push_back(sample_osc);
-    Outfile->cd();
-    sample_osc->Write(NameTString+"_osc_2sigma");
-    sample_osc -> SetTitle(NameTString+"_osc_2sigma");
-    sample_osc -> GetXaxis()->SetTitle("Bin Number");
-    sample_osc -> Draw("HIST");
-    canv->Update();
-
-    
-  
-     canv->cd(4);
-     //xsec->setParameters(XsecParVals);
-     //xsec->setParCurrProp(0, nominal2+(2*error2));////////// set //+(2*error
-      //xsec->setStepScale(fitMan->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
-      //SamplePDFs[sample_i] -> reweight(osc->getPropPars());
-
-       for(Int_t bin1d_i = 0; bin1d_i < sample_osc->GetNcells(); ++bin1d_i){
-        Abis2DHistogram_forplotting_osc->SetBinContent(bin1d_i,sample_osc->GetBinContent(bin1d_i));
+     canv->cd(5);
+     /*TH2D *sample_unosc2D = (TH2D*)SamplePDFs[sample_i] -> get2DHist() -> Clone(NameTString+"_unosc");
+     sample_unosc2D->Scale(1., "width");
+     sample_unosc2D->Draw("colz");
+     sample_unosc2D->Write(NameTString+"unosc_2D");
+     canv->Update();
+     */
+     //TH2D *sample_osc2D = (TH2D*)SamplePDFs[sample_i] -> get2DHist() -> Clone(NameTString+"_osc");
+     //sample_osc2D->Draw("colz");
+     for(Int_t bin1d_i = 0; bin1d_i < sample_unosc->GetNcells(); ++bin1d_i){
+      Abis2DHistogram_forplotting_unosc->SetBinContent(bin1d_i,sample_unosc->GetBinContent(bin1d_i));
       }
+    // Abis2DHistogram_forplotting_unosc->SetOptStat(0);
+     Abis2DHistogram_forplotting_unosc->GetXaxis()->SetTitle("Off axis position");
+     Abis2DHistogram_forplotting_unosc->GetYaxis()->SetTitle("Neutrino energy (GeV)");
+     Abis2DHistogram_forplotting_unosc->Draw("colz text");
      
-       Abis2DHistogram_forplotting_osc->SetTitle("+2 #sigma");
-       Abis2DHistogram_forplotting_osc->Draw("colz");
-      Abis2DHistogram_forplotting_osc->Write(NameTString+"osc_2D");
-      
-     //TCanvas *ratiocanvas = new TCanvas("ratiocanv", "", 0, 0, 700, 900);
-    //ratiocanvas->cd();
 
-    // Clone the 'osc' histogram and divide by the 'unosc' histogram
-    canv->cd(5);
-    TH2D* ratio = new TH2D(*Abis2DHistogram_forplotting_osc);
-    ratio->Divide(Abis2DHistogram_forplotting_unosc.get());
+     canv->cd(6);
+     
+    //Divide histogram rows by number of events in each OA position------------------------------------------------------------------
+    //std::vector<double> bincontent_oa_position;
+    TH2* Abis2DHistogram_forplotting_unosc_scaled = (TH2*)Abis2DHistogram_forplotting_unosc->Clone();
+    double events_in_each_bin[Abis2DHistogram_forplotting_unosc_scaled->GetNbinsX()+2][Abis2DHistogram_forplotting_unosc_scaled->GetNbinsY()+2];
+   for(Int_t det_i = 0; det_i <= Abis2DHistogram_forplotting_unosc_scaled->GetNbinsX()+1; ++det_i){
+      double n_events_yaxis=0.0;
+      for(int x=0 ; x <= Abis2DHistogram_forplotting_unosc_scaled->GetNbinsY()+1; ++x){
 
-    // Draw the ratio histogram with color option
-    ratio->Draw("colz");
+        double bin_content = Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x);
+        events_in_each_bin[det_i][x] = bin_content;
+      }
+    }
 
-    // Save the ratio histogram to file
-    ratio->Write(NameTString + "ratioplot");
-    canv->Update();
-	  canv->Print(OutPlotName.c_str());
+    for(Int_t det_i = 0; det_i <= (Abis2DHistogram_forplotting_unosc_scaled->GetNbinsX()+1); ++det_i){
+          Double_t det_integral = Abis2DHistogram_forplotting_unosc_scaled->Integral(det_i, det_i, 1 , Abis2DHistogram_forplotting_unosc_scaled->GetNbinsY()); 
+      for(int x=0; x <= (Abis2DHistogram_forplotting_unosc_scaled->GetNbinsY()+1); ++x){
+          //std::cout << "Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x)" << Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x) <<std::endl;
+          Abis2DHistogram_forplotting_unosc_scaled->SetBinContent(det_i,x,  Abis2DHistogram_forplotting_unosc_scaled->GetBinContent(det_i,x)/(det_integral+1.0));
+          //std::cout << "events_in_each_bin[det_i] " << events_in_each_bin[det_i][x] << std::endl;
+          //std::cout << "det_integral" << det_integral << std::endl; 
+      }
+    }
+      Abis2DHistogram_forplotting_unosc_scaled->GetXaxis()->SetTitle("Off axis position");
+     Abis2DHistogram_forplotting_unosc_scaled->GetYaxis()->SetTitle("Neutrino energy (GeV)");
 
-
+      Abis2DHistogram_forplotting_unosc_scaled->Draw("colz text");
+	   canv->Print(OutPlotName.c_str());
 
 	Outfile->cd();
-	
- 
+	sample_osc->Write(NameTString+"_osc");
+  Abis2DHistogram_forplotting_unosc->Write(NameTString+"unosc_2D");
 
+    
+  Abis2DHistogram_forplotting_unosc_scaled->Write(NameTString+"unosc_2D_scaled");
 
   ///////////////////////////////////////////////////////////
   }
@@ -324,8 +442,8 @@ int main(int argc, char * argv[]) {
   std::cout << "~~~~~~~~~~~~~~~~" << std::endl;
   std::cout << "Integrals of nominal hists: " << std::endl;
   for (unsigned sample_i = 0; sample_i < SamplePDFs.size() ; ++sample_i) {
+	std::cout << " " << std::endl;
 	std::cout << sample_names[sample_i].c_str() << " unosc:      " << unoscillated_hists[sample_i]-> Integral() << std::endl;
-  std::cout<< "help"<< std::endl;
 	std::cout << sample_names[sample_i].c_str() << "   osc:      " << oscillated_hists[sample_i]-> Integral() << std::endl; 
   }
   std::cout << "~~~~~~~~~~~~~~~~" << std::endl;

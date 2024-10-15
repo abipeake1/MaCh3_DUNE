@@ -38,13 +38,14 @@ public:
     std::unique_ptr<TH3D> Abis3DHistogram;
     std::unique_ptr<TH3D> OA3DHistogram;
     std::unique_ptr<TH2D> OA2DHistogram;
+    std::unique_ptr<TH2D> OA2DHistogram2;
     std::unique_ptr<THnD> OANDHistogram;
 
     // Constructor that initializes the histograms
     Multidim_HistogramManager() {
         // Define bin ranges using linspace and ExtendLinspace
         std::vector<double> ELep_bins;
-        ExtendLinspace(ELep_bins, 0, 10, 10);
+        ExtendLinspace(ELep_bins, 0, 4, 10);
         
         std::vector<double> theta_bins;
         ExtendLinspace(theta_bins, 0, 3, 10);
@@ -52,9 +53,7 @@ public:
         ExtendLinspace(theta_bins, 9, 100, 2);
         
         std::vector<double> ENuReco_bins;
-        ExtendLinspace(ENuReco_bins, 0, 4, 8);
-        ExtendLinspace(ENuReco_bins, 4, 10, 2);
-        
+        ExtendLinspace(ENuReco_bins, 0, 4, 16);        
         std::vector<double> offaxis_position;
         ExtendLinspace(offaxis_position, -35, 0, 7);
 
@@ -62,11 +61,14 @@ public:
                                         0.16, 0.2, 0.24, 0.28, 0.32, 0.4, 0.5, 0.6,0.8, 1, 5, 10};
 
 
-        std::vector<double> q0_bins;
-        ExtendLinspace(q0_bins, 0, 15,15);
+        std::vector<double> q0;
+        ExtendLinspace(q0, 0, 0.5,5);
+        ExtendLinspace(q0, 0.5, 2, 3);
 
-        std::vector<double> q3_bins;
-        ExtendLinspace(q3_bins, 0, 15,15);
+        std::vector<double> q3;
+        ExtendLinspace(q3, 0, 0.5,5);
+        ExtendLinspace(q3, 0.5, 2,3 );
+
         
         // Print bin sizes
         std::cout << "ELep_bins.size() = " << ELep_bins.size() << std::endl;
@@ -90,12 +92,28 @@ public:
         std::cout << "Number of bins in  OA3DHistogram histogram = " <<  OA3DHistogram->GetNcells() << std::endl;
 
         // Initialize the 2D histogram for Off-Axis and ENuReco
-        OA2DHistogram = std::make_unique<TH2D>("OA2DHistogram", "", 
-                                               offaxis_position.size() - 1, offaxis_position.data(),
-                                               ENuReco_bins.size() - 1, ENuReco_bins.data());
+        OA2DHistogram = std::make_unique<TH2D>("OA2DHistogram", "",  
+                                                //ENuReco_bins.size()-1, ENuReco_bins.data(),
+                                               //ELep_bins.size() - 1, ELep_bins.data());
+                                               q0.size()-1, q0.data(),
+                                               q3.size() - 1, q3.data());
+
+        OA2DHistogram->GetXaxis()->SetTitle("q0");
+        OA2DHistogram->GetYaxis()->SetTitle("q3");
+
+                                               //offaxis_position.size() - 1, offaxis_position.data(),
+                                               //ENuReco_bins.size() - 1, ENuReco_bins.data());
 
         std::cout << "Number of bins in  OA2DHistogram histogram = " <<  OA2DHistogram->GetNcells() << std::endl;
 
+         // Initialize the 2D histogram for Off-Axis and ENuReco
+        OA2DHistogram2 = std::make_unique<TH2D>("OA2DHistogram2", "", // ENuReco_bins.size()-1, ENuReco_bins.data(),
+                                               //ELep_bins.size() - 1, ELep_bins.data());
+                                                q0.size()-1, q0.data(),
+                                               q3.size() - 1, q3.data());
+
+        OA2DHistogram2->GetXaxis()->SetTitle("q0");
+        OA2DHistogram2->GetYaxis()->SetTitle("q3");
 
 
         ////////////////ND Histogram

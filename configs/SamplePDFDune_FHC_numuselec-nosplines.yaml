@@ -26,8 +26,6 @@ SelectionCuts:
     Bounds: [ 50.0, 1244.0 ]
   - KinematicStr: "CVNNumu"
     Bounds: [ 0.5, 999 ]
-  - KinematicStr: "Abis3DBinning" #"kBinningin2D" #"kDUNEPRISMBinning" #"kBinningin2D" 
-    Bounds: [ 0.0, 10000.0]
 Binning:
   BinningOpt: 4
   NTotalBins: 1576

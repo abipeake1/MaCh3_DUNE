@@ -122,21 +122,23 @@ int main(int argc, char * argv[]) {
   std::vector<samplePDFFDBase*> SamplePDFs;
   
   if(addFD) { 
-    samplePDFDUNEBase *numu_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_FHC_numuselec.yaml", xsec);
+   samplePDFDUNEBase *numu_pdf = new samplePDFDUNEBase(FDPOT, "/home/abipeake/Mach3/MaCh3_DUNE/configs/SamplePDFDune_FHC_offaxis-nosplines.yaml", xsec);
+   SamplePDFs.push_back(numu_pdf);
+    /*samplePDFDUNEBase *numu_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_FHC_numuselec.yaml", xsec);
     SamplePDFs.push_back(numu_pdf);
     samplePDFDUNEBase *nue_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_FHC_nueselec.yaml", xsec);
     SamplePDFs.push_back(nue_pdf);
     samplePDFDUNEBase *numubar_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_RHC_numuselec.yaml", xsec);
     SamplePDFs.push_back(numubar_pdf);
     samplePDFDUNEBase *nuebar_pdf = new samplePDFDUNEBase(FDPOT, "configs/SamplePDFDune_RHC_nueselec.yaml", xsec);
-    SamplePDFs.push_back(nuebar_pdf);
+    SamplePDFs.push_back(nuebar_pdf);*/
   }
  
   if(addND) {
-    samplePDFDUNEBaseND * FHC_numuCCND_pdf = new samplePDFDUNEBaseND(NDPOT, "configs/SamplePDFDuneND_FHC_CCnumuselec.yaml", xsec);
+    /*samplePDFDUNEBaseND * FHC_numuCCND_pdf = new samplePDFDUNEBaseND(NDPOT, "configs/SamplePDFDuneND_FHC_CCnumuselec.yaml", xsec);
     SamplePDFs.push_back(FHC_numuCCND_pdf);
     samplePDFDUNEBaseND * RHC_numuCCND_pdf = new samplePDFDUNEBaseND(NDPOT, "configs/SamplePDFDuneND_RHC_CCnumuselec.yaml", xsec);
-    SamplePDFs.push_back(RHC_numuCCND_pdf);
+    SamplePDFs.push_back(RHC_numuCCND_pdf);*/
   }
 
   // Oscillated
@@ -244,7 +246,7 @@ int main(int argc, char * argv[]) {
   }
 
 
-  const int nsubsamples = 12;
+  const int nsubsamples = 13;
 
   //Get the nice names of the modes  
   int nmodes = kMaCh3_nModes;
@@ -277,8 +279,8 @@ int main(int argc, char * argv[]) {
 	std::vector<TH1D*> varied_hists;
 
 	//Now loop over all xsec systs
-	for (int i=0; i<int(xsecpar.size()); i++)
-	{
+	//for (int i=0; i<int(xsecpar.size()); i++)
+	for (int i=0; i<1; i++){
 
 	  char xsec_name[100];
 	  sprintf(xsec_name, "%i : %s", i, xsec->getParName(i));

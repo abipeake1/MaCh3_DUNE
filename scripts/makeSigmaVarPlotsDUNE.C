@@ -12,7 +12,7 @@
 TString getXsecParName(TString keyname)
 {
   if (keyname.EndsWith("_par_0"))
-    keyname.ReplaceAll("_par_0","_0 Total Energy Scale FD");
+    keyname.ReplaceAll("_par_0","_0 abis q0q3 parameter");
   else if (keyname.EndsWith("_par_1"))
     keyname.ReplaceAll("_par_1","_1 Total Energy Scale Sqrt FD");
   else if (keyname.EndsWith("_par_2"))

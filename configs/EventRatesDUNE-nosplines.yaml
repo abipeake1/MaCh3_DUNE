@@ -8,7 +8,7 @@ General:
   # NuFit 4.0 NH ####
   #OscParams: [0.310, 0.582, 0.0224, 7.39e-5, 2.525e-3, -2.498]
   Systematics:
-    XsecCovFile: /home/abipeake/Mach3/MaCh3_DUNE/utils/xsecMatrixMaker/xsec_abisversion.root #"inputs/XSecCovNoSplineParams.root"
+    XsecCovFile: "/home/abipeake/Mach3/MaCh3_DUNE/utils/xsecMatrixMaker/xsec_abisversion_q0.root" #"inputs/XSecCovNoSplineParams.root"
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false 
@@ -16,4 +16,4 @@ General:
     OscCovName: "osc_cov"
     OscStepScale: 0.045
   Output:
-    FileName: "Results/xsec_parameter_0_shift_71024.root"
+    FileName: "Results/xsec_parameter_1Dq3_2D_2sigma_151024.root"

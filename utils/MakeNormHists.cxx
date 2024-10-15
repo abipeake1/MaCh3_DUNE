@@ -70,8 +70,8 @@ void MakeNormHists()
   //double pot_anu = 1E21;
 
   //folder containing mtuples
-  char* mtuple_folder = "/vols/t2k/users/ljw20/data/DUNE_2021/DUNE_2021_CAFs";
-  char* unsplit_mtuple_folder = "/vols/t2k/users/ljw20/data/DUNE_2021/DUNE_2021_HaddedCAFs";
+  char* mtuple_folder = "/home/abipeake/Mach3/MaCh3_DUNE/inputs/DUNE_OA_CAF_FILES";
+  char* unsplit_mtuple_folder = "/home/abipeake/Mach3/MaCh3_DUNE/inputs/DUNE_OA_CAF_FILES_hidden";
   // Names of SK files 
   // Note: it's important that the first index follows the same order as the indices in 'numerators' and 'denominators' (ie. numu / nue / numubar / nuebar / signue / signuebar)
   char *sk_filenames[6][8];

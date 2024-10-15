@@ -39,7 +39,7 @@ BeRPA_A : Has CV weights but still has a generated value of 0
 <!-- ### A  dummy normalisation parameter### -->
 <parameter name="abisparameter" nom="1" prior="1" lb="-9999" ub="9999" error="0.5" renorm="0" type="norm" detid="1" stepscale="0.1">
   <kinematic_cut var="the_Q0">0.1 0.2</kinematic_cut>
-  <kinematic_cut var="Q3">0.1 0.2</kinematic_cut>
+  <!--kinematic_cut var="Q3">0.1 0.2</kinematic_cut-->
   <prod_nupdg>14</prod_nupdg>
   <horncurrent>1</horncurrent>
 </parameter>

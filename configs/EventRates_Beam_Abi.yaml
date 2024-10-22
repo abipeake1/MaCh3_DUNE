@@ -1,5 +1,5 @@
 General:
-  OutputFile: "DuneEventRates_9_q0q3parameters.root"
+  OutputFile: "DuneEventRates_9_q0q3parameters_plus2sigma.root"
   DUNESamples:
     - "configs/Samples/SamplePDFDune_FHC_numuselec.yaml" 
     # - "configs/Samples/SamplePDFDune_FHC_nueselec.yaml"

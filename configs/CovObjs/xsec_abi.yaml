@@ -1,0 +1,25 @@
+Systematics:
+- Systematic:
+    DetID: 24
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0.1
+      - 0.2
+    - q3:
+      - 0.1
+      - 0.2
+    Names:
+      FancyName: abisparameter
+      ParameterName: abisparameter
+    ParameterBounds:
+    - -9999.0
+    - 9999.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 0.1
+    Type: Norm
+    ParameterGroup: Xsec

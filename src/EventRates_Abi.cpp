@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
-
 #include <TCanvas.h>
 #include <TColor.h>
 #include <TH1D.h>
@@ -11,9 +10,7 @@
 #include <TMath.h>
 #include <TRint.h>
 #include <TStyle.h>
-
 #include "samplePDF/GenericBinningTools.h"
-
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
 
 void Write1DHistogramsToFile(std::string OutFileName,
@@ -71,7 +68,7 @@ int main(int argc, char *argv[]) {
 
   auto gc1 = std::unique_ptr<TCanvas>(new TCanvas("gc1", "gc1", 800, 600));
   gStyle->SetOptStat(false);
-  gc1->Print("GenericBinTest.pdf[");
+  gc1->Print("GenericBinTest_plus2sigma.pdf[");
 
   std::vector<TH1D *> DUNEHists;
   for (auto Sample : DUNEPdfs) {
@@ -81,35 +78,37 @@ int main(int argc, char *argv[]) {
     double error = xsec->getDiagonalError(0);
     std::cout<<"nominal  = " << nominal << std::endl; 
     std::cout<<"error  = " << error << std::endl; 
-    xsec->setParCurrProp(0, nominal);////////// set //+(2*error)
+    xsec->setParCurrProp(0, nominal+(2*error));////////// set //+(2*error)
     std::cout<< "nominal value = " << nominal <<std::endl;;
     double current_value = xsec->getParProp(0);
     std::cout<<"current value  = " << current_value << std::endl; 
-
+    
+    Sample->reweight();
+    DUNEHists.push_back(Sample->get1DHist());
 
     if (Sample->generic_binning.GetNDimensions()) {
 
       auto myhist = GetGenericBinningTH1(*Sample, "myhist");
       myhist->Scale(1, "WIDTH");
       myhist->Draw();
-      gc1->Print("GenericBinTest.pdf");
+      gc1->Print("GenericBinTest_plus2sigma.pdf");
 
       if (Sample->generic_binning.GetNDimensions() == 2) {
         auto myhist2 = GetGenericBinningTH2(*Sample, "myhist2");
         myhist2->Draw("COLZ TEXT");
-        gc1->Print("GenericBinTest.pdf");
+        gc1->Print("GenericBinTest_plus2sigma.pdf");
 
         for (auto &slice :
              GetGenericBinningTH1Slices(*Sample, 0, "myslicehist")) {
           slice->Draw();
-          gc1->Print("GenericBinTest.pdf");
+          gc1->Print("GenericBinTest_plus2sigma.pdf");
         }
       }
       if (Sample->generic_binning.GetNDimensions() == 3) {
         for (auto &slice :
              GetGenericBinningTH2Slices(*Sample, {0, 1}, "myslicehist")) {
           slice->Draw();
-          gc1->Print("GenericBinTest.pdf");
+          gc1->Print("GenericBinTest_plus2sigma.pdf");
         }
       }
     }
@@ -122,11 +121,11 @@ int main(int argc, char *argv[]) {
                   EventRateString);
   }
 
-  gc1->Print("GenericBinTest.pdf]");
+  gc1->Print("GenericBinTest_plus2sigma.pdf]");
 
 
   std::string OutFileName = GetFromManager<std::string>(
-      fitMan->raw()["General"]["OutputFile"], "EventRates.root");
+      fitMan->raw()["General"]["OutputFile"], "EventRates_Abi.root");
 
   Write1DHistogramsToFile(OutFileName, DUNEHists);
   Write1DHistogramsToPdf(OutFileName, DUNEHists);

@@ -2,6 +2,8 @@ add_custom_target(MaCh3DUNEApps)
 
 foreach(app
 	EventRates
+    EventRates_Abi
+    LogLikelihood_scans
 	Fit
 )
     add_executable(${app} ${app}.cpp)

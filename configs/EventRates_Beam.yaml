@@ -2,6 +2,7 @@ General:
   OutputFile: "DuneEventRates_9_q0q3parameters.root"
   DUNESamples:
     - "configs/Samples/SamplePDFDune_FHC_numuselec.yaml" 
+    - "configs/Samples/SamplePDFDune_FHC_numuselec_offaxis_subset.yaml"
     # - "configs/Samples/SamplePDFDune_FHC_nueselec.yaml"
     # - "configs/Samples/SamplePDFDune_RHC_numuselec.yaml"
     # - "configs/Samples/SamplePDFDune_RHC_nueselec.yaml"
@@ -26,9 +27,11 @@ General:
     NSteps: 2000
     AutoSave: 10000
   Output:
-    FileName: "TestEventRates.root"
-    OUTPUTNAME: "TestLLH.root"
+    FileName: "TestEventRates_someoa.root"
+    OUTPUTNAME: "TestLLH_someoa.root"
 
   ProcessMCMC: No
   Seed: 0
   Debug: No
+LLHScans:
+  ParPoints: 1000

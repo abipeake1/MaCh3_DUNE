@@ -1,0 +1,147 @@
+SampleName: "FHC_numu"
+SampleType: "BeamFD"
+POT: 1.3628319e+23
+SelectionCuts:
+  - KinematicStr: "TrueXPos"
+    Bounds: [ -310.0, 310.0 ]
+  - KinematicStr: "TrueYPos"
+    Bounds: [ -550.0, 550.0 ]
+  - KinematicStr: "TrueZPos"
+    Bounds: [ 50.0, 1244.0 ]
+  - KinematicStr: "CVNNumu"
+    Bounds: [ 0.5, 999 ]
+
+Binning:
+  Axes:
+# Appropriate values for VarStr
+# TrueNeutrinoEnergy
+# RecoNeutrinoEnergy
+# CVNNumu
+# CVNNue
+# q0
+# q3
+# ERecQE
+# ELepRec
+# EHadRec
+    - VarStr: "q0" 
+      Uniform: [3,0,1.5]
+      Title: "q_{0} [GeV]"
+    - VarStr: "q3" 
+      Uniform: [3,0,1.5]
+      Title: "q_{3} [GeV]"
+    #- VarStr: "ELepRec" 
+     # Uniform: [25,0,5]
+      #Title: "E_{lep.}^{Rec} [GeV]"
+    #- VarStr: "EHadRec" 
+     # Uniform: [25,0,5]
+      #Title: "E_{had.}^{Vis} [GeV]"
+    #- VarStr: "RecoNeutrinoEnergy" 
+     # Uniform: [10,0.5,5.5]
+      #Title: "E_{#nu}^{Rec} [GeV]"
+  # if you want to use the generic binning with a single 
+  # axis, useful for calculated VarStr that cannot be referenced
+  ForceGeneric: True
+
+DUNESampleBools:
+  iselike: no
+InputFiles:
+  mtupleprefix: "/project/rpp-nilic/abipeake/DUNE_OA_CAF_new/"
+  mtuplesuffix: ".root"
+  # splineprefix: "inputs/DUNE_spline_files/FD_FHC_ger_"
+  # splinesuffix: "_numuselec_splines.root"
+DetID: 24
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
+NSubSamples: 13
+SubSamples:
+  - name: "CAFv7_0m_130_FHC"
+    mtuplefile: "CAFv7_0m_130_FHC"
+    splinefile: "CAFv7_0m_130_FHC"
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_2m_subset10"
+    mtuplefile: "CAFv7_2m_subset10"
+    splinefile: "CAFv7_2m_subset10"
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_4m_subset10"
+    mtuplefile: "CAFv7_4m_subset10"
+    splinefile: "CAFv7_4m_subset10"
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_CM_8m_subset08"
+    mtuplefile: "CAFv7_CM_8m_subset08"
+    splinefile: "CAFv7_CM_8m_subset08"
+    samplevecno: 3
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_9.75m_10_FHC"
+    mtuplefile: "CAFv7_9.75m_10_FHC"
+    splinefile: "CAFv7_9.75m_10_FHC"
+    samplevecno: 4
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_CM_12m_subset09"
+    mtuplefile: "CAFv7_CM_12m_subset09"
+    splinefile: "CAFv7_CM_12m_subset09"
+    samplevecno: 5
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_CM_16m_subset09"
+    mtuplefile: "CAFv7_CM_16m_subset09"
+    splinefile: "CAFv7_CM_16m_subset09"
+    samplevecno: 6
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_CM_20m_subset09"
+    mtuplefile: "CAFv7_CM_20m_subset09"
+    splinefile: "CAFv7_CM_20m_subset09"
+    samplevecno: 7
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_10_FHC"
+    mtuplefile: "CAFv7_21.75m_10_FHC"
+    splinefile: "CAFv7_21.75m_10_FHC"
+    samplevecno: 8
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_CM_24m_subset08"
+    mtuplefile: "CAFv7_CM_24m_subset08"
+    splinefile: "CAFv7_CM_24m_subset08"
+    samplevecno: 9
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_25.75m_10_FHC"
+    mtuplefile: "CAFv7_25.75m_10_FHC"
+    splinefile: "CAFv7_25.75m_10_FHC"
+    samplevecno: 10
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_26.25m_04_FHC"
+    mtuplefile: "CAFv7_26.25m_04_FHC"
+    splinefile: "CAFv7_26.25m_04_FHC"
+    samplevecno: 11
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_28.25m_10_FHC"
+    mtuplefile: "CAFv7_28.25m_10_FHC"
+    splinefile: "CAFv7_28.25m_10_FHC"
+    samplevecno: 12
+    nutype: 14
+    oscnutype: 14
+    signal: false

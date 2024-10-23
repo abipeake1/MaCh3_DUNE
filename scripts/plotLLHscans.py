@@ -10,7 +10,7 @@ import ROOT
 from ROOT import TFile, TIter, TKey, TCanvas, TGraph, TMath
 
 if (len(sys.argv) != 3):
-    print "Useage: " + str(sys.argv[0]) + " /path/to/llh_scan.root /path/to/output"
+    print ("Useage: " + str(sys.argv[0]) + " /path/to/llh_scan.root /path/to/output")
     quit(1)
 
 ### main 
@@ -19,7 +19,7 @@ output_loc = sys.argv[2] + "/"
 out_name = os.path.basename(data_loc)
 out_name = os.path.splitext(out_name)[0]
 
-print "-------------------------------------------"
+print("-------------------------------------------")
 ROOT.gROOT.SetBatch(True)
 
 file1 = TFile(data_loc)
@@ -36,7 +36,7 @@ canv.Divide(2,3)
 for key in nextkey:
     if (str(key.GetClassName()) == "TGraph"): 
         
-        print key.GetName()
+        print(key.GetName())
         llh_plot = key.ReadObj()
         canv.cd(pc)
         ROOT.gPad.SetGrid()
@@ -61,4 +61,4 @@ for key in nextkey:
 canv.Print(output_loc + out_name + ".ps]")
 
 os.system("ps2pdf " + output_loc + out_name + ".ps " + output_loc + out_name + ".pdf")
-print "finished!"        
+print ("finished!")     

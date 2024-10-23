@@ -74,7 +74,7 @@ int main(int argc, char * argv[]) {
 
   auto gc1 = std::unique_ptr<TCanvas>(new TCanvas("gc1", "gc1", 800, 600));
   gStyle->SetOptStat(false);
-  gc1->Print("GenericBinTest.pdf[");
+  gc1->Print("GenericBinTest_someoa.pdf[");
   
 
     // Setting flat priors based on XSECPARAMFLAT list in configuration file 
@@ -162,14 +162,14 @@ int main(int argc, char * argv[]) {
       double totalllh = 0;
       
 	  xsec->setParameters(xsecpar);
-	  std::cout << "Val = " << xsecpar[par] << std::endl;
+	  //std::cout << "Val = " << xsecpar[par] << std::endl;
 
 	  // Calc LLH for each sample
       for(unsigned sample_i=0; sample_i < DUNEPdfs.size() ; ++sample_i) {
         DUNEPdfs[sample_i]  -> reweight();
 	    llh_hists[sample_i]->Fill(xsecpar[par], 2 *  DUNEPdfs[sample_i]  -> GetLikelihood());	
         totalllh += 2 *  DUNEPdfs[sample_i] -> GetLikelihood();
-		std::cout << "LLH for sample " << sample_i << " = " << 2 *  DUNEPdfs[sample_i]  -> GetLikelihood() << std::endl;
+		//std::cout << "LLH for sample " << sample_i << " = " << 2 *  DUNEPdfs[sample_i]  -> GetLikelihood() << std::endl;
       } //end of sample loop
 
 	  // Calc Penalty LLH

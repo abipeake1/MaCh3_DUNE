@@ -70,63 +70,73 @@ int main(int argc, char *argv[]) {
   gStyle->SetOptStat(false);
   gc1->Print("GenericBinTest_plus2sigma.pdf[");
 
-  std::vector<TH1D *> DUNEHists;
   for (auto Sample : DUNEPdfs) {
     Sample->reweight();
+    Sample->addData(static_cast<TH1D*>(Sample->get1DHist()->Clone((Sample->GetName() + "_asimovdata").c_str())));
+    
     xsec->setParameters();
-    double nominal =xsec->getNominal(0); //get central value of parameter
+
+    double nominal = xsec->getNominal(0); //get central value of parameter
     double error = xsec->getDiagonalError(0);
+    
     std::cout<<"nominal  = " << nominal << std::endl; 
     std::cout<<"error  = " << error << std::endl; 
+      
+    Sample->reweight();
+
+    auto myhist_nom = GetGenericBinningTH1(*Sample, "myhistnom", ";global_bin_number;rate", true);
+
     xsec->setParCurrProp(0, nominal+(2*error));////////// set //+(2*error)
-    std::cout<< "nominal value = " << nominal <<std::endl;;
     double current_value = xsec->getParProp(0);
     std::cout<<"current value  = " << current_value << std::endl; 
-    
     Sample->reweight();
-    DUNEHists.push_back(Sample->get1DHist());
 
-    if (Sample->generic_binning.GetNDimensions()) {
+    auto myhist_p2 = GetGenericBinningTH1(*Sample, "myhist2", ";global_bin_number;rate", true);
+    
+    myhist_nom->SetLineColor(kBlack);
+    myhist_nom->GetYaxis()->SetRangeUser(0,std::max(myhist_nom->GetMaximum(),myhist_p2->GetMaximum())*1.2);
+    myhist_nom->Draw("EHIST");
+    myhist_p2->SetLineColor(kRed);
+    myhist_p2->SetLineStyle(kDashed);
+    myhist_p2->Draw("EHIST SAME");
 
-      auto myhist = GetGenericBinningTH1(*Sample, "myhist");
-      myhist->Scale(1, "WIDTH");
-      myhist->Draw();
-      gc1->Print("GenericBinTest_plus2sigma.pdf");
+    gc1->Print("GenericBinTest_plus2sigma.pdf");
 
-      if (Sample->generic_binning.GetNDimensions() == 2) {
-        auto myhist2 = GetGenericBinningTH2(*Sample, "myhist2");
-        myhist2->Draw("COLZ TEXT");
-        gc1->Print("GenericBinTest_plus2sigma.pdf");
+      // if (Sample->generic_binning.GetNDimensions() == 2) {
+      //   auto myhist2 = GetGenericBinningTH2(*Sample, "myhist2");
+      //   myhist2->Draw("COLZ TEXT");
+      //   gc1->Print("GenericBinTest_plus2sigma.pdf");
 
-        for (auto &slice :
-             GetGenericBinningTH1Slices(*Sample, 0, "myslicehist")) {
-          slice->Draw();
-          gc1->Print("GenericBinTest_plus2sigma.pdf");
-        }
-      }
-      if (Sample->generic_binning.GetNDimensions() == 3) {
-        for (auto &slice :
-             GetGenericBinningTH2Slices(*Sample, {0, 1}, "myslicehist")) {
-          slice->Draw();
-          gc1->Print("GenericBinTest_plus2sigma.pdf");
-        }
-      }
-    }
-
-    DUNEHists.push_back(Sample->get1DHist());
+      //   for (auto &slice :
+      //        GetGenericBinningTH1Slices(*Sample, 0, "myslicehist")) {
+      //     slice->Draw();
+      //     gc1->Print("GenericBinTest_plus2sigma.pdf");
+      //   }
+      // }
+      // if (Sample->generic_binning.GetNDimensions() == 3) {
+      //   for (auto &slice :
+      //        GetGenericBinningTH2Slices(*Sample, {0, 1}, "myslicehist")) {
+      //     slice->Draw();
+      //     gc1->Print("GenericBinTest_plus2sigma.pdf");
+      //   }
+      // }
 
     std::string EventRateString =
         fmt::format("{:.2f}", Sample->get1DHist()->Integral());
     MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetName(),
                   EventRateString);
+
+    std::string LLHString =
+        fmt::format("{:.2f}", Sample-> GetLikelihood());
+    MACH3LOG_INFO("LLH for {} : {:<5}", Sample->GetName(),
+                  LLHString);
   }
 
   gc1->Print("GenericBinTest_plus2sigma.pdf]");
 
+  // std::string OutFileName = GetFromManager<std::string>(
+  //     fitMan->raw()["General"]["OutputFile"], "EventRates_Abi.root");
 
-  std::string OutFileName = GetFromManager<std::string>(
-      fitMan->raw()["General"]["OutputFile"], "EventRates_Abi.root");
-
-  Write1DHistogramsToFile(OutFileName, DUNEHists);
-  Write1DHistogramsToPdf(OutFileName, DUNEHists);
+  // Write1DHistogramsToFile(OutFileName, DUNEHists);
+  // Write1DHistogramsToPdf(OutFileName, DUNEHists);
 }

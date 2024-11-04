@@ -209,14 +209,18 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   
   _sampleFile = new TFile(mc_files[iSample].c_str(), "READ");
   _data = (TTree*)_sampleFile->Get("caf");
+  //if (!caf){ caf = tfile->Get<TTree>(“cafTree”); }
   
   if(_data){
     MACH3LOG_INFO("Found \"caf\" tree in {}", mc_files[iSample].native());
     MACH3LOG_INFO("With number of entries: {}", _data->GetEntries());
   }
   else{
-	MACH3LOG_ERROR("Could not find \"caf\" tree in {}", mc_files[iSample].native());
-	throw MaCh3Exception(__FILE__, __LINE__);
+    _data = (TTree*)_sampleFile->Get("cafTree");
+    //MACH3LOG_INFO("Found \"caf\" tree in {}", mc_files[iSample].native());
+    //MACH3LOG_INFO("With number of entries: {}", _data->GetEntries());
+	  //MACH3LOG_ERROR("Could not find \"caf\" tree in {}", mc_files[iSample].native());
+	  //throw MaCh3Exception(__FILE__, __LINE__);
   }
   
   _data->SetBranchStatus("*", 0);
@@ -293,16 +297,38 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   _data->SetBranchStatus("LepMomZ", 1);
   _data->SetBranchAddress("LepMomZ", &_LepMomZ);
 
-  TH1D* norm = (TH1D*)_sampleFile->Get("norm");
+  /* TH1D* norm = (TH1D*)_sampleFile->Get("norm");
   if(!norm){
     MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
     throw MaCh3Exception(__FILE__, __LINE__);
+    }
+  */
+   
+
+   TH1D* norm = (TH1D*)_sampleFile->Get("norm");
+  if(!norm){
+    //MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
+    //throw MaCh3Exception(__FILE__, __LINE__);
+    
+    norm = new TH1D("norm","",1,0,1);
+    norm->SetBinContent(1,1);
+    duneobj.norm_s = 1.0; //norm->GetBinContent(1);
+    //duneobj->pot_s = (pot) / norm->GetBinContent(1);
+    duneobj.pot_s = (pot) / 3.85e21;
+
+    }
+  else{
+    duneobj.norm_s = norm->GetBinContent(1);
+    duneobj.pot_s = pot/norm->GetBinContent(2);
   }
 
-  // now fill the actual variables
-  duneobj.norm_s = norm->GetBinContent(1);
-  duneobj.pot_s = pot/norm->GetBinContent(2);
-
+  std::cout << "pot = " << (pot)<< std::endl;
+  std::cout << "pot_s = " << duneobj.pot_s << std::endl;
+  std::cout << "norm_s = " << duneobj.norm_s << std::endl;
+  
+  
+  //duneobj.norm_s = norm->GetBinContent(1);
+  //duneobj.pot_s = pot/norm->GetBinContent(2);
   duneobj.nEvents = _data->GetEntries();
   duneobj.nutype = nutype;
   duneobj.oscnutype = oscnutype;

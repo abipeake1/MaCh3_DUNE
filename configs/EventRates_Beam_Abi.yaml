@@ -1,7 +1,10 @@
 General:
-  OutputFile: "DuneEventRates_9_q0q3parameters_plus2sigma.root"
+  OutputFile: "helpme_ndmcaf_evrate2std.root"
   DUNESamples:
-    - "configs/Samples/SamplePDFDune_FHC_numuselec.yaml" 
+    #- "configs/Samples/SamplePDFDune_FHC_numuselec.yaml" 
+    #- "configs/Samples/SamplePDFDune_FHC_numuselec_offaxis_subset.yaml"
+    #- "configs/Samples/SamplePDFDuneND_FHC_numuselec.yaml"
+    - "configs/Samples/SamplePDFDune_FHC_numuselec_prismsubset.yaml"
     # - "configs/Samples/SamplePDFDune_FHC_nueselec.yaml"
     # - "configs/Samples/SamplePDFDune_RHC_numuselec.yaml"
     # - "configs/Samples/SamplePDFDune_RHC_nueselec.yaml"
@@ -13,7 +16,7 @@ General:
   OscillatorConfigName: "configs/OscillatorObj.yaml"
 
   Systematics:
-    XsecCovFile: ["/home/abipeake/MaCh3_newvesion/MaCh3_DUNE/configs/CovObjs/xsec_abi_manyparameters.yaml"]
+    XsecCovFile: ["configs/CovObjs/xsec_abi_manyparameters_nd.yaml"]
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false 
@@ -23,12 +26,14 @@ General:
   Fitter:
     FitTestLikelihood: false
   MCMC:
-    NSteps: 2000
-    AutoSave: 10000
+    NSteps: 1000
+    AutoSave: 1000
   Output:
-    FileName: "TestEventRates.root"
-    OUTPUTNAME: "TestLLH.root"
+    FileName: "TestEventRates_fit_10000.root"
+    OUTPUTNAME: "TestLLH__fit_10000.root"
 
   ProcessMCMC: No
   Seed: 0
   Debug: No
+LLHScans:
+  ParPoints: 1000

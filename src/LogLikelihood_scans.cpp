@@ -161,20 +161,28 @@ int main(int argc, char * argv[]) {
     for (unsigned val =0; val < n_points; val++) {
       double totalllh = 0;
       
-	  xsec->setParameters(xsecpar);
+	  xsec->setParameters(xsecpar);  //->get1DHist()->Integral())
 	  //std::cout << "Val = " << xsecpar[par] << std::endl;
 
 	  // Calc LLH for each sample
       for(unsigned sample_i=0; sample_i < DUNEPdfs.size() ; ++sample_i) {
-        DUNEPdfs[sample_i]  -> reweight();
-	    llh_hists[sample_i]->Fill(xsecpar[par], 2 *  DUNEPdfs[sample_i]  -> GetLikelihood());	
-        totalllh += 2 *  DUNEPdfs[sample_i] -> GetLikelihood();
-		//std::cout << "LLH for sample " << sample_i << " = " << 2 *  DUNEPdfs[sample_i]  -> GetLikelihood() << std::endl;
+        //std::cout<< "sample_i loop = " << sample_i<<std::endl;
+        // std::cout << "LLH for sample before reweigting sample :  " << sample_i << " = " << 2 *  DUNEPdfs[sample_i]  -> GetLikelihood() << std::endl;
+          //std::cout << "Event Rate for sample before reweigting sample :  " << sample_i << " = " <<  DUNEPdfs[sample_i]  -> get1DHist()->Integral() << std::endl;
+         DUNEPdfs[sample_i]  -> reweight();
+	       llh_hists[sample_i]->Fill(xsecpar[par], 2 *  DUNEPdfs[sample_i]  -> GetLikelihood());	
+         totalllh += 2 *  DUNEPdfs[sample_i] -> GetLikelihood();
+		  //std::cout << "LLH for sample after reweigting sample :  " << sample_i << " = " << 2 *  DUNEPdfs[sample_i]  -> GetLikelihood() << std::endl;
+      //std::cout << "Event Rate for sample after reweigting sample :  " << sample_i << " = " << 2 *  DUNEPdfs[sample_i]  ->get1DHist()->Integral() << std::endl;
       } //end of sample loop
+
+
+      //std::cout<< "data event rate =" <<   DUNEPdfs[sample_i]->get1DHist()->Integral()<< "prediction event rate =" << sample_names[sample_i]->get1DHist()->Integral()<< std::endl;
 
 	  // Calc Penalty LLH
 	  llh_hists[DUNEPdfs.size()]->Fill(xsecpar[par], 2 * (xsec->GetLikelihood()));
-	  // Total sample LLH
+	  // Total sample 
+    //std::cout << "Total sample LLH = " << xsecpar[par], 2 * totalllh << std::endl;
 	  llh_hists[DUNEPdfs.size()+1]->Fill(xsecpar[par], 2 * totalllh);
 
       xsecpar[par] += dsigma*sqrt((*xsec->getCovMatrix())(par,par)); // Increment parameter
@@ -187,7 +195,7 @@ int main(int argc, char * argv[]) {
       llh_hists[hist]->Write();
 	}
 
-    std::cout << "Finished xsec param " << par << std::endl;
+    //std::cout << "Finished xsec param " << par << std::endl;
   } //end of parameter loop
 
   std::cout << "Finished LLH Scans!" << std::endl;

@@ -15,6 +15,7 @@
 #include "samplePDF/GenericBinningTools.h"
 
 #include "samplePDFDUNE/MaCh3DUNEFactory.h"
+#include "mcmc/mcmc.h"
 
 void Write1DHistogramsToFile(std::string OutFileName,
                              std::vector<TH1D *> Histograms) {
@@ -73,8 +74,18 @@ int main(int argc, char *argv[]) {
   gStyle->SetOptStat(false);
   gc1->Print("GenericBinTest.pdf[");
 
+  /*
+  if (Sample -> GetNDim() == 1) {
+      TH1D *Asimov_1D = (TH1D*)Sample->get1DHist()->Clone(NameTString+"_asimov");
+      std::cout << name.c_str() << ": " << Asimov_1D->Integral() << std::endl;
+      Sample -> addData(Asimov_1D); 
+	}*/
+
   std::vector<TH1D *> DUNEHists;
   for (auto Sample : DUNEPdfs) {
+    TH1D *Asimov_1D = (TH1D*)Sample->get1DHist()->Clone((Sample->GetName()+"_asimov").c_str());
+    //Sample->addData(Sample->get1DHist()->Clone((Sample->GetName() + "_asimovdata").c_str()));
+    Sample -> addData(Asimov_1D); 
     Sample->reweight();
     xsec->setParameters();
     double nominal =xsec->getNominal(0); //get central value of parameter
@@ -85,6 +96,7 @@ int main(int argc, char *argv[]) {
     std::cout<< "nominal value = " << nominal <<std::endl;;
     double current_value = xsec->getParProp(0);
     std::cout<<"current value  = " << current_value << std::endl; 
+    Sample->reweight();
 
 
     if (Sample->generic_binning.GetNDimensions()) {
@@ -120,6 +132,11 @@ int main(int argc, char *argv[]) {
         fmt::format("{:.2f}", Sample->get1DHist()->Integral());
     MACH3LOG_INFO("Event rate for {} : {:<5}", Sample->GetName(),
                   EventRateString);
+
+    std::string LLHString =
+        fmt::format("{:.10f}", Sample-> GetLikelihood());
+    MACH3LOG_INFO("LLH for {} : {:<5}", Sample->GetName(),
+                  LLHString);
   }
 
   gc1->Print("GenericBinTest.pdf]");

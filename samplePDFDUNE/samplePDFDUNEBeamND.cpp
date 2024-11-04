@@ -181,8 +181,9 @@ int samplePDFDUNEBeamND::setupExperimentMC(int iSample) {
     std::cout << "N of entries: " << _data->GetEntries() << std::endl;
   }
   else{
-    MACH3LOG_ERROR("Could not find \"caf\" tree in {}", mc_files[iSample].native());
-    throw MaCh3Exception(__FILE__, __LINE__);
+    //MACH3LOG_ERROR("Could not find \"caf\" tree in {}", mc_files[iSample].native());
+    //throw MaCh3Exception(__FILE__, __LINE__);
+    _data = (TTree*)_sampleFile->Get("cafTree");
   }
 
   _data->SetBranchStatus("*", 0);

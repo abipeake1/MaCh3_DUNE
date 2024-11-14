@@ -55,7 +55,7 @@ InputFiles:
 DetID: 1
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
-NSubSamples: 3
+NSubSamples: 13
 SubSamples:
   - name: "CAFv7_0m_130_FHC"
     mtuplefile: "CAFv7_0m_130_FHC"

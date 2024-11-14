@@ -8,6 +8,14 @@
 # isfitqun = true for fitqun variable samples false otherwise #default to true
 #Add samples to the sample list as shown below
 # {
+# name = "descriptive name for sample";
+# mtuplefile = "path to mtuple file";
+#splinefile  = "path to splinefile"; #!!NB MUST BE COMPATIBLE WITH BINNING OPTION SPECIFIED IN EXECUTABLE
+# samplevecno = which number in the skmcsamples array should this go in;
+# nutype = "nutype before oscillation";
+# oscnutype = "nutype after oscillation";
+# signal = true for signal samples;,
+# },
 SampleName: "ND_FHC_CCnumu"
 SampleType: "BeamFD"
 SelectionCuts:
@@ -55,10 +63,6 @@ DUNESampleBools:
   iselike: no
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
-SampleBools:
-  isrhc: no
-  isnd: yes
-  iselike: no
 InputFiles:
   mtupleprefix: "inputs/DUNE_ND_CAF_files/ND_FHC_ger_"
   mtuplesuffix: "_fv_ccinc_q.root"
@@ -76,3 +80,4 @@ SubSamples:
     nutype: 14
     oscnutype: 14
     signal: false
+  

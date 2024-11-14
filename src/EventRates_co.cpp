@@ -103,25 +103,51 @@ int main(int argc, char *argv[]) {
     gc1->Print("GenericBinTest_plus2sigma.pdf");
 
        if (Sample->generic_binning.GetNDimensions() == 2) {
-         auto myhist2 = GetGenericBinningTH2(*Sample, "myhist2");
-         myhist2->SetMinimum(0);
-          myhist2->SetMaximum(3.77e7);
-         myhist2->Draw("COLZ");
-         gc1->Print("GenericBinTest_plus2sigma.pdf");
+          gc1->Divide(2,1);
+          gc1->cd(1);
+         //auto a = new THStack("a","Stacked 2D histograms");
+         auto myhist2_nom = GetGenericBinningTH2(*Sample, "myhist2");
+         auto myhist2_p2 = GetGenericBinningTH2(*Sample, "myhistp2");
+         auto myhist2_p3 = GetGenericBinningTH2(*Sample, "myhistp2");
 
-         for (auto &slice :
+         //a->Add(myhist2 );
+         //a->Add(myhist2_p2);
+          myhist_nom->Draw("COLZ");
+          myhist_nom->SetMinimum(0);
+          myhist_nom->SetMaximum(16.1e7);
+          myhist_nom->SetTitle("Nominal");
+
+          gc1->cd(2);
+          myhist2_p2->SetMinimum(0);
+          myhist2_p2->SetMaximum(16.1e7);  
+          //a->Draw("NOSTACK COLZ");
+          myhist2_p2->SetTitle("+2 #sigma");
+          myhist2_p2->Draw("COLZ");
+          /*
+          gc1->cd(3);
+          myhist2_p2->Divide(myhist2.get());  // Perform the division
+          //myhist2_p3 = std::make_unique<TH2D>(*myhist2_p2);  // Copy the result to myhist2_p3
+          //myhist2_p3 = myhist2_p2->Divide(myhist2.get());
+          //myhist2_p2->Divide(myhist2);
+          //myhist2_p2->Divide(myhist2.get());
+          myhist2_p2->Draw("colz");
+          myhist2_p2->SetTitle("Ratio");
+          */
+          gc1->Print("GenericBinTest_plus2sigma.pdf");
+
+         /*for (auto &slice :
               GetGenericBinningTH1Slices(*Sample, 0, "myslicehist")) {
            slice->Draw();
            gc1->Print("GenericBinTest_plus2sigma.pdf");
-         }
+         }*/
        }
-       if (Sample->generic_binning.GetNDimensions() == 3) {
+       /*if (Sample->generic_binning.GetNDimensions() == 3) {
          for (auto &slice :
               GetGenericBinningTH2Slices(*Sample, {0, 1}, "myslicehist")) {
            slice->Draw("colz");
            gc1->Print("GenericBinTest_plus2sigma.pdf");
-         }
-       }
+         }*/
+       //}
 
     DUNEHists.push_back(Sample->get1DHist());
 

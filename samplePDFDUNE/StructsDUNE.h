@@ -18,6 +18,7 @@ struct dunemc_base {
   std::vector<double> rw_eRecoPim;
   std::vector<double> rw_eRecoPi0;
   std::vector<double> rw_eRecoN;
+  std::vector<double> lepton_momentum;
 
   std::vector<double> true_q0;
   std::vector<double> true_q3;

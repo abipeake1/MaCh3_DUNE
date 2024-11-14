@@ -3,6 +3,7 @@ add_custom_target(MaCh3DUNEApps)
 foreach(app
 	EventRates
     EventRates_Abi
+    EventRates_co
     LogLikelihood_scans
 	Fit
 )

@@ -40,7 +40,11 @@ public:
     kq3,
     kERecQE,
     kELepRec,
-    kEHadRec
+    kEHadRec,
+    kERec_minus_Etrue,
+    kEHadRec_minus_EHadtrue,
+    ktheta_lep,
+    kp_lep
   };
 
   //More robust getters to make plots in different variables, mode, osc channel, systematic weighting and with bin range 

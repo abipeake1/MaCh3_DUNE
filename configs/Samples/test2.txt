@@ -1,0 +1,310 @@
+ ./build/src/EventRates_Abi configs/EventRates_Beam_Abi.yaml 
+[Monitor.cpp][info] ##################################
+[Monitor.cpp][info] Welcome to:  
+[Monitor.cpp][info]   __  __        _____ _     ____  
+[Monitor.cpp][info]  |  \/  |      / ____| |   |___ \ 
+[Monitor.cpp][info]  | \  / | __ _| |    | |__   __) |
+[Monitor.cpp][info]  | |\/| |/ _` | |    | '_ \ |__ < 
+[Monitor.cpp][info]  | |  | | (_| | |____| | | |___) |
+[Monitor.cpp][info]  |_|  |_|\__,_|\_____|_| |_|____/ 
+[Monitor.cpp][info] Version: 1.2.0
+[Monitor.cpp][info] ##################################
+[Monitor.cpp][info] Using following CPU:
+[Monitor.cpp][info] model name	: Intel(R) Xeon(R) Platinum 8160 CPU @ 2.10GHz
+[Monitor.cpp][info] cpu MHz		: 2100.000
+[Monitor.cpp][info] Architecture:                       x86_64
+[Monitor.cpp][info] L1d cache:                          1.5 MiB (48 instances)
+[Monitor.cpp][info] L1i cache:                          1.5 MiB (48 instances)
+[Monitor.cpp][info] L2 cache:                           48 MiB (48 instances)
+[Monitor.cpp][info] L3 cache:                           66 MiB (2 instances)
+[Monitor.cpp][info] Thread(s) per core:                 1
+[Monitor.cpp][info] CPU(s):                             48
+[manager.cpp][info] Setting config to be: configs/EventRates_Beam_Abi.yaml
+[manager.cpp][info] Config is now: 
+[Monitor.cpp][info] General:
+[Monitor.cpp][info]   OutputFile: test.root
+[Monitor.cpp][info]   DUNESamples:
+[Monitor.cpp][info]     - configs/Samples/SamplePDFDUNE_FHC_NewPrism.yaml
+[Monitor.cpp][info]   OscillationParameters: [0.307, 0.528, 0.0218, 7.53e-5, 2.509e-3, -1.601, 1284.9, 2.848]
+[Monitor.cpp][info]   OscillatorConfigName: configs/OscillatorObj.yaml
+[Monitor.cpp][info]   Systematics:
+[Monitor.cpp][info]     XsecCovFile: [configs/CovObjs/xsec_abi_manyparameters_nd.yaml]
+[Monitor.cpp][info]     XsecCovName: xsec_cov
+[Monitor.cpp][info]     XsecStepScale: 0.1
+[Monitor.cpp][info]     XsecAtGen: false
+[Monitor.cpp][info]     OscCovFile: [configs/CovObjs/OscCov_PDG2021_v2.yaml]
+[Monitor.cpp][info]     OscCovName: osc_cov
+[Monitor.cpp][info]   Fitter:
+[Monitor.cpp][info]     FitTestLikelihood: false
+[Monitor.cpp][info]   MCMC:
+[Monitor.cpp][info]     NSteps: 1000
+[Monitor.cpp][info]     AutoSave: 1000
+[Monitor.cpp][info]   Output:
+[Monitor.cpp][info]     FileName: TestEventRates_fit_10000.root
+[Monitor.cpp][info]     OUTPUTNAME: TestLLH__fit_10000.root
+[Monitor.cpp][info]   ProcessMCMC: No
+[Monitor.cpp][info]   Seed: 0
+[Monitor.cpp][info]   Debug: No
+[Monitor.cpp][info] LLHScans:
+[Monitor.cpp][info]   ParPoints: 1000
+[covarianceBase.cpp][info] Constructing instance of covarianceBase using 
+[covarianceBase.cpp][info] configs/CovObjs/xsec_abi_manyparameters_nd.yaml
+[covarianceBase.cpp][info] as an input
+[covarianceBase.cpp][info] Principal component analysis but given the threshold for the principal components to be less than 0, or greater than (or equal to) 1. This will not work
+[covarianceBase.cpp][info] Please specify a number between 0 and 1
+[covarianceBase.cpp][info] You specified: 
+[covarianceBase.cpp][info] Am instead calling the usual non-PCA constructor...
+[covarianceBase.cpp][info] Had to shift diagonal 0 time(s) to allow the covariance matrix to be decomposed
+[covarianceBase.cpp][info] Had to shift diagonal 0 time(s) to allow the covariance matrix to be decomposed
+[covarianceBase.cpp][info] Created covariance matrix from files: 
+[covarianceBase.cpp][info] configs/CovObjs/xsec_abi_manyparameters_nd.yaml 
+[covarianceBase.cpp][info] ----------------
+[covarianceBase.cpp][info] Found 9 systematics parameters in total
+[covarianceBase.cpp][info] ----------------
+[covarianceXsec.cpp][info] #################################################
+[covarianceXsec.cpp][info] Printing covarianceXsec:
+[covarianceXsec.cpp][info] ============================================================================================================================================================
+[covarianceXsec.cpp][info] #     |  Name                                     |  Nom.       |  Prior      |  Error      |  Lower      |  Upper      |  StepScale  |  DetID |  Type      
+[covarianceXsec.cpp][info] ------------------------------------------------------------------------------------------------------------------------------------------------------------
+[covarianceXsec.cpp][info] 0     |  q0q3_1                                   |  1          |  1          |  +/- 0.50   |  -9999      |  9999       |  0.1        |  1     |  Norm      
+[covarianceXsec.cpp][info] 1     |  q0q3_2                                   |  1          |  1          |  +/- 0.50   |  -9999      |  9999       |  0.1        |  1     |  Norm      
+[covarianceXsec.cpp][info] 2     |  q0q3_3                                   |  1          |  1          |  +/- 0.50   |  -9999      |  9999       |  0.1        |  1     |  Norm      
+[covarianceXsec.cpp][info] 3     |  q0q3_4                                   |  1          |  1          |  +/- 0.50   |  -9999      |  9999       |  0.1        |  1     |  Norm      
+[covarianceXsec.cpp][info] 4     |  q0q3_5                                   |  1          |  1          |  +/- 0.50   |  -9999      |  9999       |  0.1        |  1     |  Norm      
+[covarianceXsec.cpp][info] 5     |  q0q3_6                                   |  1          |  1          |  +/- 0.50   |  -9999      |  9999       |  0.1        |  1     |  Norm      
+[covarianceXsec.cpp][info] 6     |  q0q3_7                                   |  1          |  1          |  +/- 0.50   |  -9999      |  9999       |  0.1        |  1     |  Norm      
+[covarianceXsec.cpp][info] 7     |  q0q3_8                                   |  1          |  1          |  +/- 0.50   |  -9999      |  9999       |  0.1        |  1     |  Norm      
+[covarianceXsec.cpp][info] 8     |  q0q3_9                                   |  1          |  1          |  +/- 0.50   |  -9999      |  9999       |  0.1        |  1     |  Norm      
+[covarianceXsec.cpp][info] ============================================================================================================================================================
+[covarianceXsec.cpp][info] Normalisation parameters:  9
+[covarianceXsec.cpp][info] ┌────┬──────────┬────────────────────────────────────────┬────────────────────┬────────────────────┬────────────────────┐
+[covarianceXsec.cpp][info] │#   │Global #  │Name                                    │Int. mode           │Target              │pdg                 │
+[covarianceXsec.cpp][info] ├────┼──────────┼────────────────────────────────────────┼────────────────────┼────────────────────┼────────────────────┤
+[covarianceXsec.cpp][info] │0   │0         │q0q3_1                                  │all                 │all                 │all                 │
+[covarianceXsec.cpp][info] │1   │1         │q0q3_2                                  │all                 │all                 │all                 │
+[covarianceXsec.cpp][info] │2   │2         │q0q3_3                                  │all                 │all                 │all                 │
+[covarianceXsec.cpp][info] │3   │3         │q0q3_4                                  │all                 │all                 │all                 │
+[covarianceXsec.cpp][info] │4   │4         │q0q3_5                                  │all                 │all                 │all                 │
+[covarianceXsec.cpp][info] │5   │5         │q0q3_6                                  │all                 │all                 │all                 │
+[covarianceXsec.cpp][info] │6   │6         │q0q3_7                                  │all                 │all                 │all                 │
+[covarianceXsec.cpp][info] │7   │7         │q0q3_8                                  │all                 │all                 │all                 │
+[covarianceXsec.cpp][info] │8   │8         │q0q3_9                                  │all                 │all                 │all                 │
+[covarianceXsec.cpp][info] └────┴──────────┴────────────────────────────────────────┴────────────────────┴────────────────────┴────────────────────┘
+[covarianceXsec.cpp][info] Spline parameters: 0
+[covarianceXsec.cpp][info] Functional parameters: 0
+[covarianceXsec.cpp][info] Printing parameter groups
+[covarianceXsec.cpp][info] Found 9: Xsec params
+[covarianceXsec.cpp][info] Finished
+[covarianceXsec.cpp][info] #################################################
+[covarianceBase.cpp][info] xsec_cov setStepScale() = 0.1
+[MaCh3DUNEFactory.cpp][info] cov xsec setup
+[MaCh3DUNEFactory.cpp][info] ------------------------------
+[MaCh3DUNEFactory.cpp][info] Oscillation Parameters being used: 0.307000, 0.528000, 0.021800, 0.000075, 0.002509, -1.601000, 1284.900000, 2.848000,  
+[covarianceBase.cpp][info] Constructing instance of covarianceBase using 
+[covarianceBase.cpp][info] configs/CovObjs/OscCov_PDG2021_v2.yaml
+[covarianceBase.cpp][info] as an input
+[covarianceBase.cpp][info] Principal component analysis but given the threshold for the principal components to be less than 0, or greater than (or equal to) 1. This will not work
+[covarianceBase.cpp][info] Please specify a number between 0 and 1
+[covarianceBase.cpp][info] You specified: 
+[covarianceBase.cpp][info] Am instead calling the usual non-PCA constructor...
+[covarianceBase.cpp][info] Had to shift diagonal 0 time(s) to allow the covariance matrix to be decomposed
+[covarianceBase.cpp][info] Had to shift diagonal 0 time(s) to allow the covariance matrix to be decomposed
+[covarianceBase.cpp][info] Created covariance matrix from files: 
+[covarianceBase.cpp][info] configs/CovObjs/OscCov_PDG2021_v2.yaml 
+[covarianceBase.cpp][info] ----------------
+[covarianceBase.cpp][info] Found 8 systematics parameters in total
+[covarianceBase.cpp][info] ----------------
+[covarianceOsc.cpp][critical] Fixing baseline and density, it is hardcoded sry
+[covarianceBase.cpp][info] Setting baseline(parameter 6) to fixed at 1284.9
+[covarianceBase.cpp][info] Setting density(parameter 7) to fixed at 2.6
+[covarianceOsc.cpp][info] Number of pars: 8
+[covarianceOsc.cpp][info] Current: osc_cov parameters:
+[covarianceOsc.cpp][info] #     | Name                      | Nom.       | IndivStepScale  | _fError         | FlatPrior 
+[covarianceOsc.cpp][info] 0     | sin2th_12                 | 0.3070     | 1.00            | 0.0130          | false     
+[covarianceOsc.cpp][info] 1     | sin2th_23                 | 0.5460     | 1.00            | 0.0210          | true      
+[covarianceOsc.cpp][info] 2     | sin2th_13                 | 0.0220     | 5.00            | 0.0007          | true      
+[covarianceOsc.cpp][info] 3     | delm2_12                  | 0.0001     | 1.00            | 0.0000          | false     
+[covarianceOsc.cpp][info] 4     | delm2_23                  | 0.0025     | 1.00            | 0.0000          | true      
+[covarianceOsc.cpp][info] 5     | delta_cp                  | -1.6010    | 1.00            | 6.2833          | true      
+[covarianceOsc.cpp][info] 6     | baseline                  | 1284.9000  | 1.00            | -1.0000         | true      
+[covarianceOsc.cpp][info] 7     | density                   | 2.6000     | 1.00            | -0.0100         | true      
+[covarianceOsc.cpp][info] Created oscillation parameter handler
+[MaCh3DUNEFactory.cpp][info] Osc cov setup
+[MaCh3DUNEFactory.cpp][info] ------------------------------
+[covarianceBase.cpp][warning] I couldn't find parameter with name , therefore will not fix it
+[MaCh3DUNEFactory.cpp][info] xsec parameters loop done
+[MaCh3DUNEFactory.cpp][info] -------------------------------------------------------------------
+[MaCh3DUNEFactory.cpp][info] Loading DUNE samples..
+[manager.cpp][info] Setting config to be: configs/Samples/SamplePDFDUNE_FHC_NewPrism.yaml
+[manager.cpp][info] Config is now: 
+[Monitor.cpp][info] SampleName: ND_FHC_CCnumu
+[Monitor.cpp][info] SampleType: BeamFD
+[Monitor.cpp][info] SelectionCuts: ~
+[Monitor.cpp][info] POT: 1.3628319e+23
+[Monitor.cpp][info] SelectionCuts:
+[Monitor.cpp][info]   - KinematicStr: TrueXPos
+[Monitor.cpp][info]     Bounds: [-310.0, 310.0]
+[Monitor.cpp][info]   - KinematicStr: TrueYPos
+[Monitor.cpp][info]     Bounds: [-550.0, 550.0]
+[Monitor.cpp][info]   - KinematicStr: TrueZPos
+[Monitor.cpp][info]     Bounds: [50.0, 1244.0]
+[Monitor.cpp][info]   - KinematicStr: CVNNumu
+[Monitor.cpp][info]     Bounds: [0.5, 999]
+[Monitor.cpp][info] Binning:
+[Monitor.cpp][info]   Axes:
+[Monitor.cpp][info]     - VarStr: q0
+[Monitor.cpp][info]       Uniform: [9, 0, 1.5]
+[Monitor.cpp][info]       Title: q_{0} [GeV]
+[Monitor.cpp][info]     - VarStr: q3
+[Monitor.cpp][info]       Uniform: [9, 0, 1.5]
+[Monitor.cpp][info]       Title: q_{3} [GeV]
+[Monitor.cpp][info]   ForceGeneric: True
+[Monitor.cpp][info] DUNESampleBools:
+[Monitor.cpp][info]   iselike: no
+[Monitor.cpp][info] NuOsc:
+[Monitor.cpp][info]   NuOscConfigFile: configs/NuOsc/CUDAProb3Linear.yaml
+[Monitor.cpp][info] InputFiles:
+[Monitor.cpp][info]   mtupleprefix: /project/rpp-nilic/abipeake/DUNE_OA_CAF_new/
+[Monitor.cpp][info]   mtuplesuffix: .root
+[Monitor.cpp][info]   splineprefix: ""
+[Monitor.cpp][info]   splinesuffix: ""
+[Monitor.cpp][info] SampleCuts:
+[Monitor.cpp][info]   up_bnd: 100.
+[Monitor.cpp][info] NSubSamples: 1
+[Monitor.cpp][info] DetID: 1
+[Monitor.cpp][info] SubSamples:
+[Monitor.cpp][info]   - name: CAFv7_0m_130_FHC
+[Monitor.cpp][info]     mtuplefile: CAFv7_0m_130_FHC
+[Monitor.cpp][info]     samplevecno: 0
+[Monitor.cpp][info]     nutype: 14
+[Monitor.cpp][info]     oscnutype: 14
+[Monitor.cpp][info]     signal: false
+[samplePDFFDBase.cpp][info] -------------------------------------------------------------------
+[samplePDFFDBase.cpp][info] Ceating SamplePDFFDBase object
+[manager.cpp][info] Setting config to be: configs/Samples/SamplePDFDUNE_FHC_NewPrism.yaml
+[manager.cpp][info] Config is now: 
+[Monitor.cpp][info] SampleName: ND_FHC_CCnumu
+[Monitor.cpp][info] SampleType: BeamFD
+[Monitor.cpp][info] SelectionCuts: ~
+[Monitor.cpp][info] POT: 1.3628319e+23
+[Monitor.cpp][info] SelectionCuts:
+[Monitor.cpp][info]   - KinematicStr: TrueXPos
+[Monitor.cpp][info]     Bounds: [-310.0, 310.0]
+[Monitor.cpp][info]   - KinematicStr: TrueYPos
+[Monitor.cpp][info]     Bounds: [-550.0, 550.0]
+[Monitor.cpp][info]   - KinematicStr: TrueZPos
+[Monitor.cpp][info]     Bounds: [50.0, 1244.0]
+[Monitor.cpp][info]   - KinematicStr: CVNNumu
+[Monitor.cpp][info]     Bounds: [0.5, 999]
+[Monitor.cpp][info] Binning:
+[Monitor.cpp][info]   Axes:
+[Monitor.cpp][info]     - VarStr: q0
+[Monitor.cpp][info]       Uniform: [9, 0, 1.5]
+[Monitor.cpp][info]       Title: q_{0} [GeV]
+[Monitor.cpp][info]     - VarStr: q3
+[Monitor.cpp][info]       Uniform: [9, 0, 1.5]
+[Monitor.cpp][info]       Title: q_{3} [GeV]
+[Monitor.cpp][info]   ForceGeneric: True
+[Monitor.cpp][info] DUNESampleBools:
+[Monitor.cpp][info]   iselike: no
+[Monitor.cpp][info] NuOsc:
+[Monitor.cpp][info]   NuOscConfigFile: configs/NuOsc/CUDAProb3Linear.yaml
+[Monitor.cpp][info] InputFiles:
+[Monitor.cpp][info]   mtupleprefix: /project/rpp-nilic/abipeake/DUNE_OA_CAF_new/
+[Monitor.cpp][info]   mtuplesuffix: .root
+[Monitor.cpp][info]   splineprefix: ""
+[Monitor.cpp][info]   splinesuffix: ""
+[Monitor.cpp][info] SampleCuts:
+[Monitor.cpp][info]   up_bnd: 100.
+[Monitor.cpp][info] NSubSamples: 1
+[Monitor.cpp][info] DetID: 1
+[Monitor.cpp][info] SubSamples:
+[Monitor.cpp][info]   - name: CAFv7_0m_130_FHC
+[Monitor.cpp][info]     mtuplefile: CAFv7_0m_130_FHC
+[Monitor.cpp][info]     samplevecno: 0
+[Monitor.cpp][info]     nutype: 14
+[Monitor.cpp][info]     oscnutype: 14
+[Monitor.cpp][info]     signal: false
+[samplePDFFDBase.cpp][warning] Didn't find a TestStatistic specified in configs/Samples/SamplePDFDUNE_FHC_NewPrism.yaml
+[samplePDFFDBase.cpp][warning] Defaulting to using a poisson likelihood
+[samplePDFFDBase.cpp][info] Found 1 dimensions for sample binning
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Initialising sample: 0/1
+[samplePDFDUNEBeamFD.cpp][info] -------------------------------------------------------------------
+[samplePDFDUNEBeamFD.cpp][info] input file: /project/rpp-nilic/abipeake/DUNE_OA_CAF_new/CAFv7_0m_130_FHC.root
+Warning in <TClass::Init>: no dictionary for class genie::NtpMCEventRecord is available
+Warning in <TClass::Init>: no dictionary for class genie::NtpMCRecordI is available
+Warning in <TClass::Init>: no dictionary for class genie::NtpMCRecHeader is available
+Warning in <TClass::Init>: no dictionary for class genie::EventRecord is available
+Warning in <TClass::Init>: no dictionary for class genie::GHepRecord is available
+Warning in <TClass::Init>: no dictionary for class genie::Interaction is available
+Warning in <TClass::Init>: no dictionary for class genie::InitialState is available
+Warning in <TClass::Init>: no dictionary for class genie::Target is available
+Warning in <TClass::Init>: no dictionary for class genie::ProcessInfo is available
+Warning in <TClass::Init>: no dictionary for class genie::Kinematics is available
+Warning in <TClass::Init>: no dictionary for class genie::XclsTag is available
+Warning in <TClass::Init>: no dictionary for class genie::KPhaseSpace is available
+Warning in <TClass::Init>: no dictionary for class genie::GHepParticle is available
+Error in <TTree::SetBranchStatus>: unknown branch -> Ev_reco_numu
+Error in <TTree::SetBranchAddress>: unknown branch -> Ev_reco_numu
+Error in <TTree::SetBranchStatus>: unknown branch -> Ev_reco_nue
+Error in <TTree::SetBranchAddress>: unknown branch -> Ev_reco_nue
+Error in <TTree::SetBranchStatus>: unknown branch -> RecoHadEnNumu
+Error in <TTree::SetBranchAddress>: unknown branch -> RecoHadEnNumu
+Error in <TTree::SetBranchStatus>: unknown branch -> RecoHadEnNue
+Error in <TTree::SetBranchAddress>: unknown branch -> RecoHadEnNue
+Error in <TTree::SetBranchStatus>: unknown branch -> RecoLepEnNumu
+Error in <TTree::SetBranchAddress>: unknown branch -> RecoLepEnNumu
+Error in <TTree::SetBranchStatus>: unknown branch -> RecoLepEnNue
+Error in <TTree::SetBranchAddress>: unknown branch -> RecoLepEnNue
+Error in <TTree::SetBranchStatus>: unknown branch -> cvnnumu
+Error in <TTree::SetBranchAddress>: unknown branch -> cvnnumu
+Error in <TTree::SetBranchStatus>: unknown branch -> cvnnue
+Error in <TTree::SetBranchAddress>: unknown branch -> cvnnue
+pot = 1.36283e+23
+pot_s = 35.3982
+norm_s = 1
+[samplePDFFDBase.cpp][info] Number of events processed: 597320
+[samplePDFFDBase.cpp][info] Initialising FDMC object..
+[samplePDFFDBase.cpp][info] Initialised sample: 0/1
+[samplePDFFDBase.cpp][info] =============================================
+[samplePDFFDBase.cpp][info] Total number of events is: 597320
+[samplePDFFDBase.cpp][info] Setting up NuOscillator..
+[samplePDFFDBase.cpp][info] Setting up NuOscillator::Oscillator object in OscillationChannel: 0/1
+OscillatorFactory creating OscillatorBase object from config: configs/NuOsc/CUDAProb3Linear.yaml
+Reading config in OscillatorBase: configs/NuOsc/CUDAProb3Linear.yaml
+[samplePDFFDBase.cpp][info] Setting up Sample Binning..
+[samplePDFFDBase.cpp][info] Setting up Sample Binning
+[samplePDFFDBase.cpp][info] XBinning:
+[samplePDFFDBase.cpp][info] -0.500000, 0.500000, 1.500000, 2.500000, 3.500000, 4.500000, 5.500000, 6.500000, 7.500000, 8.500000, 9.500000, 10.500000, 11.500000, 12.500000, 13.500000, 14.500000, 15.500000, 16.500000, 17.500000, 18.500000, 19.500000, 20.500000, 21.500000, 22.500000, 23.500000, 24.500000, 25.500000, 26.500000, 27.500000, 28.500000, 29.500000, 30.500000, 31.500000, 32.500000, 33.500000, 34.500000, 35.500000, 36.500000, 37.500000, 38.500000, 39.500000, 40.500000, 41.500000, 42.500000, 43.500000, 44.500000, 45.500000, 46.500000, 47.500000, 48.500000, 49.500000, 50.500000, 51.500000, 52.500000, 53.500000, 54.500000, 55.500000, 56.500000, 57.500000, 58.500000, 59.500000, 60.500000, 61.500000, 62.500000, 63.500000, 64.500000, 65.500000, 66.500000, 67.500000, 68.500000, 69.500000, 70.500000, 71.500000, 72.500000, 73.500000, 74.500000, 75.500000, 76.500000, 77.500000, 78.500000, 79.500000, 80.500000, 
+[samplePDFFDBase.cpp][info] YBinning:
+[samplePDFFDBase.cpp][info] 
+[samplePDFFDBase.cpp][info] Setting up 1D binning with global_bin_number
+[samplePDFFDBase.cpp][info] Setting up Splines..
+[samplePDFDUNEBeamFD.cpp][info] Found 0 splines for this sample so I will not load or evaluate splines
+[samplePDFFDBase.cpp][info] Setting up Normalisation Pointers..
+[samplePDFFDBase.cpp][info] Setting up Weight Pointers..
+[samplePDFFDBase.cpp][info] =======================================================
+Info in <TCanvas::Print>: pdf file GenericBinTest_plus2sigma.pdf has been created
+[samplePDFFDBase.cpp][info] Adding 1D data histogram : ND_FHC_CCnumu_asimovdata with 5536914.755417104 events
+nominal  = 1
+error  = 0.5
+current value  = 2
+Info in <TCanvas::Print>: Current canvas added to pdf file GenericBinTest_plus2sigma.pdf
+Info in <TCanvas::Print>: Current canvas added to pdf file GenericBinTest_plus2sigma.pdf
+Info in <TCanvas::Print>: Current canvas added to pdf file GenericBinTest_plus2sigma.pdf
+Info in <TCanvas::Print>: Current canvas added to pdf file GenericBinTest_plus2sigma.pdf
+Info in <TCanvas::Print>: Current canvas added to pdf file GenericBinTest_plus2sigma.pdf
+Info in <TCanvas::Print>: Current canvas added to pdf file GenericBinTest_plus2sigma.pdf
+Info in <TCanvas::Print>: Current canvas added to pdf file GenericBinTest_plus2sigma.pdf
+Info in <TCanvas::Print>: Current canvas added to pdf file GenericBinTest_plus2sigma.pdf
+Info in <TCanvas::Print>: Current canvas added to pdf file GenericBinTest_plus2sigma.pdf
+Info in <TCanvas::Print>: Current canvas added to pdf file GenericBinTest_plus2sigma.pdf
+Info in <TCanvas::Print>: Current canvas added to pdf file GenericBinTest_plus2sigma.pdf
+[EventRates_Abi.cpp][info] Event rate for ND_FHC_CCnumu : 6524645.30
+[EventRates_Abi.cpp][info] LLH for ND_FHC_CCnumu : 303087.90
+Info in <TCanvas::Print>: pdf file GenericBinTest_plus2sigma.pdf has been closed
+Info in <TCanvas::Print>: pdf file test.pdf has been created
+Info in <TCanvas::Print>: Current canvas added to pdf file test.pdf
+Info in <TCanvas::Print>: pdf file test.pdf has been closed

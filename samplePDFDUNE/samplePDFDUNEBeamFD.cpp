@@ -230,6 +230,8 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   _data->SetBranchAddress("Ev_reco_numu", &_erec);
   _data->SetBranchStatus("Ev_reco_nue", 1);
   _data->SetBranchAddress("Ev_reco_nue", &_erec_nue);
+  _data->SetBranchStatus("Ev_reco", 1);
+  _data->SetBranchAddress("Ev_reco", &_erec);
   _data->SetBranchStatus("RecoHadEnNumu", 1);
   _data->SetBranchAddress("RecoHadEnNumu", &_erec_had);
   _data->SetBranchStatus("RecoHadEnNue", 1);
@@ -297,6 +299,9 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   _data->SetBranchStatus("LepMomZ", 1);
   _data->SetBranchAddress("LepMomZ", &_LepMomZ);
 
+  _data->SetBranchStatus("LepNuAngle", 1);
+  _data->SetBranchAddress("LepNuAngle", &_LepNuAngle);
+
   /* TH1D* norm = (TH1D*)_sampleFile->Get("norm");
   if(!norm){
     MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
@@ -309,7 +314,7 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   if(!norm){
     //MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
     //throw MaCh3Exception(__FILE__, __LINE__);
-    
+  
     norm = new TH1D("norm","",1,0,1);
     norm->SetBinContent(1,1);
     duneobj.norm_s = 1.0; //norm->GetBinContent(1);
@@ -370,6 +375,7 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   duneobj.rw_vtx_x.resize(duneobj.nEvents);
   duneobj.rw_vtx_y.resize(duneobj.nEvents);
   duneobj.rw_vtx_z.resize(duneobj.nEvents);
+  duneobj.lepton_momentum.resize(duneobj.nEvents);
 
   duneobj.global_bin_number.resize(duneobj.nEvents);
 
@@ -404,7 +410,9 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
     duneobj.true_q3[i] = (TVector3{_NuMomX, _NuMomY, _NuMomZ} -
                           TVector3{_LepMomX, _LepMomY, _LepMomZ})
                              .Mag();
+    
 
+    duneobj.lepton_momentum[i] =(TVector3{_LepMomX, _LepMomY, _LepMomZ}).Mag();
     duneobj.rw_eRecoP[i] = _eRecoP; 
     duneobj.rw_eRecoPip[i] = _eRecoPip; 
     duneobj.rw_eRecoPim[i] = _eRecoPim; 
@@ -668,6 +676,17 @@ double const& samplePDFDUNEBeamFD::ReturnKinematicParameterByReference(int Kinem
 
       return rEnu;
     }
+    case ktheta_lep: {  // EHadRec - EHadTrue)
+      //std::cout << "theta_lep =  " << dunemcSamples[iSample].rw_theta[iEvent] <<std::endl;
+
+      return  dunemcSamples[iSample].rw_theta[iEvent];
+    }
+    case kp_lep: {  // EHadRec - EHadTrue)
+
+      //std::cout << "lepton momentum = " << dunemcSamples[iSample].lepton_momentum[iEvent] << std::endl;
+      return  dunemcSamples[iSample].lepton_momentum[iEvent];
+  
+    }
     case kEHadRec: {
 
       return dunemcSamples[iSample].rw_eRecoP[iEvent] +
@@ -676,6 +695,19 @@ double const& samplePDFDUNEBeamFD::ReturnKinematicParameterByReference(int Kinem
              dunemcSamples[iSample].rw_eRecoPi0[iEvent] +
              dunemcSamples[iSample].rw_eRecoN[iEvent];
     }
+    case kERec_minus_Etrue: {  //(ERec - ETrue, EHadRec - EHadTrue)
+         //std::cout << "rw_etru[iEvent] - rw_erec_shifted[iEvent] =  " << dunemcSamples[iSample].rw_etru[iEvent] - dunemcSamples[iSample].rw_erec_shifted[iEvent] << std::endl;
+      return dunemcSamples[iSample].rw_etru[iEvent] - dunemcSamples[iSample].rw_erec_shifted[iEvent];
+    }
+    case kEHadRec_minus_EHadtrue: {  // EHadRec - EHadTrue)
+
+      return ( dunemcSamples[iSample].rw_eRecoP[iEvent] +
+             dunemcSamples[iSample].rw_eRecoPip[iEvent] +
+             dunemcSamples[iSample].rw_eRecoPim[iEvent] +
+             dunemcSamples[iSample].rw_eRecoPi0[iEvent] +
+             dunemcSamples[iSample].rw_eRecoN[iEvent] ) - dunemcSamples[iSample].true_q0[iEvent];
+    }
+    
     default: {
       return ReturnKinematicParameterByReference(KinematicParameter, iSample,
                                                  iEvent);
@@ -698,7 +730,12 @@ int samplePDFDUNEBeamFD::ReturnKinematicParameterFromString(std::string Kinemati
   if (KinematicParameterStr.find("ERecQE") != std::string::npos) {return kERecQE;}
   if (KinematicParameterStr.find("ELepRec") != std::string::npos) {return kELepRec;}
   if (KinematicParameterStr.find("EHadRec") != std::string::npos) {return kEHadRec;}
-
+  if (KinematicParameterStr.find("p_lep") != std::string::npos) {return kp_lep;}
+  if (KinematicParameterStr.find("ERec_minus_Etrue") != std::string::npos) {return kERec_minus_Etrue;}
+  //if (KinematicParameterStr.find("ERec_minus_Etrue")!= std::string::npos) {return kERec_minus_Etrue;}
+  if (KinematicParameterStr.find("kEHadRec_minus_EHadtrue")!= std::string::npos) {return kEHadRec_minus_EHadtrue;}
+  if (KinematicParameterStr.find("theta_lep")!= std::string::npos) {return ktheta_lep;}
+ 
   std::stringstream ss;
   ss << "[ERROR]: " << __FILE__ << ":" << __LINE__
      << "failed to translate kinematic parameter string "
@@ -738,6 +775,12 @@ std::string samplePDFDUNEBeamFD::ReturnStringFromKinematicParameter(
     return "ELepRec";
   case kEHadRec:
     return "EHadRec";
+  case ktheta_lep:
+    return "theta_lep";
+  case kp_lep:
+    return "p_lep";
+  case kERec_minus_Etrue:
+    return "ERec_minus_Etrue";
   default: {
    MACH3LOG_ERROR("Did not recognise Kinematic Parameter type...");
    throw MaCh3Exception(__FILE__, __LINE__);

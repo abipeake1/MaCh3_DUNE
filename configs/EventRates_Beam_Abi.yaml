@@ -1,12 +1,15 @@
 General:
-  OutputFile: "helpme_ndmcaf_evrate2std.root"
+  OutputFile: "test.root"
   DUNESamples:
-    #- "configs/Samples/SamplePDFDune_FHC_numuselec.yaml" 
-    #- "configs/Samples/SamplePDFDune_FHC_numuselec_offaxis_subset.yaml"
-    #- "configs/Samples/SamplePDFDuneND_FHC_numuselec.yaml"
-    - "configs/Samples/SamplePDFDune_FHC_numuselec_prismsubset.yaml"
+   #- "configs/Samples/SamplePDFDUNE_FHC_numu_onecaf.yaml"
+   - "configs/Samples/SamplePDFDUNE_FHC_NewPrism.yaml"  #this one works
+   #- "configs/Samples/SamplePDFDune_FHC_numuselec.yaml" 
+   #- "configs/Samples/SamplePDFDune_FHC_numuselec_offaxis_subset.yaml"
+   #- "configs/Samples/SamplePDFDUNE_FHC_numuselec_newprojections.yaml"
+   #- "configs/Samples/SamplePDFDuneND_FHC_numuselec.yaml"
+  # - "configs/Samples/SamplePDFDune_FHC_numuselec_prismsubset.yaml"
     # - "configs/Samples/SamplePDFDune_FHC_nueselec.yaml"
-    # - "configs/Samples/SamplePDFDune_RHC_numuselec.yaml"
+   # - "configs/Samples/SamplePDFDune_RHC_numuselec.yaml"
     # - "configs/Samples/SamplePDFDune_RHC_nueselec.yaml"
 
   #Nu-FIT
@@ -16,7 +19,7 @@ General:
   OscillatorConfigName: "configs/OscillatorObj.yaml"
 
   Systematics:
-    XsecCovFile: ["configs/CovObjs/xsec_abi_manyparameters_nd.yaml"]
+    XsecCovFile: ["configs/CovObjs/xsec_abi_manyparameters_nd.yaml"] #["configs/CovObjs/xsec_energy_abi_moreparameters.yaml"]  #["configs/CovObjs/xsec_abi_manyparameters_nd.yaml"] #["configs/CovObjs/xsec_energy_abi_moreparameters.yaml"]  #["configs/CovObjs/xsec_abi_manyparameters_nd.yaml"]
     XsecCovName: "xsec_cov"
     XsecStepScale: 0.1
     XsecAtGen: false 

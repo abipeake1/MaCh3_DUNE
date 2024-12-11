@@ -103,36 +103,42 @@ int main(int argc, char *argv[]) {
     gc1->Print("GenericBinTest_plus2sigma.pdf");
 
        if (Sample->generic_binning.GetNDimensions() == 2) {
-          gc1->Divide(2,1);
+          gc1->Divide(3,1);
           gc1->cd(1);
+          xsec->setParCurrProp(0, nominal);////////// set //+(2*error)
+          Sample->reweight();
          //auto a = new THStack("a","Stacked 2D histograms");
-         auto myhist2_nom = GetGenericBinningTH2(*Sample, "myhist2");
-         auto myhist2_p2 = GetGenericBinningTH2(*Sample, "myhistp2");
-         auto myhist2_p3 = GetGenericBinningTH2(*Sample, "myhistp2");
-
+          auto myhist2_nom = GetGenericBinningTH2(*Sample, "myhist2");
+         
          //a->Add(myhist2 );
          //a->Add(myhist2_p2);
-          myhist_nom->Draw("COLZ");
-          myhist_nom->SetMinimum(0);
-          myhist_nom->SetMaximum(16.1e7);
-          myhist_nom->SetTitle("Nominal");
+          myhist2_nom->Draw("COLZ");
+          myhist2_nom->SetMinimum(0);
+          myhist2_nom->SetMaximum(160e6);
+          myhist2_nom->SetTitle("Nominal");
 
           gc1->cd(2);
-          myhist2_p2->SetMinimum(0);
-          myhist2_p2->SetMaximum(16.1e7);  
+          xsec->setParCurrProp(0, nominal+(2*error));////////// set //+(2*error)
+          Sample->reweight();
+         //auto a = new THStack("a","Stacked 2D histograms");
+          auto myhist2_plus2std = GetGenericBinningTH2(*Sample, "myhist2plus2std");
+          myhist2_plus2std->SetMinimum(0);
+          myhist2_plus2std->SetMaximum(160e6);  
           //a->Draw("NOSTACK COLZ");
-          myhist2_p2->SetTitle("+2 #sigma");
-          myhist2_p2->Draw("COLZ");
-          /*
+          myhist2_plus2std->SetTitle("+2 #sigma");
+          myhist2_plus2std->Draw("COLZ");
+          
           gc1->cd(3);
-          myhist2_p2->Divide(myhist2.get());  // Perform the division
-          //myhist2_p3 = std::make_unique<TH2D>(*myhist2_p2);  // Copy the result to myhist2_p3
-          //myhist2_p3 = myhist2_p2->Divide(myhist2.get());
-          //myhist2_p2->Divide(myhist2);
-          //myhist2_p2->Divide(myhist2.get());
-          myhist2_p2->Draw("colz");
-          myhist2_p2->SetTitle("Ratio");
-          */
+          auto myhist2_ratio = (TH2D*)myhist2_plus2std->Clone("myhist2_ratio");
+          myhist2_ratio->Divide(myhist2_nom.get());
+          double maxBinContent = myhist2_ratio->GetMaximum();
+          if (maxBinContent != 0) {
+              myhist2_ratio->Scale(1.0 / maxBinContent);
+          }  
+          myhist2_ratio->SetTitle("Ratio");
+          myhist2_ratio->Draw("COLZ");
+
+          
           gc1->Print("GenericBinTest_plus2sigma.pdf");
 
          /*for (auto &slice :

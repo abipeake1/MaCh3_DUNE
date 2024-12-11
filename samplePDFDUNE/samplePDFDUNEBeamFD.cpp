@@ -302,6 +302,9 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   _data->SetBranchStatus("LepNuAngle", 1);
   _data->SetBranchAddress("LepNuAngle", &_LepNuAngle);
 
+  _data->SetBranchStatus("Elep_reco", 1);
+  _data->SetBranchAddress("Elep_reco", &_erec_lep);
+
   /* TH1D* norm = (TH1D*)_sampleFile->Get("norm");
   if(!norm){
     MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
@@ -398,14 +401,14 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
       duneobj.rw_erec[i] = _erec_nue;
       duneobj.rw_erec_shifted[i] = _erec_nue; 
       duneobj.rw_erec_had[i] = _erec_had_nue;
-      duneobj.rw_erec_lep[i] = _erec_lep_nue;
+      //duneobj.rw_erec_lep[i] = _erec_lep_nue;
     } else {
       duneobj.rw_erec[i] = _erec; 
       duneobj.rw_erec_shifted[i] = _erec; 
       duneobj.rw_erec_had[i] = _erec_had; 
-      duneobj.rw_erec_lep[i] = _erec_lep; 
+      //duneobj.rw_erec_lep[i] = _erec_lep; 
     }
-
+    duneobj.rw_erec_lep[i]= _Elep_reco;
     duneobj.true_q0[i] = _ev - _LepE;
     duneobj.true_q3[i] = (TVector3{_NuMomX, _NuMomY, _NuMomZ} -
                           TVector3{_LepMomX, _LepMomY, _LepMomZ})
@@ -446,6 +449,8 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
     duneobj.mode[i]=SIMBMode_ToMaCh3Mode(mode, _isCC);
     
     duneobj.flux_w[i] = 1.0;
+
+    //std::cout<< "rw_erec_lep =  " << _erec_lep[i] << std::endl;
   }
   
   _sampleFile->Close();
@@ -607,7 +612,9 @@ double const& samplePDFDUNEBeamFD::ReturnKinematicParameterByReference(int Kinem
   case kGlobalBinNumber:
     return dunemcSamples[iSample].global_bin_number[iEvent];
   case kELepRec: {
-    return dunemcSamples[iSample].rw_erec_lep[iEvent];
+    //std::cout << "ELepRec =  " << dunemcSamples[iSample].rw_erec_lep[iEvent] << std::endl;
+    return dunemcSamples[iSample].rw_LepE[iEvent];
+    
   }
   case kq0:
     return dunemcSamples[iSample].true_q0[iEvent];

@@ -1,0 +1,73 @@
+# for each list specify:
+# isrhc = "true for rhc or false for fhc"; #default to false
+# mtupleprefix = "common part at beginning of path to mtuple files"
+# mtuplesuffix = "common part at end of path to mtuple files"
+# splineprefix = "common part at beginning of path to spline files"
+# splinesuffix = "common part at endof path to spline files"
+# up_bnd = "upper boundary on erec" #deault to 30.
+# isfitqun = true for fitqun variable samples false otherwise #default to true
+#Add samples to the sample list as shown below
+SampleName: "ND_FHC_CCnumu"
+SampleType: "BeamFD"
+SelectionCuts:
+POT: 1.3628319e+23
+SelectionCuts:
+  - KinematicStr: "TrueXPos"
+    Bounds: [ -310.0, 310.0 ]
+  - KinematicStr: "TrueYPos"
+    Bounds: [ -550.0, 550.0 ]
+  - KinematicStr: "TrueZPos"
+    Bounds: [ 50.0, 1244.0 ]
+  - KinematicStr: "CVNNumu"
+    Bounds: [ 0.5, 999 ]
+Binning:
+  Axes:
+# Appropriate values for VarStr
+# TrueNeutrinoEnergy
+# RecoNeutrinoEnergy
+# CVNNumu
+# CVNNue
+# q0
+# q3
+# ERecQE
+# ELepRec
+# EHadRec
+    - VarStr: "RecoNeutrinoEnergy" 
+      Uniform: [20,0.5,5.5]
+      Title: "E_{#nu}^{Rec} [GeV]"
+    - VarStr: "p_lep" 
+      Uniform: [40,0,5]
+      Title: "p_{lep.}^{Rec} [GeV]"
+    - VarStr: "theta_lep" 
+      Uniform: [5,0,3.5]
+      Title: "#theta_{lep.}^{Rec} [GeV]"
+    #- VarStr: "EHadRec" 
+     # Uniform: [25,0,5]
+      #Title: "E_{had.}^{Vis} [GeV]"
+    #- VarStr: "RecoNeutrinoEnergy" 
+     # Uniform: [10,0.5,5.5]
+      #Title: "E_{#nu}^{Rec} [GeV]"
+  # if you want to use the generic binning with a single 
+  # axis, useful for calculated VarStr that cannot be referenced
+  ForceGeneric: True
+DUNESampleBools:
+  iselike: no
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
+InputFiles:
+  mtupleprefix: "inputs/DUNE_ND_CAF_files/ND_FHC_ger_"
+  mtuplesuffix: "_fv_ccinc_q.root"
+  splineprefix: "" #"inputs/DUNE_ND_spline_files/ND_FHC_ger_"
+  splinesuffix: "" #"_splines.root"
+SampleCuts:
+  up_bnd: 100.
+NSubSamples: 1
+DetID: 1
+SubSamples:
+  - name: "FHC_numu_x_numu_0"
+    mtuplefile: "numu_x_numu_0"
+    #splinefile: "numu_x_numu_0"
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false

@@ -108,19 +108,19 @@ int main(int argc, char *argv[]) {
 
       if (Sample->generic_binning.GetNDimensions() == 2) {
         auto myhist2 = GetGenericBinningTH2(*Sample, "myhist2");
-        myhist2->Draw("COLZ TEXT");
+        myhist2->Draw("COLZ");
         gc1->Print("GenericBinTest.pdf");
 
         for (auto &slice :
              GetGenericBinningTH1Slices(*Sample, 0, "myslicehist")) {
-          slice->Draw();
+          slice->Draw("colz");
           gc1->Print("GenericBinTest.pdf");
         }
       }
       if (Sample->generic_binning.GetNDimensions() == 3) {
         for (auto &slice :
              GetGenericBinningTH2Slices(*Sample, {0, 1}, "myslicehist")) {
-          slice->Draw();
+          slice->Draw("colz ");
           gc1->Print("GenericBinTest.pdf");
         }
       }

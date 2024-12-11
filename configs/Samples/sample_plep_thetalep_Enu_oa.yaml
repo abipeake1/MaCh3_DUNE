@@ -32,15 +32,15 @@ Binning:
 # ERecQE
 # ELepRec
 # EHadRec
-    - VarStr: "q0" 
-      Uniform: [9,0,1.5]
-      Title: "q_{0} [GeV]"
-    - VarStr: "q3" 
-      Uniform: [9,0,1.5]
-      Title: "q_{3} [GeV]"
-    #- VarStr: "ELepRec" 
-     # Uniform: [25,0,5]
-      #Title: "E_{lep.}^{Rec} [GeV]"
+   - VarStr: "RecoNeutrinoEnergy" 
+     Uniform: [10,0.5,5.5]
+      Title: "E_{#nu}^{Rec} [GeV]"
+    - VarStr: "p_lep" 
+      Uniform: [12,0,6]
+      Title: "p_{lep.}^{Rec} [GeV]"
+    - VarStr: "theta_lep" 
+      Uniform: [7,0,3.5]
+      Title: "#theta_{lep.}^{Rec} [GeV]"
     #- VarStr: "EHadRec" 
      # Uniform: [25,0,5]
       #Title: "E_{had.}^{Vis} [GeV]"

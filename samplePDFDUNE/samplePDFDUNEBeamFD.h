@@ -156,6 +156,7 @@ public:
   double em_res_fd_pos;
   double cvn_numu_fd_pos;
   double cvn_nue_fd_pos;
+  double _Elep_reco;
 
   std::vector<const double*> FDDetectorSystPointers;
   int nFDDetectorSystPointers;

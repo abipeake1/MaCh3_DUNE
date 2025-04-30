@@ -74,7 +74,7 @@ int main(int argc, char * argv[]) {
 
   auto gc1 = std::unique_ptr<TCanvas>(new TCanvas("gc1", "gc1", 800, 600));
   gStyle->SetOptStat(false);
-  gc1->Print("GenericBinTest_someoa.pdf[");
+  //gc1->Print("GenericBinTest_someoa.pdf[");
   
 
     // Setting flat priors based on XSECPARAMFLAT list in configuration file 
@@ -135,7 +135,11 @@ int main(int argc, char * argv[]) {
  
 	 // Create Histogram for each sample + systematic penalty + total sample	
     for(unsigned sample_i=0; sample_i < DUNEPdfs.size() ; ++sample_i) {
-	  std::string histname = "xsec_" + std::to_string(par) + "_llh_" + sample_names[sample_i];
+    //static int hist_counter = 0;
+    //std::string histname = "xsec_" + std::to_string(par) + "_llh_" + sample_names[sample_i] + "_h" + std::to_string(hist_counter++);
+    //std::string histtitle = "xsec_" + std::to_string(par) + "_" + sample_names[sample_i] + "_h" + std::to_string(hist_counter++);
+	  //std::string histname = "xsec_" + std::to_string(par) + "_llh_" + sample_names[sample_i];
+    std::string histname = "xsec_" + std::to_string(par) + "_llh_" + sample_names[sample_i] + "_sub" + std::to_string(sample_i);
 	  std::string histtitle = "xsec_" + std::to_string(par) + "_" + sample_names[sample_i];
       TH1D *hScan = new TH1D(histname.c_str(), histtitle.c_str(), n_points, lowerb, upperb);
 	  llh_hists.push_back(hScan);
@@ -167,8 +171,8 @@ int main(int argc, char * argv[]) {
 	  // Calc LLH for each sample
       for(unsigned sample_i=0; sample_i < DUNEPdfs.size() ; ++sample_i) {
         //std::cout<< "sample_i loop = " << sample_i<<std::endl;
-        // std::cout << "LLH for sample before reweigting sample :  " << sample_i << " = " << 2 *  DUNEPdfs[sample_i]  -> GetLikelihood() << std::endl;
-          //std::cout << "Event Rate for sample before reweigting sample :  " << sample_i << " = " <<  DUNEPdfs[sample_i]  -> get1DHist()->Integral() << std::endl;
+         //std::cout << "LLH for sample before reweigting sample :  " << sample_i << " = " << 2 *  DUNEPdfs[sample_i]  -> GetLikelihood() << std::endl;
+         //std::cout << "Event Rate for sample before reweigting sample :  " << sample_i << " = " <<  DUNEPdfs[sample_i]  -> get1DHist()->Integral() << std::endl;
          DUNEPdfs[sample_i]  -> reweight();
 	       llh_hists[sample_i]->Fill(xsecpar[par], 2 *  DUNEPdfs[sample_i]  -> GetLikelihood());	
          totalllh += 2 *  DUNEPdfs[sample_i] -> GetLikelihood();
@@ -201,4 +205,3 @@ int main(int argc, char * argv[]) {
   std::cout << "Finished LLH Scans!" << std::endl;
   return 0;
 }
-

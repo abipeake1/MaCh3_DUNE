@@ -53,17 +53,31 @@ void Write1DHistogramsToPdf(std::string OutFileName,
   return;
 }
 
+
 int main(int argc, char *argv[]) {
   if (argc == 1) {
     std::cout << "Usage: bin/EventRatesDUNEBeam config.cfg" << std::endl;
     return 1;
   }
-
   auto fitMan = std::unique_ptr<manager>(new manager(argv[1]));
+  
+  std::string OutFileName = GetFromManager<std::string>(
+    fitMan->raw()["General"]["OutputFile"], "EventRates.root");
+
+  // Replace ".root" with "_prism.pdf"
+  std::string PrismFileName = OutFileName;
+  size_t pos = PrismFileName.find(".root");
+  if (pos != std::string::npos) {
+      PrismFileName.replace(pos, 5, "_prism.pdf");
+  } else {
+      PrismFileName += "_prism.pdf";
+  }
+
 
   covarianceXsec *xsec = nullptr;
   covarianceOsc *osc = nullptr;
 
+ // std::string hists_file (OutFileName + "event_histograms").c_str();
   // ####################################################################################
   // Create samplePDFFD objects
 
@@ -72,7 +86,9 @@ int main(int argc, char *argv[]) {
 
   auto gc1 = std::unique_ptr<TCanvas>(new TCanvas("gc1", "gc1", 800, 600));
   gStyle->SetOptStat(false);
+  gc1->Print((PrismFileName + "[").c_str());  // Open multi-page PDF
   gc1->Print("GenericBinTest.pdf[");
+  
 
   /*
   if (Sample -> GetNDim() == 1) {
@@ -105,16 +121,19 @@ int main(int argc, char *argv[]) {
       myhist->Scale(1, "WIDTH");
       myhist->Draw();
       gc1->Print("GenericBinTest.pdf");
+      gc1->Print(PrismFileName.c_str());
 
       if (Sample->generic_binning.GetNDimensions() == 2) {
         auto myhist2 = GetGenericBinningTH2(*Sample, "myhist2");
         myhist2->Draw("COLZ");
         gc1->Print("GenericBinTest.pdf");
+        gc1->Print(PrismFileName.c_str());
 
         for (auto &slice :
              GetGenericBinningTH1Slices(*Sample, 0, "myslicehist")) {
           slice->Draw("colz");
           gc1->Print("GenericBinTest.pdf");
+          gc1->Print(PrismFileName.c_str());
         }
       }
       if (Sample->generic_binning.GetNDimensions() == 3) {
@@ -122,6 +141,7 @@ int main(int argc, char *argv[]) {
              GetGenericBinningTH2Slices(*Sample, {0, 1}, "myslicehist")) {
           slice->Draw("colz ");
           gc1->Print("GenericBinTest.pdf");
+          gc1->Print(PrismFileName.c_str());
         }
       }
     }
@@ -140,10 +160,7 @@ int main(int argc, char *argv[]) {
   }
 
   gc1->Print("GenericBinTest.pdf]");
-
-
-  std::string OutFileName = GetFromManager<std::string>(
-      fitMan->raw()["General"]["OutputFile"], "EventRates.root");
+  gc1->Print((PrismFileName + "]").c_str());
 
   Write1DHistogramsToFile(OutFileName, DUNEHists);
   Write1DHistogramsToPdf(OutFileName, DUNEHists);

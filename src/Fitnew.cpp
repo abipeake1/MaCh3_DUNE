@@ -92,6 +92,8 @@ int main(int argc, char * argv[]) {
   else {
     MaCh3Fitter->addSystObj(xsec);
   }
+
+  MaCh3Fitter->RunLLHScan();
   
   //Run fit
   MaCh3Fitter->runMCMC();

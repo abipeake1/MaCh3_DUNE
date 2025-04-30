@@ -123,6 +123,7 @@ int main(int argc, char * argv[]) {
     std::map<TString, double>::const_iterator itt;
 
     // set the oscillation parameters
+    /*
     itt = init_pars.find("sin2th_12");
     oscparstarts.push_back(itt->second);
     itt = init_pars.find("sin2th_23");
@@ -135,7 +136,7 @@ int main(int argc, char * argv[]) {
     oscparstarts.push_back(itt->second);
     itt = init_pars.find("delta_cp");
     oscparstarts.push_back(itt->second);
-
+    */
     lastStep = step_val;
 
   }
@@ -171,16 +172,16 @@ int main(int argc, char * argv[]) {
   }
 
   //start chain from random position
-  xsec->throwParameters();
-  osc->throwParameters();
+  //xsec->throwParameters(); -----------------------why norm parameters starting in random place
+  //osc->throwParameters();
 
   // add systematic objects
   if (GetFromManager(FitManager->raw()["General"]["StatOnly"], false)){
-    MaCh3Fitter->addSystObj(osc);
+   //MaCh3Fitter->addSystObj(osc);
     MACH3LOG_INFO("Running a stat-only fit so no systematics will be applied");
   }
   else {
-    MaCh3Fitter->addSystObj(osc);
+    //MaCh3Fitter->addSystObj(osc); ///////////////get rid if that 
     MaCh3Fitter->addSystObj(xsec);
   }
   

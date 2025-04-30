@@ -11,7 +11,7 @@
 SampleName: "ND_FHC_CCnumu"
 SampleType: "BeamFD"
 SelectionCuts:
-POT: 1.3628319e+23
+POT: 1.3628319e+23 #1.3628319e+23
 SelectionCuts:
   - KinematicStr: "TrueXPos"
     Bounds: [ -310.0, 310.0 ]
@@ -33,18 +33,21 @@ Binning:
 # ERecQE
 # ELepRec
 # EHadRec
-    - VarStr: "q0" 
-      Uniform: [9,0,1.5]
-      Title: "q_{0} [GeV]"
-    - VarStr: "q3" 
-      Uniform: [9,0,1.5]
-      Title: "q_{3} [GeV]"
+    #- VarStr: "EHadRec" 
+     # VarBins: [0, 0.04,  0.08, 0.12,0.14, 0.16, 0.2, 0.24, 0.28, 0.32, 0.4, 0.5, 0.6,0.8]
+      #Title: "E_{had.}^{Vis} [GeV]"
     #- VarStr: "ELepRec" 
      # Uniform: [25,0,5]
       #Title: "E_{lep.}^{Rec} [GeV]"
-    #- VarStr: "EHadRec" 
-     # Uniform: [25,0,5]
-      #Title: "E_{had.}^{Vis} [GeV]"
+    - VarStr: "pT" 
+      Uniform: [20,0.0,2.0]
+      Title: "p_{T} [GeV/c]"
+    - VarStr: "RecoNeutrinoEnergy" 
+      Uniform: [18,0.5,3.5]
+      Title: "E_{#nu}^{Rec} [GeV]"
+    - VarStr: "pz" 
+      Uniform: [20,0,5.0]
+      Title: "p_{z} [GeV/c]"
     #- VarStr: "RecoNeutrinoEnergy" 
      # Uniform: [10,0.5,5.5]
       #Title: "E_{#nu}^{Rec} [GeV]"
@@ -71,7 +74,7 @@ DetID: 1
 SubSamples:
   - name: "FHC_numu_x_numu_0"
     mtuplefile: "numu_x_numu_0"
-    #splinefile: "numu_x_numu_0"
+    splinefile: ""
     samplevecno: 0
     nutype: 14
     oscnutype: 14

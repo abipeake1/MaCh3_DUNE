@@ -7,30 +7,52 @@
 #include "TMath.h"
 #include "manager/manager.h"
 
+#include <TTreeReader.h>
+#include <TTreeReaderValue.h>
+#include "TSystem.h"
+
+
+#include <cstdlib>
+#include <iostream>
+
+
+
 samplePDFDUNEBeamFD::samplePDFDUNEBeamFD(std::string mc_version_, covarianceXsec* xsec_cov_) : samplePDFFDBase(mc_version_, xsec_cov_) {
   //Call insitialise in samplePDFFD
+  //std::cout << "starting samplePDFDUNEBeamFD........"<<std::endl;
+  //gSystem->Setenv("XROOTD_CLIENT_VERSION", "5.6.9");
+
   Initialise();
+  //std::cout << "sdone initialisE()........"<<std::endl;
 }
+
 
 samplePDFDUNEBeamFD::~samplePDFDUNEBeamFD() {
 }
 
+
 void samplePDFDUNEBeamFD::Init() {
+  //std::cout<<"in Init()"<< std::endl;
   dunemcSamples.resize(nSamples,dunemc_base());
-  
+  //double pot = 1.3628319e+23;
+  //events_for_analysis = SampleManager->raw()["NEvents"].as<double>();
+  pot = SampleManager->raw()["POT"].as<double>();
+  //pot_cafgenwith = SampleManager->raw()["GEN_POT"].as<double>(); /////////////just as test for fermigrid
+  std::cout<< "POT IS !!! ================ " << pot <<std::endl;
+ 
   if (CheckNodeExists(SampleManager->raw(), "DUNESampleBools", "iselike" )) {
     iselike = SampleManager->raw()["DUNESampleBools"]["iselike"].as<bool>();
   } else{
     MACH3LOG_ERROR("Did not find DUNESampleBools:iselike in {}, please add this", SampleManager->GetFileName());
     throw MaCh3Exception(__FILE__, __LINE__);
   }
-  
+  /*
   if (CheckNodeExists(SampleManager->raw(), "POT")) {
     pot = SampleManager->raw()["POT"].as<double>();
   } else{
     MACH3LOG_ERROR("POT not defined in {}, please add this!", SampleManager->GetFileName());
     throw MaCh3Exception(__FILE__, __LINE__);
-  }
+  }*/
   
   tot_escale_fd_pos = -999;
   tot_escale_sqrt_fd_pos = -999;
@@ -180,6 +202,37 @@ void samplePDFDUNEBeamFD::SetupSplines() {
   return;
 }
 
+double samplePDFDUNEBeamFD::CalculatePOT() {
+  TChain calc_pot_chain("meta");  // Use correct tree name
+
+  std::string pot_branch = "pot";  // Use the correct branch name
+
+  for (int i = 0; i < (int)dunemcSamples.size(); ++i) {
+      calc_pot_chain.AddFile((mc_files[i]).c_str());
+  }
+
+  // Check if the branch exists before proceeding
+  if (!calc_pot_chain.GetBranch(pot_branch.c_str())) {
+      std::cerr << "Error: Branch " << pot_branch << " not found in the tree!" << std::endl;
+      return 0.0;
+  }
+
+  double pot_value = 0.0;
+  calc_pot_chain.SetBranchAddress(pot_branch.c_str(), &pot_value);
+
+  double sum_pot = 0.0;
+  Long64_t nEntries = calc_pot_chain.GetEntries();
+  for (Long64_t i = 0; i < nEntries; i++) {
+      calc_pot_chain.GetEntry(i);
+      sum_pot += pot_value;
+  }
+
+  std::cout << "Summed POT: " << sum_pot << std::endl;
+  return sum_pot;
+}
+
+
+
 void samplePDFDUNEBeamFD::SetupWeightPointers() {
   for (int i = 0; i < (int)dunemcSamples.size(); ++i) {
     for (int j = 0; j < dunemcSamples[i].nEvents; ++j) {
@@ -196,20 +249,75 @@ void samplePDFDUNEBeamFD::SetupWeightPointers() {
 }
 
 
+  
+
 int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
+
+  std::cout<< " in experiment setupMC " << std::endl; 
 
   auto &duneobj = dunemcSamples[iSample];
 
   int nutype = sample_nutype[iSample];
   int oscnutype = sample_oscnutype[iSample];
   bool signal = sample_signal[iSample];
+
+  double newpot = CalculatePOT();
+  std::cout<< "CalculatePOT() = " << newpot << " -----------------------------------------------------------------------------" << std::endl;
+
+  
+  //std::cout << "BEARER_TOKEN_FILE: " << getenv("BEARER_TOKEN_FILE") << std::endl;
+  //std::cout << "XRD_SEC_TOKEN: " << getenv("XRD_SEC_TOKEN") << std::endl;
+  //std::cout << "XRD_PLUGIN: " << getenv("XRD_PLUGIN") << std::endl;
+  //gSystem->Setenv("XrdSecPROTOCOL", "bearer");
+  //gSystem->Setenv("XRD_RUNFORKHANDLER", "1");
+
+
   
   MACH3LOG_INFO("-------------------------------------------------------------------");
   MACH3LOG_INFO("input file: {}", mc_files[iSample].native());
+  std::cout<< " about to do  TFile::Open " << std::endl; 
+  //_sampleFile = new TFile(mc_files[iSample].c_str(), "READ");
+  //_sampleFile = TFile::Open(mc_files[iSample].c_str(), "READ"); //for xrootd reading apparently
+  std::string filename = mc_files[iSample].string();
+  _sampleFile = TFile::Open(filename.c_str(), "READ");
+  if (!_sampleFile || _sampleFile->IsZombie()) {
+    std::cout << "Error: Failed to open file " << filename << std::endl;
+    throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  std::cout << "Successfully read in sample file " << filename << std::endl;
   
-  _sampleFile = new TFile(mc_files[iSample].c_str(), "READ");
+
+  _data = (TTree*)_sampleFile->Get("cafTree");
+  if (!_data) {
+      MACH3LOG_ERROR("Branch 'cafTree' not found in file: {}", filename);
+      throw MaCh3Exception(__FILE__, __LINE__);
+  }
+  //_data = (TTree*)_sampleFile->Get("caf");
+  _meta = (TTree*)_sampleFile->Get("meta");
+  if (!_meta ){
+      MACH3LOG_ERROR("Branch 'meta' not found in file: {}", filename);
+      throw MaCh3Exception(__FILE__, __LINE__);
+  } 
+
+  //_sampleFile = TFile::Open(mc_files[iSample].c_str(), "READ");
+  
+
+  if (!_sampleFile || _sampleFile->IsZombie()) {
+      std::cerr << "Error: Failed to open file " << mc_files[iSample] << std::endl;
+  }
   _data = (TTree*)_sampleFile->Get("caf");
+  if (!_data) {
+      std::cerr << "Error: 'caf' tree not found in " << mc_files[iSample] << std::endl;
+  }
+
+  _meta = (TTree*)_sampleFile->Get("meta");
+  if (!_meta) {
+      std::cerr << "Error: 'meta' tree not found in " << mc_files[iSample] << std::endl;
+  }
   //if (!caf){ caf = tfile->Get<TTree>(“cafTree”); }
+
+  //TTree *_metaTree = (TTree*)_sampleFile->Get("meta")
+
   
   if(_data){
     MACH3LOG_INFO("Found \"caf\" tree in {}", mc_files[iSample].native());
@@ -217,12 +325,43 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   }
   else{
     _data = (TTree*)_sampleFile->Get("cafTree");
-    //MACH3LOG_INFO("Found \"caf\" tree in {}", mc_files[iSample].native());
-    //MACH3LOG_INFO("With number of entries: {}", _data->GetEntries());
-	  //MACH3LOG_ERROR("Could not find \"caf\" tree in {}", mc_files[iSample].native());
-	  //throw MaCh3Exception(__FILE__, __LINE__);
+    
   }
   
+  double _production_pot = 0.0;  // Explicitly initialize
+  double gen_pot = 0.0; //set the sum of the pot from each file to be 0,befor any are read in
+  
+  if(_meta){
+    std::cout<<"Found meta tree" << std::endl;
+     
+    _meta->SetBranchStatus("*", 0);
+    _meta->SetBranchStatus("pot", 1);
+    _meta->SetBranchAddress("pot", &_production_pot);
+   
+    for (int i = 0; i < _meta->GetEntries(); i++) {
+      //std::cout << "Total entries in _meta: " << _meta->GetEntries() << std::endl;
+
+      _meta->GetEntry(i);
+      //std::cout << "Entry " << i << " pot: " << _production_pot << std::endl;
+      if (_production_pot > 1e30) {  // Arbitrary threshold for large numbers
+        std::cerr << "WARNING: Unusually large pot value at entry " << i << ": " 
+                  << _production_pot << std::endl;
+      }
+
+      //gen_pot += _production_pot;
+      gen_pot = gen_pot + _production_pot;
+      //std::cout << "updated gen_pot = " << gen_pot << std::endl;
+  }
+
+  }
+  else{
+    MACH3LOG_ERROR("Could not find \"meta\" tree in {}", mc_files[iSample].native());
+    gen_pot =  3.85e21;
+    std::cout << "instead setting gen_pot to be = " << gen_pot << std::endl;
+  }
+  
+  std::cout << " final gen_pot  = " << gen_pot << std::endl;
+
   _data->SetBranchStatus("*", 0);
   _data->SetBranchStatus("Ev", 1);
   _data->SetBranchAddress("Ev", &_ev);
@@ -313,6 +452,13 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   */
    
 
+  //meta->SetBranchAddress("pot", &_production_pot);
+
+  
+//double mean_pot = sum_pot / meta->GetEntries();
+std::cout << "Generated POT: " << gen_pot << std::endl;
+std::cout << "pot_s: " << (pot)  << std::endl; /// (newpot)
+
    TH1D* norm = (TH1D*)_sampleFile->Get("norm");
   if(!norm){
     //MACH3LOG_ERROR("Add a norm KEY to the root file using MakeNormHists.cxx");
@@ -322,7 +468,16 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
     norm->SetBinContent(1,1);
     duneobj.norm_s = 1.0; //norm->GetBinContent(1);
     //duneobj->pot_s = (pot) / norm->GetBinContent(1);
-    duneobj.pot_s = (pot) / 3.85e21;
+    //duneobj.pot_s = (pot) / 3.85e21;
+
+    //duneobj->norm_s = 1.0/gen_pot;
+    //duneobj->pot_s = *pot; /
+
+    duneobj.pot_s = (pot)/(newpot) ; ////////////correct one for all CAFS
+    //duneobj.pot_s = (pot)/pot_cafgenwith; //one for subsample of OA
+  
+     std::cout << "(pot)/(newpot)" << (pot)/(newpot) << std::endl;
+     //std::cout << "(pot)/(pot_cafgenwith)" << (pot)/(pot_cafgenwith) << std::endl;
 
     }
   else{
@@ -333,8 +488,12 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   std::cout << "pot = " << (pot)<< std::endl;
   std::cout << "pot_s = " << duneobj.pot_s << std::endl;
   std::cout << "norm_s = " << duneobj.norm_s << std::endl;
+  std::cout << "N.o of events = " <<  _data->GetEntries() << std::endl;
   
   
+  //if(events_for_analysis  >  _data->GetEntries()){
+    //std::cout<<"you are trying to analyse with an number of events larger than that in the sample" << std::endl;
+  //}
   //duneobj.norm_s = norm->GetBinContent(1);
   //duneobj.pot_s = pot/norm->GetBinContent(2);
   duneobj.nEvents = _data->GetEntries();
@@ -385,12 +544,18 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
   duneobj.mode.resize(duneobj.nEvents);
   duneobj.Target.resize(duneobj.nEvents);
 
+  duneobj.rw_pt.resize(duneobj.nEvents); //perpendicular momentum
+  duneobj.rw_pz.resize(duneobj.nEvents); //parallel momentum
+
   _data->GetEntry(0);
 
   bool need_global_bin_numbers = (XVarStr == "global_bin_number");
 
+  
+
   //FILL DUNE STRUCT
   for (int i = 0; i < duneobj.nEvents; ++i) { // Loop through tree
+  //for (int i = 0; i < events_for_analysis ; ++i) { // Loop through just enough events...............
     _data->GetEntry(i);
     duneobj.rw_cvnnumu[i] = _cvnnumu;
     duneobj.rw_cvnnue[i] = _cvnnue;
@@ -413,7 +578,15 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
     duneobj.true_q3[i] = (TVector3{_NuMomX, _NuMomY, _NuMomZ} -
                           TVector3{_LepMomX, _LepMomY, _LepMomZ})
                              .Mag();
-    
+
+    //duneobj.rw_pt[i] =(TVector3{_LepMomX, _LepMomY, _LepMomZ}).Dot((TVector3{TVector3{_NuMomX, _NuMomY, _NuMomZ}}.Divide(TVector3{TVector3{_NuMomX, _NuMomY, _NuMomZ}}.Mag())));
+    //duneobj.rw_pz[i] =(TVector3{_LepMomX, _LepMomY, _LepMomZ}).Cross((TVector3{TVector3{_NuMomX, _NuMomY, _NuMomZ}}.Divide(TVector3{TVector3{_NuMomX, _NuMomY, _NuMomZ}}.Mag())));
+    TVector3 nuMom(_NuMomX, _NuMomY, _NuMomZ);
+    TVector3 nuMomNorm = nuMom.Unit(); // Normalized vector
+
+    duneobj.rw_pt[i] = TVector3(_LepMomX, _LepMomY, _LepMomZ).Dot(nuMomNorm);
+    duneobj.rw_pz[i] = (TVector3(_LepMomX, _LepMomY, _LepMomZ).Cross(nuMomNorm)).Mag();
+
 
     duneobj.lepton_momentum[i] =(TVector3{_LepMomX, _LepMomY, _LepMomZ}).Mag();
     duneobj.rw_eRecoP[i] = _eRecoP; 
@@ -449,6 +622,8 @@ int samplePDFDUNEBeamFD::setupExperimentMC(int iSample) {
     duneobj.mode[i]=SIMBMode_ToMaCh3Mode(mode, _isCC);
     
     duneobj.flux_w[i] = 1.0;
+
+    
 
     //std::cout<< "rw_erec_lep =  " << _erec_lep[i] << std::endl;
   }
@@ -614,12 +789,15 @@ double const& samplePDFDUNEBeamFD::ReturnKinematicParameterByReference(int Kinem
   case kELepRec: {
     //std::cout << "ELepRec =  " << dunemcSamples[iSample].rw_erec_lep[iEvent] << std::endl;
     return dunemcSamples[iSample].rw_LepE[iEvent];
-    
   }
   case kq0:
     return dunemcSamples[iSample].true_q0[iEvent];
   case kq3:
     return dunemcSamples[iSample].true_q3[iEvent];
+  case k_pT:
+    return dunemcSamples[iSample].rw_pt[iEvent];
+  case k_pz:
+    return dunemcSamples[iSample].rw_pz[iEvent];
   default:
     std::stringstream ss;
     ss << "[ERROR]: " << __FILE__ << ":" << __LINE__
@@ -738,6 +916,8 @@ int samplePDFDUNEBeamFD::ReturnKinematicParameterFromString(std::string Kinemati
   if (KinematicParameterStr.find("ELepRec") != std::string::npos) {return kELepRec;}
   if (KinematicParameterStr.find("EHadRec") != std::string::npos) {return kEHadRec;}
   if (KinematicParameterStr.find("p_lep") != std::string::npos) {return kp_lep;}
+  if (KinematicParameterStr.find("pT") != std::string::npos) {return k_pT;}
+  if (KinematicParameterStr.find("pz") != std::string::npos) {return k_pz;}
   if (KinematicParameterStr.find("ERec_minus_Etrue") != std::string::npos) {return kERec_minus_Etrue;}
   //if (KinematicParameterStr.find("ERec_minus_Etrue")!= std::string::npos) {return kERec_minus_Etrue;}
   if (KinematicParameterStr.find("kEHadRec_minus_EHadtrue")!= std::string::npos) {return kEHadRec_minus_EHadtrue;}
@@ -786,6 +966,10 @@ std::string samplePDFDUNEBeamFD::ReturnStringFromKinematicParameter(
     return "theta_lep";
   case kp_lep:
     return "p_lep";
+  case k_pz:
+    return "pz";
+  case k_pT:
+    return "pT";
   case kERec_minus_Etrue:
     return "ERec_minus_Etrue";
   default: {

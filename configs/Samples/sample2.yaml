@@ -55,7 +55,7 @@ DUNESampleBools:
 NuOsc:
   NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
 InputFiles:
-  mtupleprefix: "/project/rpp-nilic/abipeake/DUNE_OA_CAF_new/"
+  mtupleprefix: "/pnfs/dune/persistent/users/chasnip/NDCAF_OnAxisHadd/FHC/"
   mtuplesuffix: ".root"
   splineprefix: "" #"inputs/DUNE_ND_spline_files/ND_FHC_ger_"
   splinesuffix: "" #"_splines.root"

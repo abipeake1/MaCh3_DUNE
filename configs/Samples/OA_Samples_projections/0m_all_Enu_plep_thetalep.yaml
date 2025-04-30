@@ -1,0 +1,819 @@
+# for each list specify:
+# isrhc = "true for rhc or false for fhc"; #default to false
+# mtupleprefix = "common part at beginning of path to mtuple files"
+# mtuplesuffix = "common part at end of path to mtuple files"
+# splineprefix = "common part at beginning of path to spline files"
+# splinesuffix = "common part at endof path to spline files"
+# up_bnd = "upper boundary on erec" #deault to 30.
+# isfitqun = true for fitqun variable samples false otherwise #default to true
+#Add samples to the sample list as shown below
+SampleName: "ND_FHC_CCnumu"
+SampleType: "BeamFD"
+SelectionCuts:
+POT: 1.3628319e+23
+NEvents: 1e21
+SelectionCuts:
+  - KinematicStr: "TrueXPos"
+    Bounds: [ -310.0, 310.0 ]
+  - KinematicStr: "TrueYPos"
+    Bounds: [ -550.0, 550.0 ]
+  - KinematicStr: "TrueZPos"
+    Bounds: [ 50.0, 1244.0 ]
+  - KinematicStr: "CVNNumu"
+    Bounds: [ 0.5, 999 ]
+Binning:
+  Axes:
+    - VarStr: "RecoNeutrinoEnergy" 
+      Uniform: [10,0.1,5.5]
+      Title: "E_{#nu}^{Rec} [GeV]"
+    - VarStr: "p_lep" 
+      Uniform: [20,0,8]
+      Title: "p_{lep.}^{Rec} [GeV]"
+    - VarStr: "theta_lep" 
+      Uniform: [6,0,3]
+      Title: "#theta_{lep.}^{Rec} [GeV]"
+  ForceGeneric: True
+DUNESampleBools:
+  iselike: no
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
+InputFiles:
+  mtupleprefix: "root://fndca1.fnal.gov:1094//pnfs/fnal.gov/usr/dune/persistent/users/chasnip/NDCAF_OnAxisHadd/FHC/"
+  mtuplesuffix: ".root"
+  splineprefix: "" 
+  splinesuffix: ""
+SampleCuts:
+  up_bnd: 100.
+NSubSamples: 110
+DetID: 24
+SubSamples:
+  - name: "CAFv7_0m_130_FHC"
+    mtuplefile: "CAFv7_0m_130_FHC"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_131_FHC"
+    mtuplefile: "CAFv7_0m_131_FHC"
+    splinefile: ""
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_132_FHC"
+    mtuplefile: "CAFv7_0m_132_FHC"
+    splinefile: ""
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_133_FHC"
+    mtuplefile: "CAFv7_0m_133_FHC"
+    splinefile: ""
+    samplevecno: 3
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_134_FHC"
+    mtuplefile: "CAFv7_0m_134_FHC"
+    splinefile: ""
+    samplevecno: 4
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_147_FHC"
+    mtuplefile: "CAFv7_0m_147_FHC"
+    splinefile: ""
+    samplevecno: 5
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_148_FHC"
+    mtuplefile: "CAFv7_0m_148_FHC"
+    splinefile: ""
+    samplevecno: 6
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_149_FHC"
+    mtuplefile: "CAFv7_0m_149_FHC"
+    splinefile: ""
+    samplevecno: 7
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_150_FHC"
+    mtuplefile: "CAFv7_0m_150_FHC"
+    splinefile: ""
+    samplevecno: 8
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_151_FHC"
+    mtuplefile: "CAFv7_0m_151_FHC"
+    splinefile: ""
+    samplevecno: 9
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_152_FHC"
+    mtuplefile: "CAFv7_0m_152_FHC"
+    splinefile: ""
+    samplevecno: 10
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_153_FHC"
+    mtuplefile: "CAFv7_0m_153_FHC"
+    splinefile: ""
+    samplevecno: 11
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_154_FHC"
+    mtuplefile: "CAFv7_0m_154_FHC"
+    splinefile: ""
+    samplevecno: 12
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_155_FHC"
+    mtuplefile: "CAFv7_0m_155_FHC"
+    splinefile: ""
+    samplevecno: 13
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_156_FHC"
+    mtuplefile: "CAFv7_0m_156_FHC"
+    splinefile: ""
+    samplevecno: 14
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_157_FHC"
+    mtuplefile: "CAFv7_0m_157_FHC"
+    splinefile: ""
+    samplevecno: 15
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_158_FHC"
+    mtuplefile: "CAFv7_0m_158_FHC"
+    splinefile: ""
+    samplevecno: 16
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_171_FHC"
+    mtuplefile: "CAFv7_0m_171_FHC"
+    splinefile: ""
+    samplevecno: 17
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_175_FHC"
+    mtuplefile: "CAFv7_0m_175_FHC"
+    splinefile: ""
+    samplevecno: 18
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_178_FHC"
+    mtuplefile: "CAFv7_0m_178_FHC"
+    splinefile: ""
+    samplevecno: 19
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_180_FHC"
+    mtuplefile: "CAFv7_0m_180_FHC"
+    splinefile: ""
+    samplevecno: 20
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_181_FHC"
+    mtuplefile: "CAFv7_0m_181_FHC"
+    splinefile: ""
+    samplevecno: 21
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_182_FHC"
+    mtuplefile: "CAFv7_0m_182_FHC"
+    splinefile: ""
+    samplevecno: 22
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_195_FHC"
+    mtuplefile: "CAFv7_0m_195_FHC"
+    splinefile: ""
+    samplevecno: 23
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_196_FHC"
+    mtuplefile: "CAFv7_0m_196_FHC"
+    splinefile: ""
+    samplevecno: 24
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_197_FHC"
+    mtuplefile: "CAFv7_0m_197_FHC"
+    splinefile: ""
+    samplevecno: 25
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_198_FHC"
+    mtuplefile: "CAFv7_0m_198_FHC"
+    splinefile: ""
+    samplevecno: 26
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_199_FHC"
+    mtuplefile: "CAFv7_0m_199_FHC"
+    splinefile: ""
+    samplevecno: 27
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_201_FHC"
+    mtuplefile: "CAFv7_0m_201_FHC"
+    splinefile: ""
+    samplevecno: 28
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_202_FHC"
+    mtuplefile: "CAFv7_0m_202_FHC"
+    splinefile: ""
+    samplevecno: 29
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_203_FHC"
+    mtuplefile: "CAFv7_0m_203_FHC"
+    splinefile: ""
+    samplevecno: 30
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_204_FHC"
+    mtuplefile: "CAFv7_0m_204_FHC"
+    splinefile: ""
+    samplevecno: 31
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_205_FHC"
+    mtuplefile: "CAFv7_0m_205_FHC"
+    splinefile: ""
+    samplevecno: 32
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_206_FHC"
+    mtuplefile: "CAFv7_0m_206_FHC"
+    splinefile: ""
+    samplevecno: 33
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_207_FHC"
+    mtuplefile: "CAFv7_0m_207_FHC"
+    splinefile: ""
+    samplevecno: 34
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_208_FHC"
+    mtuplefile: "CAFv7_0m_208_FHC"
+    splinefile: ""
+    samplevecno: 35
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_209_FHC"
+    mtuplefile: "CAFv7_0m_209_FHC"
+    splinefile: ""
+    samplevecno: 36
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_210_FHC"
+    mtuplefile: "CAFv7_0m_210_FHC"
+    splinefile: ""
+    samplevecno: 37
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_211_FHC"
+    mtuplefile: "CAFv7_0m_211_FHC"
+    splinefile: ""
+    samplevecno: 38
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_224_FHC"
+    mtuplefile: "CAFv7_0m_224_FHC"
+    splinefile: ""
+    samplevecno: 39
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_225_FHC"
+    mtuplefile: "CAFv7_0m_225_FHC"
+    splinefile: ""
+    samplevecno: 40
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_226_FHC"
+    mtuplefile: "CAFv7_0m_226_FHC"
+    splinefile: ""
+    samplevecno: 41
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_227_FHC"
+    mtuplefile: "CAFv7_0m_227_FHC"
+    splinefile: ""
+    samplevecno: 42
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_228_FHC"
+    mtuplefile: "CAFv7_0m_228_FHC"
+    splinefile: ""
+    samplevecno: 43
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_229_FHC"
+    mtuplefile: "CAFv7_0m_229_FHC"
+    splinefile: ""
+    samplevecno: 44
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_230_FHC"
+    mtuplefile: "CAFv7_0m_230_FHC"
+    splinefile: ""
+    samplevecno: 45
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_231_FHC"
+    mtuplefile: "CAFv7_0m_231_FHC"
+    splinefile: ""
+    samplevecno: 46
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_232_FHC"
+    mtuplefile: "CAFv7_0m_232_FHC"
+    splinefile: ""
+    samplevecno: 47
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_233_FHC"
+    mtuplefile: "CAFv7_0m_233_FHC"
+    splinefile: ""
+    samplevecno: 48
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_234_FHC"
+    mtuplefile: "CAFv7_0m_234_FHC"
+    splinefile: ""
+    samplevecno: 49
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_235_FHC"
+    mtuplefile: "CAFv7_0m_235_FHC"
+    splinefile: ""
+    samplevecno: 50
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_249_FHC"
+    mtuplefile: "CAFv7_0m_249_FHC"
+    splinefile: ""
+    samplevecno: 51
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_200_FHC"
+    mtuplefile: "CAFv7_0m_200_FHC"
+    splinefile: ""
+    samplevecno: 52
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_247_FHC"
+    mtuplefile: "CAFv7_0m_247_FHC"
+    splinefile: ""
+    samplevecno: 53
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_194_FHC"
+    mtuplefile: "CAFv7_0m_194_FHC"
+    splinefile: ""
+    samplevecno: 54
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_146_FHC"
+    mtuplefile: "CAFv7_0m_146_FHC"
+    splinefile: ""
+    samplevecno: 55
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_223_FHC"
+    mtuplefile: "CAFv7_0m_223_FHC"
+    splinefile: ""
+    samplevecno: 56
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_170_FHC"
+    mtuplefile: "CAFv7_0m_170_FHC"
+    splinefile: ""
+    samplevecno: 57
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_169_FHC"
+    mtuplefile: "CAFv7_0m_169_FHC"
+    splinefile: ""
+    samplevecno: 58
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_246_FHC"
+    mtuplefile: "CAFv7_0m_246_FHC"
+    splinefile: ""
+    samplevecno: 59
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_193_FHC"
+    mtuplefile: "CAFv7_0m_193_FHC"
+    splinefile: ""
+    samplevecno: 60
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_145_FHC"
+    mtuplefile: "CAFv7_0m_145_FHC"
+    splinefile: ""
+    samplevecno: 61
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_222_FHC"
+    mtuplefile: "CAFv7_0m_222_FHC"
+    splinefile: ""
+    samplevecno: 62
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_168_FHC"
+    mtuplefile: "CAFv7_0m_168_FHC"
+    splinefile: ""
+    samplevecno: 63
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_245_FHC"
+    mtuplefile: "CAFv7_0m_245_FHC"
+    splinefile: ""
+    samplevecno: 64
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_192_FHC"
+    mtuplefile: "CAFv7_0m_192_FHC"
+    splinefile: ""
+    samplevecno: 65
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_144_FHC"
+    mtuplefile: "CAFv7_0m_144_FHC"
+    splinefile: ""
+    samplevecno: 66
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_221_FHC"
+    mtuplefile: "CAFv7_0m_221_FHC"
+    splinefile: ""
+    samplevecno: 67
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_167_FHC"
+    mtuplefile: "CAFv7_0m_167_FHC"
+    splinefile: ""
+    samplevecno: 68
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_244_FHC"
+    mtuplefile: "CAFv7_0m_244_FHC"
+    splinefile: ""
+    samplevecno: 69
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_191_FHC"
+    mtuplefile: "CAFv7_0m_191_FHC"
+    splinefile: ""
+    samplevecno: 70
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_143_FHC"
+    mtuplefile: "CAFv7_0m_143_FHC"
+    splinefile: ""
+    samplevecno: 71
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_220_FHC"
+    mtuplefile: "CAFv7_0m_220_FHC"
+    splinefile: ""
+    samplevecno: 72
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_219_FHC"
+    mtuplefile: "CAFv7_0m_219_FHC"
+    splinefile: ""
+    samplevecno: 73
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_166_FHC"
+    mtuplefile: "CAFv7_0m_166_FHC"
+    splinefile: ""
+    samplevecno: 74
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_243_FHC"
+    mtuplefile: "CAFv7_0m_243_FHC"
+    splinefile: ""
+    samplevecno: 75
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_190_FHC"
+    mtuplefile: "CAFv7_0m_190_FHC"
+    splinefile: ""
+    samplevecno: 76
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_142_FHC"
+    mtuplefile: "CAFv7_0m_142_FHC"
+    splinefile: ""
+    samplevecno: 77
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_189_FHC"
+    mtuplefile: "CAFv7_0m_189_FHC"
+    splinefile: ""
+    samplevecno: 78
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_218_FHC"
+    mtuplefile: "CAFv7_0m_218_FHC"
+    splinefile: ""
+    samplevecno: 79
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_165_FHC"
+    mtuplefile: "CAFv7_0m_165_FHC"
+    splinefile: ""
+    samplevecno: 80
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_242_FHC"
+    mtuplefile: "CAFv7_0m_242_FHC"
+    splinefile: ""
+    samplevecno: 81
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_141_FHC"
+    mtuplefile: "CAFv7_0m_141_FHC"
+    splinefile: ""
+    samplevecno: 82
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_188_FHC"
+    mtuplefile: "CAFv7_0m_188_FHC"
+    splinefile: ""
+    samplevecno: 83
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_217_FHC"
+    mtuplefile: "CAFv7_0m_217_FHC"
+    splinefile: ""
+    samplevecno: 84
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_164_FHC"
+    mtuplefile: "CAFv7_0m_164_FHC"
+    splinefile: ""
+    samplevecno: 85
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_241_FHC"
+    mtuplefile: "CAFv7_0m_241_FHC"
+    splinefile: ""
+    samplevecno: 86
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_140_FHC"
+    mtuplefile: "CAFv7_0m_140_FHC"
+    splinefile: ""
+    samplevecno: 87
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_187_FHC"
+    mtuplefile: "CAFv7_0m_187_FHC"
+    splinefile: ""
+    samplevecno: 88
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_139_FHC"
+    mtuplefile: "CAFv7_0m_139_FHC"
+    splinefile: ""
+    samplevecno: 89
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_216_FHC"
+    mtuplefile: "CAFv7_0m_216_FHC"
+    splinefile: ""
+    samplevecno: 90
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_163_FHC"
+    mtuplefile: "CAFv7_0m_163_FHC"
+    splinefile: ""
+    samplevecno: 91
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_240_FHC"
+    mtuplefile: "CAFv7_0m_240_FHC"
+    splinefile: ""
+    samplevecno: 92
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_239_FHC"
+    mtuplefile: "CAFv7_0m_239_FHC"
+    splinefile: ""
+    samplevecno: 93
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_186_FHC"
+    mtuplefile: "CAFv7_0m_186_FHC"
+    splinefile: ""
+    samplevecno: 94
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_138_FHC"
+    mtuplefile: "CAFv7_0m_138_FHC"
+    splinefile: ""
+    samplevecno: 95
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_215_FHC"
+    mtuplefile: "CAFv7_0m_215_FHC"
+    splinefile: ""
+    samplevecno: 96
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_162_FHC"
+    mtuplefile: "CAFv7_0m_162_FHC"
+    splinefile: ""
+    samplevecno: 97
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_238_FHC"
+    mtuplefile: "CAFv7_0m_238_FHC"
+    splinefile: ""
+    samplevecno: 98
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_185_FHC"
+    mtuplefile: "CAFv7_0m_185_FHC"
+    splinefile: ""
+    samplevecno: 99
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_214_FHC"
+    mtuplefile: "CAFv7_0m_214_FHC"
+    splinefile: ""
+    samplevecno: 100
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_161_FHC"
+    mtuplefile: "CAFv7_0m_161_FHC"
+    splinefile: ""
+    samplevecno: 101
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_237_FHC"
+    mtuplefile: "CAFv7_0m_237_FHC"
+    splinefile: ""
+    samplevecno: 102
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_213_FHC"
+    mtuplefile: "CAFv7_0m_213_FHC"
+    splinefile: ""
+    samplevecno: 103
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_160_FHC"
+    mtuplefile: "CAFv7_0m_160_FHC"
+    splinefile: ""
+    samplevecno: 104
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_159_FHC"
+    mtuplefile: "CAFv7_0m_159_FHC"
+    splinefile: ""
+    samplevecno: 105
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_236_FHC"
+    mtuplefile: "CAFv7_0m_236_FHC"
+    splinefile: ""
+    samplevecno: 106
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_183_FHC"
+    mtuplefile: "CAFv7_0m_183_FHC"
+    splinefile: ""
+    samplevecno: 107
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_135_FHC"
+    mtuplefile: "CAFv7_0m_135_FHC"
+    splinefile: ""
+    samplevecno: 108
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_212_FHC"
+    mtuplefile: "CAFv7_0m_212_FHC"
+    splinefile: ""
+    samplevecno: 109
+    nutype: 14
+    oscnutype: 14
+    signal: false

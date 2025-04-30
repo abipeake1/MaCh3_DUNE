@@ -44,7 +44,9 @@ public:
     kERec_minus_Etrue,
     kEHadRec_minus_EHadtrue,
     ktheta_lep,
-    kp_lep
+    kp_lep,
+    k_pT,
+    k_pz
   };
 
   //More robust getters to make plots in different variables, mode, osc channel, systematic weighting and with bin range 
@@ -66,6 +68,8 @@ public:
                                                     int iSample, int iEvent);
   double ReturnKinematicParameter(int KinematicParameter, int iSample,
                                   int iEvent);
+  
+  double CalculatePOT();
 
   std::vector<double> ReturnKinematicParameterBinning(int KinematicParameter);
   
@@ -81,8 +85,11 @@ public:
 
   double pot;
 
+  double _production_pot;
+
   TFile *_sampleFile;
   TTree *_data;
+  TTree *_meta;
   TString _nutype;
   int _mode;
 
@@ -157,6 +164,11 @@ public:
   double cvn_numu_fd_pos;
   double cvn_nue_fd_pos;
   double _Elep_reco;
+
+  //double gen_pot;
+
+  double  events_for_analysis;
+  double pot_cafgenwith;
 
   std::vector<const double*> FDDetectorSystPointers;
   int nFDDetectorSystPointers;

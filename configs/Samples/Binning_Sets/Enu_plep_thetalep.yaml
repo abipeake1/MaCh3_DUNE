@@ -1,0 +1,10 @@
+Axes:
+  - VarStr: "RecoNeutrinoEnergy" 
+    Uniform: [10,0.1,5.5]
+    Title: "E_{#nu}^{Rec} [GeV]"
+  - VarStr: "p_lep" 
+    Uniform: [20,0,8]
+    Title: "p_{lep.}^{Rec} [GeV]"
+  - VarStr: "theta_lep" 
+    Uniform: [6,0,3]
+    Title: "#theta_{lep.}^{Rec} [GeV]"

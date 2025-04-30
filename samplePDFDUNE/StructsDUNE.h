@@ -34,6 +34,8 @@ struct dunemc_base {
   std::vector<double> rw_mom;
   std::vector<double> rw_theta;
   std::vector<double> rw_Q2;
+  std::vector<double> rw_pt;
+  std::vector<double> rw_pz;
 
   std::vector<double> rw_cvnnumu;
   std::vector<double> rw_cvnnue;

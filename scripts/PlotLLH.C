@@ -13,6 +13,7 @@
 
 
 #include <iostream>
+/*
 
 void PlotLLH (TString inputfile)
 {
@@ -56,4 +57,58 @@ void PlotLLH (TString inputfile)
     file->Close();
     delete c0;
     delete file;
+}*/
+
+void PlotLLH(TString inputfile)
+{
+    // Open the ROOT file
+    TFile* file = new TFile(inputfile);
+    if (!file || file->IsZombie()) {
+        std::cout << "Error: Could not open file " << inputfile << std::endl;
+        return;
+    }
+
+    // Get base name of the file (no path, no extension)
+    TString baseName = gSystem->BaseName(inputfile);         // e.g., "myfile.root"
+    baseName.ReplaceAll(".root", "");                        // e.g., "myfile"
+    TString outputPDF = "LLHScans_" + baseName + ".pdf";     // e.g., "LLHScans_myfile.pdf"
+
+    // Get the 'posteriors' tree
+    TTree* tree = (TTree*)file->Get("posteriors");
+    if (!tree) {
+        std::cout << "Error: Could not find TTree 'posteriors'" << std::endl;
+        return;
+    }
+
+    // Create canvas
+    TCanvas* c0 = new TCanvas("c0", "c0", 0, 0, 700, 900);
+    c0->Print(outputPDF + "[");
+
+    // Loop over branches
+    TObjArray* branches = tree->GetListOfBranches();
+    for (int i = 0; i < branches->GetEntries(); ++i) {
+        TBranch* branch = (TBranch*)branches->At(i);
+        TString branchName = branch->GetName();
+
+        std::cout << "Drawing branch: " << branchName << std::endl;
+
+        // Draw histogram of the branch
+        tree->Draw(branchName + ">>h_temp(100)", "", "goff");
+        TH1D* h_temp = (TH1D*)gDirectory->Get("h_temp");
+        if (h_temp) {
+            h_temp->SetTitle(branchName);
+            h_temp->Draw("HIST");
+            c0->Print(outputPDF);
+            delete h_temp;
+        } else {
+            std::cout << "Warning: Could not get histogram for branch " << branchName << std::endl;
+        }
+    }
+
+    // Finalize the PDF
+    c0->Print(outputPDF + "]");
+    file->Close();
+    delete c0;
+    delete file;
 }
+

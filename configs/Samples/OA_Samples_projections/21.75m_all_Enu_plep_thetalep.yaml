@@ -1,0 +1,259 @@
+# for each list specify:
+# isrhc = "true for rhc or false for fhc"; #default to false
+# mtupleprefix = "common part at beginning of path to mtuple files"
+# mtuplesuffix = "common part at end of path to mtuple files"
+# splineprefix = "common part at beginning of path to spline files"
+# splinesuffix = "common part at endof path to spline files"
+# up_bnd = "upper boundary on erec" #deault to 30.
+# isfitqun = true for fitqun variable samples false otherwise #default to true
+#Add samples to the sample list as shown below
+SampleName: "ND_FHC_CCnumu"
+SampleType: "BeamFD"
+SelectionCuts:
+POT: 1.3628319e+23
+NEvents: 1e21
+SelectionCuts:
+  - KinematicStr: "TrueXPos"
+    Bounds: [ -310.0, 310.0 ]
+  - KinematicStr: "TrueYPos"
+    Bounds: [ -550.0, 550.0 ]
+  - KinematicStr: "TrueZPos"
+    Bounds: [ 50.0, 1244.0 ]
+  - KinematicStr: "CVNNumu"
+    Bounds: [ 0.5, 999 ]
+Binning:
+  Axes:
+    - VarStr: "RecoNeutrinoEnergy" 
+      Uniform: [10,0.1,5.5]
+      Title: "E_{#nu}^{Rec} [GeV]"
+    - VarStr: "p_lep" 
+      Uniform: [20,0,8]
+      Title: "p_{lep.}^{Rec} [GeV]"
+    - VarStr: "theta_lep" 
+      Uniform: [6,0,3]
+      Title: "#theta_{lep.}^{Rec} [GeV]"
+  ForceGeneric: True
+DUNESampleBools:
+  iselike: no
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
+InputFiles:
+  mtupleprefix: "root://fndca1.fnal.gov:1094//pnfs/fnal.gov/usr/dune/persistent/users/chasnip/NDCAF_OnAxisHadd/FHC/"
+  mtuplesuffix: ""
+  splineprefix: "" 
+  splinesuffix: ""
+SampleCuts:
+  up_bnd: 100.
+NSubSamples: 30
+DetID: 1
+SubSamples:
+  - name: "CAFv7_21.75m_07_FHC.root"
+    mtuplefile: "CAFv7_21.75m_07_FHC.root"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_08_FHC.root"
+    mtuplefile: "CAFv7_21.75m_08_FHC.root"
+    splinefile: ""
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_09_FHC.root"
+    mtuplefile: "CAFv7_21.75m_09_FHC.root"
+    splinefile: ""
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_10_FHC.root"
+    mtuplefile: "CAFv7_21.75m_10_FHC.root"
+    splinefile: ""
+    samplevecno: 3
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_11_FHC.root"
+    mtuplefile: "CAFv7_21.75m_11_FHC.root"
+    splinefile: ""
+    samplevecno: 4
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_12_FHC.root"
+    mtuplefile: "CAFv7_21.75m_12_FHC.root"
+    splinefile: ""
+    samplevecno: 5
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_13_FHC.root"
+    mtuplefile: "CAFv7_21.75m_13_FHC.root"
+    splinefile: ""
+    samplevecno: 6
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_14_FHC.root"
+    mtuplefile: "CAFv7_21.75m_14_FHC.root"
+    splinefile: ""
+    samplevecno: 7
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_15_FHC.root"
+    mtuplefile: "CAFv7_21.75m_15_FHC.root"
+    splinefile: ""
+    samplevecno: 8
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_16_FHC.root"
+    mtuplefile: "CAFv7_21.75m_16_FHC.root"
+    splinefile: ""
+    samplevecno: 9
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_17_FHC.root"
+    mtuplefile: "CAFv7_21.75m_17_FHC.root"
+    splinefile: ""
+    samplevecno: 10
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_18_FHC.root"
+    mtuplefile: "CAFv7_21.75m_18_FHC.root"
+    splinefile: ""
+    samplevecno: 11
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_06_FHC.root"
+    mtuplefile: "CAFv7_21.75m_06_FHC.root"
+    splinefile: ""
+    samplevecno: 12
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_29_FHC.root"
+    mtuplefile: "CAFv7_21.75m_29_FHC.root"
+    splinefile: ""
+    samplevecno: 13
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_05_FHC.root"
+    mtuplefile: "CAFv7_21.75m_05_FHC.root"
+    splinefile: ""
+    samplevecno: 14
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_28_FHC.root"
+    mtuplefile: "CAFv7_21.75m_28_FHC.root"
+    splinefile: ""
+    samplevecno: 15
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_04_FHC.root"
+    mtuplefile: "CAFv7_21.75m_04_FHC.root"
+    splinefile: ""
+    samplevecno: 16
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_27_FHC.root"
+    mtuplefile: "CAFv7_21.75m_27_FHC.root"
+    splinefile: ""
+    samplevecno: 17
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_03_FHC.root"
+    mtuplefile: "CAFv7_21.75m_03_FHC.root"
+    splinefile: ""
+    samplevecno: 18
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_26_FHC.root"
+    mtuplefile: "CAFv7_21.75m_26_FHC.root"
+    splinefile: ""
+    samplevecno: 19
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_02_FHC.root"
+    mtuplefile: "CAFv7_21.75m_02_FHC.root"
+    splinefile: ""
+    samplevecno: 20
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_25_FHC.root"
+    mtuplefile: "CAFv7_21.75m_25_FHC.root"
+    splinefile: ""
+    samplevecno: 21
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_01_FHC.root"
+    mtuplefile: "CAFv7_21.75m_01_FHC.root"
+    splinefile: ""
+    samplevecno: 22
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_24_FHC.root"
+    mtuplefile: "CAFv7_21.75m_24_FHC.root"
+    splinefile: ""
+    samplevecno: 23
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_00_FHC.root"
+    mtuplefile: "CAFv7_21.75m_00_FHC.root"
+    splinefile: ""
+    samplevecno: 24
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_23_FHC.root"
+    mtuplefile: "CAFv7_21.75m_23_FHC.root"
+    splinefile: ""
+    samplevecno: 25
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_22_FHC.root"
+    mtuplefile: "CAFv7_21.75m_22_FHC.root"
+    splinefile: ""
+    samplevecno: 26
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_21_FHC.root"
+    mtuplefile: "CAFv7_21.75m_21_FHC.root"
+    splinefile: ""
+    samplevecno: 27
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_20_FHC.root"
+    mtuplefile: "CAFv7_21.75m_20_FHC.root"
+    splinefile: ""
+    samplevecno: 28
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_21.75m_19_FHC.root"
+    mtuplefile: "CAFv7_21.75m_19_FHC.root"
+    splinefile: ""
+    samplevecno: 29
+    nutype: 14
+    oscnutype: 14
+    signal: false

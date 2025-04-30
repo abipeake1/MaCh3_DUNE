@@ -1,0 +1,2401 @@
+Systematics:
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0
+      - .20000000000000000000
+    - q3:
+      - 0
+      - .20000000000000000000
+    Names:
+      FancyName: q0q3_1
+      ParameterName: q0q3_1
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0
+      - .20000000000000000000
+    - q3:
+      - .20000000000000000000
+      - .40000000000000000000
+    Names:
+      FancyName: q0q3_2
+      ParameterName: q0q3_2
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0
+      - .20000000000000000000
+    - q3:
+      - .40000000000000000000
+      - .60000000000000000000
+    Names:
+      FancyName: q0q3_3
+      ParameterName: q0q3_3
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0
+      - .20000000000000000000
+    - q3:
+      - .60000000000000000000
+      - .80000000000000000000
+    Names:
+      FancyName: q0q3_4
+      ParameterName: q0q3_4
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0
+      - .20000000000000000000
+    - q3:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    Names:
+      FancyName: q0q3_5
+      ParameterName: q0q3_5
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0
+      - .20000000000000000000
+    - q3:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    Names:
+      FancyName: q0q3_6
+      ParameterName: q0q3_6
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0
+      - .20000000000000000000
+    - q3:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    Names:
+      FancyName: q0q3_7
+      ParameterName: q0q3_7
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0
+      - .20000000000000000000
+    - q3:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    Names:
+      FancyName: q0q3_8
+      ParameterName: q0q3_8
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0
+      - .20000000000000000000
+    - q3:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    Names:
+      FancyName: q0q3_9
+      ParameterName: q0q3_9
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 0
+      - .20000000000000000000
+    - q3:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    Names:
+      FancyName: q0q3_10
+      ParameterName: q0q3_10
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .20000000000000000000
+      - .40000000000000000000
+    - q3:
+      - 0
+      - .20000000000000000000
+    Names:
+      FancyName: q0q3_11
+      ParameterName: q0q3_11
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .20000000000000000000
+      - .40000000000000000000
+    - q3:
+      - .20000000000000000000
+      - .40000000000000000000
+    Names:
+      FancyName: q0q3_12
+      ParameterName: q0q3_12
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .20000000000000000000
+      - .40000000000000000000
+    - q3:
+      - .40000000000000000000
+      - .60000000000000000000
+    Names:
+      FancyName: q0q3_13
+      ParameterName: q0q3_13
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .20000000000000000000
+      - .40000000000000000000
+    - q3:
+      - .60000000000000000000
+      - .80000000000000000000
+    Names:
+      FancyName: q0q3_14
+      ParameterName: q0q3_14
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .20000000000000000000
+      - .40000000000000000000
+    - q3:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    Names:
+      FancyName: q0q3_15
+      ParameterName: q0q3_15
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .20000000000000000000
+      - .40000000000000000000
+    - q3:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    Names:
+      FancyName: q0q3_16
+      ParameterName: q0q3_16
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .20000000000000000000
+      - .40000000000000000000
+    - q3:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    Names:
+      FancyName: q0q3_17
+      ParameterName: q0q3_17
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .20000000000000000000
+      - .40000000000000000000
+    - q3:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    Names:
+      FancyName: q0q3_18
+      ParameterName: q0q3_18
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .20000000000000000000
+      - .40000000000000000000
+    - q3:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    Names:
+      FancyName: q0q3_19
+      ParameterName: q0q3_19
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .20000000000000000000
+      - .40000000000000000000
+    - q3:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    Names:
+      FancyName: q0q3_20
+      ParameterName: q0q3_20
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .40000000000000000000
+      - .60000000000000000000
+    - q3:
+      - 0
+      - .20000000000000000000
+    Names:
+      FancyName: q0q3_21
+      ParameterName: q0q3_21
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .40000000000000000000
+      - .60000000000000000000
+    - q3:
+      - .20000000000000000000
+      - .40000000000000000000
+    Names:
+      FancyName: q0q3_22
+      ParameterName: q0q3_22
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .40000000000000000000
+      - .60000000000000000000
+    - q3:
+      - .40000000000000000000
+      - .60000000000000000000
+    Names:
+      FancyName: q0q3_23
+      ParameterName: q0q3_23
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .40000000000000000000
+      - .60000000000000000000
+    - q3:
+      - .60000000000000000000
+      - .80000000000000000000
+    Names:
+      FancyName: q0q3_24
+      ParameterName: q0q3_24
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .40000000000000000000
+      - .60000000000000000000
+    - q3:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    Names:
+      FancyName: q0q3_25
+      ParameterName: q0q3_25
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .40000000000000000000
+      - .60000000000000000000
+    - q3:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    Names:
+      FancyName: q0q3_26
+      ParameterName: q0q3_26
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .40000000000000000000
+      - .60000000000000000000
+    - q3:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    Names:
+      FancyName: q0q3_27
+      ParameterName: q0q3_27
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .40000000000000000000
+      - .60000000000000000000
+    - q3:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    Names:
+      FancyName: q0q3_28
+      ParameterName: q0q3_28
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .40000000000000000000
+      - .60000000000000000000
+    - q3:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    Names:
+      FancyName: q0q3_29
+      ParameterName: q0q3_29
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .40000000000000000000
+      - .60000000000000000000
+    - q3:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    Names:
+      FancyName: q0q3_30
+      ParameterName: q0q3_30
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .60000000000000000000
+      - .80000000000000000000
+    - q3:
+      - 0
+      - .20000000000000000000
+    Names:
+      FancyName: q0q3_31
+      ParameterName: q0q3_31
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .60000000000000000000
+      - .80000000000000000000
+    - q3:
+      - .20000000000000000000
+      - .40000000000000000000
+    Names:
+      FancyName: q0q3_32
+      ParameterName: q0q3_32
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .60000000000000000000
+      - .80000000000000000000
+    - q3:
+      - .40000000000000000000
+      - .60000000000000000000
+    Names:
+      FancyName: q0q3_33
+      ParameterName: q0q3_33
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .60000000000000000000
+      - .80000000000000000000
+    - q3:
+      - .60000000000000000000
+      - .80000000000000000000
+    Names:
+      FancyName: q0q3_34
+      ParameterName: q0q3_34
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .60000000000000000000
+      - .80000000000000000000
+    - q3:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    Names:
+      FancyName: q0q3_35
+      ParameterName: q0q3_35
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .60000000000000000000
+      - .80000000000000000000
+    - q3:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    Names:
+      FancyName: q0q3_36
+      ParameterName: q0q3_36
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .60000000000000000000
+      - .80000000000000000000
+    - q3:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    Names:
+      FancyName: q0q3_37
+      ParameterName: q0q3_37
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .60000000000000000000
+      - .80000000000000000000
+    - q3:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    Names:
+      FancyName: q0q3_38
+      ParameterName: q0q3_38
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .60000000000000000000
+      - .80000000000000000000
+    - q3:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    Names:
+      FancyName: q0q3_39
+      ParameterName: q0q3_39
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .60000000000000000000
+      - .80000000000000000000
+    - q3:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    Names:
+      FancyName: q0q3_40
+      ParameterName: q0q3_40
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    - q3:
+      - 0
+      - .20000000000000000000
+    Names:
+      FancyName: q0q3_41
+      ParameterName: q0q3_41
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    - q3:
+      - .20000000000000000000
+      - .40000000000000000000
+    Names:
+      FancyName: q0q3_42
+      ParameterName: q0q3_42
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    - q3:
+      - .40000000000000000000
+      - .60000000000000000000
+    Names:
+      FancyName: q0q3_43
+      ParameterName: q0q3_43
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    - q3:
+      - .60000000000000000000
+      - .80000000000000000000
+    Names:
+      FancyName: q0q3_44
+      ParameterName: q0q3_44
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    - q3:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    Names:
+      FancyName: q0q3_45
+      ParameterName: q0q3_45
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    - q3:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    Names:
+      FancyName: q0q3_46
+      ParameterName: q0q3_46
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    - q3:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    Names:
+      FancyName: q0q3_47
+      ParameterName: q0q3_47
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    - q3:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    Names:
+      FancyName: q0q3_48
+      ParameterName: q0q3_48
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    - q3:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    Names:
+      FancyName: q0q3_49
+      ParameterName: q0q3_49
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    - q3:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    Names:
+      FancyName: q0q3_50
+      ParameterName: q0q3_50
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    - q3:
+      - 0
+      - .20000000000000000000
+    Names:
+      FancyName: q0q3_51
+      ParameterName: q0q3_51
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    - q3:
+      - .20000000000000000000
+      - .40000000000000000000
+    Names:
+      FancyName: q0q3_52
+      ParameterName: q0q3_52
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    - q3:
+      - .40000000000000000000
+      - .60000000000000000000
+    Names:
+      FancyName: q0q3_53
+      ParameterName: q0q3_53
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    - q3:
+      - .60000000000000000000
+      - .80000000000000000000
+    Names:
+      FancyName: q0q3_54
+      ParameterName: q0q3_54
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    - q3:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    Names:
+      FancyName: q0q3_55
+      ParameterName: q0q3_55
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    - q3:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    Names:
+      FancyName: q0q3_56
+      ParameterName: q0q3_56
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    - q3:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    Names:
+      FancyName: q0q3_57
+      ParameterName: q0q3_57
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    - q3:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    Names:
+      FancyName: q0q3_58
+      ParameterName: q0q3_58
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    - q3:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    Names:
+      FancyName: q0q3_59
+      ParameterName: q0q3_59
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    - q3:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    Names:
+      FancyName: q0q3_60
+      ParameterName: q0q3_60
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    - q3:
+      - 0
+      - .20000000000000000000
+    Names:
+      FancyName: q0q3_61
+      ParameterName: q0q3_61
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    - q3:
+      - .20000000000000000000
+      - .40000000000000000000
+    Names:
+      FancyName: q0q3_62
+      ParameterName: q0q3_62
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    - q3:
+      - .40000000000000000000
+      - .60000000000000000000
+    Names:
+      FancyName: q0q3_63
+      ParameterName: q0q3_63
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    - q3:
+      - .60000000000000000000
+      - .80000000000000000000
+    Names:
+      FancyName: q0q3_64
+      ParameterName: q0q3_64
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    - q3:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    Names:
+      FancyName: q0q3_65
+      ParameterName: q0q3_65
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    - q3:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    Names:
+      FancyName: q0q3_66
+      ParameterName: q0q3_66
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    - q3:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    Names:
+      FancyName: q0q3_67
+      ParameterName: q0q3_67
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    - q3:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    Names:
+      FancyName: q0q3_68
+      ParameterName: q0q3_68
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    - q3:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    Names:
+      FancyName: q0q3_69
+      ParameterName: q0q3_69
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    - q3:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    Names:
+      FancyName: q0q3_70
+      ParameterName: q0q3_70
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    - q3:
+      - 0
+      - .20000000000000000000
+    Names:
+      FancyName: q0q3_71
+      ParameterName: q0q3_71
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    - q3:
+      - .20000000000000000000
+      - .40000000000000000000
+    Names:
+      FancyName: q0q3_72
+      ParameterName: q0q3_72
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    - q3:
+      - .40000000000000000000
+      - .60000000000000000000
+    Names:
+      FancyName: q0q3_73
+      ParameterName: q0q3_73
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    - q3:
+      - .60000000000000000000
+      - .80000000000000000000
+    Names:
+      FancyName: q0q3_74
+      ParameterName: q0q3_74
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    - q3:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    Names:
+      FancyName: q0q3_75
+      ParameterName: q0q3_75
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    - q3:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    Names:
+      FancyName: q0q3_76
+      ParameterName: q0q3_76
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    - q3:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    Names:
+      FancyName: q0q3_77
+      ParameterName: q0q3_77
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    - q3:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    Names:
+      FancyName: q0q3_78
+      ParameterName: q0q3_78
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    - q3:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    Names:
+      FancyName: q0q3_79
+      ParameterName: q0q3_79
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    - q3:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    Names:
+      FancyName: q0q3_80
+      ParameterName: q0q3_80
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    - q3:
+      - 0
+      - .20000000000000000000
+    Names:
+      FancyName: q0q3_81
+      ParameterName: q0q3_81
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    - q3:
+      - .20000000000000000000
+      - .40000000000000000000
+    Names:
+      FancyName: q0q3_82
+      ParameterName: q0q3_82
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    - q3:
+      - .40000000000000000000
+      - .60000000000000000000
+    Names:
+      FancyName: q0q3_83
+      ParameterName: q0q3_83
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    - q3:
+      - .60000000000000000000
+      - .80000000000000000000
+    Names:
+      FancyName: q0q3_84
+      ParameterName: q0q3_84
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    - q3:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    Names:
+      FancyName: q0q3_85
+      ParameterName: q0q3_85
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    - q3:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    Names:
+      FancyName: q0q3_86
+      ParameterName: q0q3_86
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    - q3:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    Names:
+      FancyName: q0q3_87
+      ParameterName: q0q3_87
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    - q3:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    Names:
+      FancyName: q0q3_88
+      ParameterName: q0q3_88
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    - q3:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    Names:
+      FancyName: q0q3_89
+      ParameterName: q0q3_89
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    - q3:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    Names:
+      FancyName: q0q3_90
+      ParameterName: q0q3_90
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    - q3:
+      - 0
+      - .20000000000000000000
+    Names:
+      FancyName: q0q3_91
+      ParameterName: q0q3_91
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    - q3:
+      - .20000000000000000000
+      - .40000000000000000000
+    Names:
+      FancyName: q0q3_92
+      ParameterName: q0q3_92
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    - q3:
+      - .40000000000000000000
+      - .60000000000000000000
+    Names:
+      FancyName: q0q3_93
+      ParameterName: q0q3_93
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    - q3:
+      - .60000000000000000000
+      - .80000000000000000000
+    Names:
+      FancyName: q0q3_94
+      ParameterName: q0q3_94
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    - q3:
+      - .80000000000000000000
+      - 1.00000000000000000000
+    Names:
+      FancyName: q0q3_95
+      ParameterName: q0q3_95
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    - q3:
+      - 1.00000000000000000000
+      - 1.20000000000000000000
+    Names:
+      FancyName: q0q3_96
+      ParameterName: q0q3_96
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    - q3:
+      - 1.20000000000000000000
+      - 1.40000000000000000000
+    Names:
+      FancyName: q0q3_97
+      ParameterName: q0q3_97
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    - q3:
+      - 1.40000000000000000000
+      - 1.60000000000000000000
+    Names:
+      FancyName: q0q3_98
+      ParameterName: q0q3_98
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    - q3:
+      - 1.60000000000000000000
+      - 1.80000000000000000000
+    Names:
+      FancyName: q0q3_99
+      ParameterName: q0q3_99
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec
+- Systematic:
+    DetID: 1
+    Error: 0.5
+    FlatPrior: false
+    KinematicCuts:
+    - q0:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    - q3:
+      - 1.80000000000000000000
+      - 2.00000000000000000000
+    Names:
+      FancyName: q0q3_100
+      ParameterName: q0q3_100
+    ParameterBounds:
+    - 0.0
+    - 4.0
+    ParameterValues:
+      Generated: 1.0
+      PreFitValue: 1.0
+    StepScale:
+      MCMC: 1.0
+    Type: Norm
+    ParameterGroup: Xsec

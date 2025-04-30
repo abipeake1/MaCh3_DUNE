@@ -1,0 +1,10 @@
+Axes:
+  - VarStr: "EHadRec"
+    Uniform: [20, 0.1, 5.5]
+    Title: "E_{Had}^{Rec} [GeV]"
+  - VarStr: "p_lep"
+    Uniform: [40, 0, 8]
+    Title: "p_{lep.}^{Rec} [GeV]"
+  - VarStr: "theta_lep"
+    Uniform: [12, 0, 3]
+    Title: "#theta_{lep.}^{Rec} [GeV]"

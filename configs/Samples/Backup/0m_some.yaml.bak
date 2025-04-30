@@ -1,0 +1,110 @@
+# for each list specify:
+# isrhc = "true for rhc or false for fhc"; #default to false
+# mtupleprefix = "common part at beginning of path to mtuple files"
+# mtuplesuffix = "common part at end of path to mtuple files"
+# splineprefix = "common part at beginning of path to spline files"
+# splinesuffix = "common part at endof path to spline files"
+# up_bnd = "upper boundary on erec" #deault to 30.
+# isfitqun = true for fitqun variable samples false otherwise #default to true
+#Add samples to the sample list as shown below
+SampleName: "ND_FHC_CCnumu"
+SampleType: "BeamFD"
+SelectionCuts:
+POT: 1.3628319e+23
+NEvents: 1e21
+SelectionCuts:
+  - KinematicStr: "TrueXPos"
+    Bounds: [ -310.0, 310.0 ]
+  - KinematicStr: "TrueYPos"
+    Bounds: [ -550.0, 550.0 ]
+  - KinematicStr: "TrueZPos"
+    Bounds: [ 50.0, 1244.0 ]
+  - KinematicStr: "CVNNumu"
+    Bounds: [ 0.5, 999 ]
+Binning:
+  Axes:
+# Appropriate values for VarStr
+# TrueNeutrinoEnergy
+# RecoNeutrinoEnergy
+# CVNNumu
+# CVNNue
+# q0
+# q3
+# ERecQE
+# ELepRec
+# EHadRec
+  - VarStr: "RecoNeutrinoEnergy" 
+    Uniform: [10,0.1,5.5]
+    Title: "E_{#nu}^{Rec} [GeV]"
+  - VarStr: "p_lep" 
+    Uniform: [20,0,8]
+    Title: "p_{lep.}^{Rec} [GeV]"
+  - VarStr: "theta_lep" 
+    Uniform: [6,0,3]
+    Title: "#theta_{lep.}^{Rec} [GeV]"
+  # if you want to use the generic binning with a single 
+  # axis, useful for calculated VarStr that cannot be referenced
+  ForceGeneric: True
+DUNESampleBools:
+  iselike: no
+NuOsc:
+  NuOscConfigFile: "configs/NuOsc/CUDAProb3Linear.yaml"
+InputFiles:
+  mtupleprefix: "/pnfs/dune/persistent/users/chasnip/NDCAF_OnAxisHadd/FHC/"
+  mtuplesuffix: ".root"
+  splineprefix: "" 
+  splinesuffix: ""
+SampleCuts:
+  up_bnd: 100.
+NSubSamples: 7
+DetID: 1
+SubSamples:
+  - name: "CAFv7_0m_130_FHC"
+    mtuplefile: "CAFv7_0m_130_FHC"
+    splinefile: ""
+    samplevecno: 0
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_131_FHC"
+    mtuplefile: "CAFv7_0m_131_FHC"
+    splinefile: ""
+    samplevecno: 1
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_132_FHC"
+    mtuplefile: "CAFv7_0m_132_FHC"
+    splinefile: ""
+    samplevecno: 2
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_133_FHC"
+    mtuplefile: "CAFv7_0m_133_FHC"
+    splinefile: ""
+    samplevecno: 3
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_134_FHC"
+    mtuplefile: "CAFv7_0m_134_FHC"
+    splinefile: ""
+    samplevecno: 4
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_147_FHC"
+    mtuplefile: "CAFv7_0m_147_FHC"
+    splinefile: ""
+    samplevecno: 5
+    nutype: 14
+    oscnutype: 14
+    signal: false
+  - name: "CAFv7_0m_148_FHC"
+    mtuplefile: "CAFv7_0m_148_FHC"
+    splinefile: ""
+    samplevecno: 6
+    nutype: 14
+    oscnutype: 14
+    signal: false

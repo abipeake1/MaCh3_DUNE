@@ -61,7 +61,12 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
 
   xsec->setParameters(XsecParVals);  
   xsec->setStepScale(FitManager->raw()["General"]["Systematics"]["XsecStepScale"].as<double>());
-  
+
+  // Adaptive MCMC stuff
+  if(FitManager->raw()["AdaptionOptions"]){
+    xsec->initialiseAdaption(FitManager->raw());
+  }
+
   MACH3LOG_INFO("cov xsec setup");
   MACH3LOG_INFO("------------------------------");
   
@@ -95,6 +100,8 @@ void MakeMaCh3DuneInstance(manager *FitManager, std::vector<samplePDFFDBase*> &D
       xsec->toggleFixParameter(XsecFixParams.at(j));
     }
   }
+
+
   MACH3LOG_INFO("xsec parameters loop done");
   
   // Fill the parameter values with their nominal values

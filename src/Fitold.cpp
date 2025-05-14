@@ -31,14 +31,6 @@ int main(int argc, char * argv[]) {
 
   //####################################################################################
   //Create samplePDFSKBase Objs
-  const int nbins_q0 = 50;
-  const int nbins_q3 = 50;
-  double q0_min = 0.0, q0_max = 5.0;
-  double q3_min = 0.0, q3_max = 5.0;
-
-
-  //TH1D* h_flat = sample->get1DHist();
-
 
   std::vector<samplePDFFDBase*> DUNEPdfs;
   MakeMaCh3DuneInstance(FitManager, DUNEPdfs, xsec, osc); 
@@ -46,7 +38,6 @@ int main(int argc, char * argv[]) {
   //Some place to store the histograms
   std::vector<TH1D*> PredictionHistograms;
   std::vector<std::string> sample_names;
-
 
   auto OutputFile = std::unique_ptr<TFile>(new TFile(OutputFileName.c_str(), "RECREATE"));
   OutputFile->cd();
@@ -64,13 +55,6 @@ int main(int argc, char * argv[]) {
     
     DUNEPdfs[sample_i]->addData(PredictionHistograms[sample_i]);
   }
-
-  TH1D* h_flat = (TH1D*)PredictionHistograms[0]->Clone("h_flat_total");
-  for (size_t i = 1; i < PredictionHistograms.size(); ++i) {
-    h_flat->Add(PredictionHistograms[i]);
-  }
-  
-
   
   //Now print out some event rates, we'll make a nice latex table at some point 
   for (unsigned iPDF = 0; iPDF < DUNEPdfs.size() ; ++iPDF) {
@@ -78,115 +62,98 @@ int main(int argc, char * argv[]) {
     MACH3LOG_INFO("{} : {}",sample_names[iPDF].c_str(),PredictionHistograms[iPDF]->Integral());
     MACH3LOG_INFO("--------------");
   }
+  //#########################################################################################################
+  //Stuff to fix xsec parameters that have a low impact
+  double threshold = 0.01;
+std::vector<double> nominal_params = xsec->getCurrentParams();
+int nParams = xsec->getNumParams();
+int nFixed = 0;
+std::vector<std::string> fixed_names;
 
-
-  // Step 1: Get nominal prediction
-xsec->setParameters(); // all parameters at nominal
+// ---- Step 1: Get total nominal and per-bin content ----
+xsec->setParameters(nominal_params);
 for (auto& pdf : DUNEPdfs) pdf->reweight();
 
-// Step 2: Sum total event rate
-double total = 0.0;
-TH1D* hNominal = new TH1D(*DUNEPdfs[0]->get1DHist()); // assume all samples are the same size
-for (size_t i = 1; i < DUNEPdfs.size(); ++i) {
-  hNominal->Add(DUNEPdfs[i]->get1DHist());
-}
-total = hNominal->Integral();
+std::vector<std::vector<double>> nominal_contents;
+double total_nominal = 0.0;
 
-// Step 3: Loop over bins and fix parameters with low bin content
-int nParams = xsec->getNumParams();
-int nFixed = 0;
-std::vector<std::string> fixed_names;
-double threshold = 0.000 * total;  // 1%
-int nBins = std::min(hNominal->GetNbinsX(), nParams);
-for (int bin = 1; bin <= nBins; ++bin) {
-  double bin_val = hNominal->GetBinContent(bin);
-  if (bin_val < threshold && bin - 1 < nParams) {
-    //xsec->toggleFixParameter(bin - 1); 
-    // bin i corresponds to parameter i-1
-    xsec->setSingleParameter(bin - 1, 0.0);     // reset to nominal
-    xsec->toggleFixParameter(bin - 1);         // freeze for MCMC
-
-    ++nFixed;
-    fixed_names.push_back(xsec->GetParFancyName(bin - 1));
-    MACH3LOG_INFO("FIXED parameter '{}' (index {}): bin content {:.3f} < {:.3f} (1%)", 
-                  xsec->GetParFancyName(bin - 1), bin - 1, bin_val, threshold);
+for (auto& pdf : DUNEPdfs) {
+  auto* h = pdf->get1DHist();
+  std::vector<double> bins;
+  for (int b = 1; b <= h->GetNbinsX(); ++b) {
+    double c = h->GetBinContent(b);
+    bins.push_back(c);
+    total_nominal += c;
   }
-  //std::cout<< "line 157" << std::endl;
+  nominal_contents.push_back(bins);
 }
-//std::cout<< "line 159" << std::endl;
-//MACH3LOG_INFO("Fixed {} of {} xsec parameters (bins < 1% of total)", nFixed, nParams);
-MACH3LOG_INFO("Fixed {} of {} xsec parameters, bins below {}% ", nFixed, nParams, threshold);
+
+// ---- Step 2: Mark low-content bins ----
+std::vector<std::vector<bool>> is_low_bin;
+for (const auto& bins : nominal_contents) {
+  std::vector<bool> low;
+  for (double val : bins) {
+    low.push_back(val / total_nominal < threshold);
+  }
+  is_low_bin.push_back(low);
+}
+
+// ---- Step 3: Check which bins each parameter affects ----
+for (int i = 0; i < nParams; ++i) {
+  std::vector<double> varied_params = nominal_params;
+  varied_params[i] += 1.0;
+
+  xsec->setParameters(varied_params);
+  for (auto& pdf : DUNEPdfs) pdf->reweight();
+
+  bool only_affects_low_bins = true;
+
+  for (size_t j = 0; j < DUNEPdfs.size(); ++j) {
+    auto* h = DUNEPdfs[j]->get1DHist();
+    for (int b = 1; b <= h->GetNbinsX(); ++b) {
+      double diff = std::abs(h->GetBinContent(b) - nominal_contents[j][b - 1]);
+      if (diff > 0.0 && !is_low_bin[j][b - 1]) {
+        only_affects_low_bins = false;
+        break;
+      }
+    }
+    if (!only_affects_low_bins) break;
+  }
+
+  // ---- Step 4: Fix if parameter only affects low-stat bins ----
+  if (only_affects_low_bins) {
+    xsec->toggleFixParameter(i);
+    fixed_names.push_back(xsec->GetParFancyName(i));
+    ++nFixed;
+    MACH3LOG_INFO("FIXED '{}': affects only low-stat bins (< {:.2f}% of total)", 
+                  xsec->GetParFancyName(i), threshold * 100);
+  } else {
+    MACH3LOG_INFO("RETAIN '{}': affects significant bin(s)", xsec->GetParFancyName(i));
+  }
+}
+
+// ---- Step 5: Print and save summary ----
+MACH3LOG_INFO("========= Summary =========");
+MACH3LOG_INFO("Fixed {} of {} xsec parameters (bin threshold = {:.2f}%)", 
+              nFixed, nParams, threshold * 100.0);
+
+std::ostringstream fixedListStr;
+for (const auto& name : fixed_names) fixedListStr << name << ", ";
+std::string fixedList = fixedListStr.str();
+if (!fixedList.empty()) fixedList.pop_back();
+MACH3LOG_INFO("Fixed parameter names: {}", fixedList);
 
 std::ofstream fixedOut("fixed_parameters.txt");
-for (const auto& name : fixed_names) fixedOut << name << "\n";
-fixedOut.close();
-
-// Optional: replace bin labels with parameter names (if they match)
-for (int i = 0; i < xsec->getNumParams(); ++i) {
-  hNominal->GetXaxis()->SetBinLabel(i+1, xsec->GetParFancyName(i).c_str());
+if (fixedOut.is_open()) {
+  fixedOut << "# Parameters fixed because they affect only low-stat bins (< "
+           << threshold * 100.0 << "% of total)\n";
+  for (const auto& name : fixed_names) fixedOut << name << "\n";
+  fixedOut.close();
+  MACH3LOG_INFO("Saved fixed parameter list to fixed_parameters.txt");
+} else {
+  MACH3LOG_WARN("Could not open file to save fixed parameter list.");
 }
-hNominal->SetTitle("Nominal Prediction per Parameter Bin;Parameter;Events");
-hNominal->SetStats(0);
-TCanvas* c = new TCanvas("c", "Nominal Event Rate", 1200, 600);
-hNominal->Draw("HIST");
-c->SaveAs("param_bin_events.pdf");
-
-/*
-int nParams = xsec->getNumParams();
-int nFixed = 0;
-std::vector<std::string> fixed_names;
-
-TH2D* h_q0q3 = new TH2D("h_q0q3", "Event Rate in (q_{0}, q_{3});q_{3} [GeV/c];q_{0} [GeV]", 
-  nbins_q3, q3_min, q3_max, 
-  nbins_q0, q0_min, q0_max);
-
-// Loop through the flattened 1D histogram and remap
-for (int i = 0; i < nbins_q0 * nbins_q3; ++i) {
-int bin_q0 = i / nbins_q3 + 1;            // row (y axis)
-int bin_q3 = i % nbins_q3 + 1;            // column (x axis)
-
-h_q0q3->SetBinContent(bin_q3, bin_q0, h_flat->GetBinContent(i + 1));
-}
-
-//TH2D* h_q0q3 = ...; // your 2D histogram
-
-int nbinsX = h_q0q3->GetNbinsX();
-int nbinsY = h_q0q3->GetNbinsY();
-
-
-TCanvas* c = new TCanvas("c_q0q3", "q0 vs q3", 800, 600);
-h_q0q3->Draw("COLZ");
-c->SaveAs("q0_q3_distribution.pdf");
-if (nbinsX * nbinsY != nParams) {
-  MACH3LOG_WARN("Mismatch: {} bins vs {} parameters", nbinsX * nbinsY, nParams);
-  // Handle gracefully if needed
-}
-
-double total = h_q0q3->Integral();
-double threshold = 0.01 * total; // 1% of total
-
-for (int ix = 1; ix <= nbinsX; ++ix) {
-  for (int iy = 1; iy <= nbinsY; ++iy) {
-    int paramIndex = (iy - 1) * nbinsX + (ix - 1);  // column-major flattening
-
-    if (paramIndex >= nParams) continue;
-
-    double binContent = h_q0q3->GetBinContent(ix, iy);
-
-    if (binContent < threshold) {
-      xsec->setSingleParameter(paramIndex, 0.0);     // nominal value
-      xsec->toggleFixParameter(paramIndex);          // freeze parameter
-      ++nFixed;
-      fixed_names.push_back(xsec->GetParFancyName(paramIndex));
-
-      MACH3LOG_INFO("FIXED param '{}' (index {}): bin ({},{}) = {:.3f} < {:.3f}", 
-        xsec->GetParFancyName(paramIndex), paramIndex, ix, iy, binContent, threshold);
-    }
-  }
-}
-*/
-
-
+  
   //###########################################################################################################
   // Set covariance objects equal to output of previous chain
   
